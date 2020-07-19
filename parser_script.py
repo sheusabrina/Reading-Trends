@@ -1,2 +1,5 @@
-#To Do List
-	#look into isbn library https://pypi.org/project/isbnlib/
+from bs4 import BeautifulSoup
+
+#PARSER 1: GIVEN BOOK PAGE, GENERATES LIST OF REVIEW URLS
+
+#PARSER 2: GIVEN REVIEW URLS, GENERATES A DATABASE
