@@ -32,9 +32,3 @@ class Classification():
             self.automated_book_list.append(book)
         else:
             return "Error: Invalid List Type"
-
-class Analysis():
-    pass
-
-class Parser():
-    pass
