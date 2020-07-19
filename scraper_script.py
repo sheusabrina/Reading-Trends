@@ -1,12 +1,24 @@
 import requests
 from bs4 import BeautifulSoup
 
+##BEFORE BUILDING, I WANT TO JUST PULL DOWN DETAILS FOR ONE BOOK.
+
+test_book_url = "https://www.goodreads.com/book/show/30659"
+webpage_response = requests.get(test_book_url)
+webpage = webpage_response.content
+webpage_str = str(webpage)
+
+open("test_book.html", "w").write(webpage_str)
+
+### NOTES
+
 #SCRAPER MUST:
     #IDENTIFY CORRECT BOOK URL
     #CREATE LIST OF REVIEW URLS
     #PULL REVIEW DATA
         #rating
         #date
+    #MIGHT MAKE SENSE TO HAVE BOOK SCRAPER AND URL SCRAPER BE SEPERATE
 
 #To Do List
 	#install Beautiful Soup
