@@ -34,8 +34,9 @@ class Parser():
         return is_valid
 
     def review_soup_to_date(self, review_soup):
-        review_date = review_soup.find_all(attrs = {"class": "right dtreviewed greyText smallText"})
-        #review_date = review_soup.find_all(attrs = {"itemprop": "datePublished"})
+        review_date = review_soup.find(attrs = {"class": "right dtreviewed greyText smallText"}).get_text()
+        review_date = review_date.replace("\\n" , "").strip()
+
         print(review_date)
 
 ##TESTING REVIEW PAGES
