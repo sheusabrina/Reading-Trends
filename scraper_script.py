@@ -22,8 +22,11 @@ class Scraper():
 
 scraper_for_testing = Scraper()
 
-test_review_url = "https://www.goodreads.com/review/show/2668957860"
-scraper_for_testing.string_to_file("test_review", scraper_for_testing.url_to_string(test_review_url))
+#test_review_url = "https://www.goodreads.com/review/show/2668957860"
+#scraper_for_testing.string_to_file("test_review", scraper_for_testing.url_to_string(test_review_url))
+
+#test_review_error_url = "https://www.goodreads.com/review/show/166895786"
+#scraper_for_testing.string_to_file("test_review_error", scraper_for_testing.url_to_string(test_review_error_url))
 
 ### NOTES
 
