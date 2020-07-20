@@ -18,6 +18,11 @@ class Scraper():
             #file_name = str(file_name)
         open(file_name+".html", "w").write(string)
 
+    def sleep(self, max_sleeptime):
+        time_list = range(0, max_sleeptime, 0.1)
+        sleeptime = random.choices(time_list)
+        time.sleep(sleeptime)
+
 # CREATION OF TESTING REVIEW FILES
 
 scraper_for_testing = Scraper()
