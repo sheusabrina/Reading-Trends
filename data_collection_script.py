@@ -15,6 +15,7 @@ class Review_URL_ID_Data_Collector():
 
     def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name, save_per_num):
         #basic definitions
+        self.max_sleep_time = max_sleep_time
         self.id_list = range(min_id, max_id)
         self.base_url = "https://www.goodreads.com/review/show/"
 
@@ -38,7 +39,10 @@ class Review_URL_ID_Data_Collector():
         self.test_url = self.base_url + str(test_id)
 
     def scrape_url(self):
-        pass
+        self.test_scraped_string = self.scraper.url_to_string(self.test_url)
+
+    def sleep(self:)
+        self.scraper.sleep(self.max_sleep_time)
 
     def parse_review(self, review):
         pass
