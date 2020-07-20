@@ -1,15 +1,5 @@
 import requests
 
-##BEFORE BUILDING, I WANT TO JUST PULL DOWN DETAILS FOR ONE BOOK.
-
-def test_book():
-    test_book_url = "https://www.goodreads.com/book/show/30659"
-    webpage_response = requests.get(test_book_url)
-    webpage = webpage_response.content
-    webpage_str = str(webpage)
-
-    open("test_book.html", "w").write(webpage_str)
-
 # SCRAPER CLASS
 
 class Scraper():
@@ -28,7 +18,12 @@ class Scraper():
             #file_name = str(file_name)
         open(file_name+".html", "w").write(string)
 
+# CREATION OF TESTING REVIEW FILES
+
 scraper_for_testing = Scraper()
+
+test_review_url = "https://www.goodreads.com/review/show/2668957860"
+scraper_for_testing.string_to_file("test_review", scraper_for_testing.url_to_string(test_review_url))
 
 ### NOTES
 
