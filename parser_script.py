@@ -12,9 +12,10 @@ class Parser():
 
     def html_to_soup(self, html):
         soup = BeautifulSoup(html, "html.parser")
+        return soup
 
-    #this method gets from the soup of a book page to urls for the top 30 reviews
     def book_soup_to_review_urls(self, book_soup):
+        #this method gets from the soup of a book page to urls for the top 30 reviews
         link_list = []
 
         review_list = book_soup.find_all(attrs = {"href": re.compile("^https://www.goodreads.com/review")})
@@ -25,7 +26,24 @@ class Parser():
         return link_list
 
     def review_soup_is_valid(self, review_soup):
-        pass
+        is_valid = True
+        error_titles = review_soup.find_all(attrs = {"title": "Page not found | Goodreads"})
+        print(error_titles)
+            #is_valid = False
+        return is_valid
 
     def review_soup_to_data(self, review_soup):
         pass
+
+##TESTING REVIEW PAGES
+
+parser_for_testing = Parser()
+
+test_review = open("test_review.html")
+test_review_error = open("test_review_error.html")
+
+test_review_soup = parser_for_testing.html_to_soup(test_review)
+test_review_error_soup = parser_for_testing.html_to_soup(test_review_error)
+
+print(parser_for_testing.review_soup_is_valid(test_review_soup))
+print(parser_for_testing.review_soup_is_valid(test_review_error_soup))
