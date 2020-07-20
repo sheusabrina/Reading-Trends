@@ -33,7 +33,7 @@ class Parser():
             is_valid = True
         return is_valid
 
-    def review_soup_to_data(self, review_soup):
+    def review_soup_to_date(self, review_soup):
         review_date = review_soup.find_all(attrs = {"class": "right dtreviewed greyText smallText"})
         #review_date = review_soup.find_all(attrs = {"itemprop": "datePublished"})
         print(review_date)
@@ -51,4 +51,4 @@ test_review_soup = parser_for_testing.html_to_soup(test_review)
 #print(parser_for_testing.review_soup_is_valid(test_review_soup))
 #print(parser_for_testing.review_soup_is_valid(test_review_error_soup))
 
-parser_for_testing.review_soup_to_data(test_review_soup)
+parser_for_testing.review_soup_to_date(test_review_soup)
