@@ -17,16 +17,16 @@ class Scraper():
     def __init__(self):
         pass
 
-    def url_to_str(self, url):
+    def url_to_string(self, url):
         webpage_response = requests.get(url)
         webpage = webpage_response.content
-        webpage_str = str(webpage)
-        return webpage_str
+        webpage_string = str(webpage)
+        return webpage_string
 
-    def str_to_file(self, file_name, str):
-        if not isinstance(file_name, str):
-            file_name = str(file_name)
-        open(file_name+".html", "w").write(webpage_str)
+    def string_to_file(self, file_name, string):
+        #if not isinstance(file_name, string):
+            #file_name = str(file_name)
+        open(file_name+".html", "w").write(string)
 
 scraper_for_testing = Scraper()
 
