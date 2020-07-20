@@ -32,9 +32,7 @@ class Review_URL_ID_Data_Collector():
 
         #creating log file
         self.datafile = open("file_name"+".csv", "a")
-
-        #figure out how to add first line of csv as:
-        #"ID,is_URL_valid,review_date_published"
+        self.datafile.write("ID, is_URL_valid, review_publication_date")
 
     def generate_test_url(self):
         self.test_id = random.choices(self.id_list)
@@ -57,6 +55,8 @@ class Review_URL_ID_Data_Collector():
 
     def log_data(self):
         ## Add data to csv
+
+
         ## Data should look like this:
             #"ID1,TRUE,11/28/2020"
             #"ID2,FALSE,""
