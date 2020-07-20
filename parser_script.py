@@ -34,7 +34,9 @@ class Parser():
         return is_valid
 
     def review_soup_to_data(self, review_soup):
-        pass
+        review_date = review_soup.find_all(attrs = {"class": "right dtreviewed greyText smallText"})
+        #review_date = review_soup.find_all(attrs = {"itemprop": "datePublished"})
+        print(review_date)
 
 ##TESTING REVIEW PAGES
 
@@ -44,7 +46,9 @@ test_review = open("test_review.html")
 test_review_error = open("test_review_error.html")
 
 test_review_soup = parser_for_testing.html_to_soup(test_review)
-test_review_error_soup = parser_for_testing.html_to_soup(test_review_error)
+#test_review_error_soup = parser_for_testing.html_to_soup(test_review_error)
 
-print(parser_for_testing.review_soup_is_valid(test_review_soup))
-print(parser_for_testing.review_soup_is_valid(test_review_error_soup))
+#print(parser_for_testing.review_soup_is_valid(test_review_soup))
+#print(parser_for_testing.review_soup_is_valid(test_review_error_soup))
+
+parser_for_testing.review_soup_to_data(test_review_soup)
