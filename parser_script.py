@@ -26,10 +26,11 @@ class Parser():
         return link_list
 
     def review_soup_is_valid(self, review_soup):
-        is_valid = True
-        error_titles = review_soup.find_all(attrs = {"title": "Page not found | Goodreads"})
-        print(error_titles)
-            #is_valid = False
+        title = review_soup.find('title').get_text()
+        if title == "Page not found":
+            is_valid = False
+        else:
+            is_valid = True
         return is_valid
 
     def review_soup_to_data(self, review_soup):
