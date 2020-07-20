@@ -16,7 +16,7 @@ from scraper_script import Scraper
 
 class Review_URL_ID_Data_Collector():
 
-    def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name, progress_increments_perc = 10)
+    def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name, progress_increments_perc = 10):
         self.max_sleep_time = max_sleep_time
         self.id_list = range(min_id, max_id)
         self.base_url = "https://www.goodreads.com/review/show/"
@@ -41,7 +41,7 @@ class Review_URL_ID_Data_Collector():
     def scrape_url(self):
         self.test_scraped_string = self.scraper.url_to_string(self.test_url)
 
-    def sleep(self:)
+    def sleep(self):
         self.scraper.sleep(self.max_sleep_time)
 
     def parse_review(self, review):
@@ -54,7 +54,7 @@ class Review_URL_ID_Data_Collector():
             self.test_date = None
 
     def log_data(self):
-        self.datafile.write("{},{},{}".format(str(self.test_id), self.is_test_valid, self.test_date)
+        self.datafile.write("{},{},{}".format(str(self.test_id), self.is_test_valid, self.test_date))
 
         self.review_counter += 1
 
