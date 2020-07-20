@@ -15,16 +15,14 @@ from scraper_script import Scraper
 
 class Review_URL_ID_Data_Collector():
 
-    def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name, save_per_num):
-        #basic definitions
+    def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name
         self.max_sleep_time = max_sleep_time
         self.id_list = range(min_id, max_id)
         self.base_url = "https://www.goodreads.com/review/show/"
 
         #counters
         self.review_counter = 0
-        self.unsaved_review_counter = 0
-        self.save_per_num = save_per_num
+        self.max_data_points = max_data_points
 
         #creating scrapers
         self.scraper = Scraper()
@@ -54,23 +52,17 @@ class Review_URL_ID_Data_Collector():
             self.test_date = None
 
     def log_data(self):
-        ## Add data to csv
-
-
-        ## Data should look like this:
-            #"ID1,TRUE,11/28/2020"
-            #"ID2,FALSE,""
-
-        ##incremental counters
+        self.datafile.write("{},{},{}".format(str(self.test_id), self.is_test_valid, self.test_date)
 
         self.review_counter += 1
-        self.unsaved_review_counter +=1
-
-        #maybe save?
-
-        if unsaved_review_counter % self.save_per_num:
-            #save file
-            self.unsaved_review_counter = 0
 
     def data_collection_loop(self):
-        pass
+        while self.review_counter < self.max_data_points:
+            self.generate_test_url()
+            self.scrape_url()
+            self.parse_review()
+            self.log_data()
+            self.sleep()
+
+        self.datafile.close()
+        print("Data Collection Complete")
