@@ -2,12 +2,30 @@ import requests
 
 ##BEFORE BUILDING, I WANT TO JUST PULL DOWN DETAILS FOR ONE BOOK.
 
-test_book_url = "https://www.goodreads.com/book/show/30659"
-webpage_response = requests.get(test_book_url)
-webpage = webpage_response.content
-webpage_str = str(webpage)
+#test_book_url = "https://www.goodreads.com/book/show/30659"
+#webpage_response = requests.get(test_book_url)
+#webpage = webpage_response.content
+#webpage_str = str(webpage)
 
-open("test_book.html", "w").write(webpage_str)
+#open("test_book.html", "w").write(webpage_str)
+
+# SCRAPER CLASS
+
+class Scraper():
+
+    def __init__(self):
+        pass
+
+    def url_to_str(url):
+        webpage_response = requests.get(url)
+        webpage = webpage_response.content
+        webpage_str = str(webpage)
+        return webpage_str
+
+    def str_to_file(self, str, file_name):
+        if not isinstance(file_name, str):
+            file_name = str(file_name)
+        open(file_name+".html", "w").write(webpage_str)
 
 ### NOTES
 
