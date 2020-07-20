@@ -1,5 +1,6 @@
 #import libraries
 from bs4 import BeautifulSoup
+from datetime import datetime
 import re
 import requests
 
@@ -15,7 +16,7 @@ from scraper_script import Scraper
 
 class Review_URL_ID_Data_Collector():
 
-    def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name
+    def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name, progress_increments_perc = 10)
         self.max_sleep_time = max_sleep_time
         self.id_list = range(min_id, max_id)
         self.base_url = "https://www.goodreads.com/review/show/"
@@ -23,6 +24,7 @@ class Review_URL_ID_Data_Collector():
         #counters
         self.review_counter = 0
         self.max_data_points = max_data_points
+        self.progress_increments_perc = progress_increments_perc
 
         #creating scrapers
         self.scraper = Scraper()
@@ -56,12 +58,21 @@ class Review_URL_ID_Data_Collector():
 
         self.review_counter += 1
 
+    def print_progress(self):
+        self.percent_complete = 100 * self.review_counter // self.max_data_points
+        if self.percent_complete % self.self.progress_increments_perc:
+            now = datetime.now()
+            now_string = now.strftime("%d/%m/%Y %H:%M:%S")
+            print("Data Collection {}% Complete at {}".format(str(self.percent_complete), now_string))
+
     def data_collection_loop(self):
+        print("Beginning Data Collection...")
         while self.review_counter < self.max_data_points:
             self.generate_test_url()
             self.scrape_url()
             self.parse_review()
             self.log_data()
+            self.print_progress()
             self.sleep()
 
         self.datafile.close()
