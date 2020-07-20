@@ -1,5 +1,4 @@
 import requests
-from bs4 import BeautifulSoup
 
 ##BEFORE BUILDING, I WANT TO JUST PULL DOWN DETAILS FOR ONE BOOK.
 
@@ -36,6 +35,9 @@ open("test_book.html", "w").write(webpage_str)
         #one of its leafs is class = "review" and that has a two links below it.
         #the first link is to the review URL, and that URL contains "review"
         #the second link is to the reviewer, and that URL does not contain review
+        #next page of reviews is under class = next_page
+        #by default, reviews have filters for language and sort order and rating.
+        #Can you only see 300 reviews for each view?
     ##VISUAL Observation
         #Each review has a "see review" button that leads to a unique URL, these are by author (ie https://www.goodreads.com/review/show/125098945?book_show_action=true&from_review_page=1)
 
