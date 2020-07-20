@@ -1,10 +1,18 @@
-import requests
+#import libraries
 
+import requests
+import random
+
+#import data
+from headers_data import ordered_headers_list
 
 class Scraper():
 
     def __init__(self):
-        pass
+        self.headers_list = ordered_headers_list
+
+    def select_header(self):
+        self.header = random.choice(self.headers_list)
 
     def url_to_string(self, url):
         webpage_response = requests.get(url)
