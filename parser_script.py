@@ -1,10 +1,6 @@
 from bs4 import BeautifulSoup
 import re
 
-#TO DO LIST:
-#PARSER 2: GIVEN A BOOK PAGE, CYCLES THROUGH PAGES (AJAX)
-#PARSER 3: GIVEN REVIEW URLS, GENERATES A REVIEWS DATABASE
-
 class Parser():
 
     def __init__(self):
@@ -45,5 +41,5 @@ class Book_Parser(Parser):
 
 ##TESTING REVIEW PAGES
 
-test_review = open("test_review.html")
-test_review_error = open("test_review_error.html")
+#test_review = open("test_review.html")
+#test_review_error = open("test_review_error.html")
