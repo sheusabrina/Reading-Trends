@@ -38,8 +38,3 @@ class Book_Parser(Parser):
             link_list.append(link)
 
         return link_list
-
-##TESTING REVIEW PAGES
-
-#test_review = open("test_review.html")
-#test_review_error = open("test_review_error.html")

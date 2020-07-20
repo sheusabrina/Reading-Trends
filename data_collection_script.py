@@ -45,6 +45,7 @@ class Review_URL_ID_Data_Collector():
         self.scraper.sleep(self.max_sleep_time)
 
     def parse_review(self, review):
+
         self.test_soup = self.parser.html_to_soup(self.test_scraped_string)
         self.is_test_valid = self.parser.review_soup_is_valid(self.test_soup)
 
