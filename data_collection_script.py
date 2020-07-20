@@ -11,6 +11,8 @@ from parser_script import Book_Parser
 
 from scraper_script import Scraper
 
+#Data Generation Classes
+
 class Review_URL_ID_Data_Collector():
 
     def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name, save_per_num):
@@ -45,7 +47,13 @@ class Review_URL_ID_Data_Collector():
         self.scraper.sleep(self.max_sleep_time)
 
     def parse_review(self, review):
-        pass
+        self.test_soup = self.parser.html_to_soup(self.test_scraped_string)
+        self.is_test_valid = self.parser.review_soup_is_valid(self.test_soup)
+
+        if self.is_test_valid:
+            self.test_date = self.parser.review_soup_to_date(self.test_soup)
+        else:
+            self.test_date = None
 
     def log_data(self):
         ## Add data to csv
