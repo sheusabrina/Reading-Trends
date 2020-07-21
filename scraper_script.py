@@ -35,8 +35,8 @@ class Scraper():
 
 ##TESTING
 
-example_url = "https://docs.python.org/3/howto/regex.html"
+#example_url = "https://docs.python.org/3/howto/regex.html"
 
-testing_scraper = Scraper()
-testing_scraper.url_to_string(example_url)
-testing_scraper.string_to_file("test_scraper_output")
+#testing_scraper = Scraper()
+#testing_scraper.url_to_string(example_url)
+#testing_scraper.string_to_file("test_scraper_output")
