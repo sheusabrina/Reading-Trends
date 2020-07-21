@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 import re
 import requests
+import random
 
 #import classes
 
@@ -31,12 +32,12 @@ class Review_URL_ID_Data_Collector():
         self.parser = Review_Parser()
 
         #creating log file
-        self.datafile = open("file_name"+".csv", "a")
+        self.datafile = open(file_name+".csv", "a")
         self.datafile.write("ID, is_URL_valid, review_publication_date")
 
     def generate_test_url(self):
-        self.test_id = random.choices(self.id_list)
-        self.test_url = self.base_url + str(test_id)
+        self.test_id = random.choice(self.id_list)
+        self.test_url = self.base_url + str(self.test_id)
 
     def scrape_url(self):
         self.test_scraped_string = self.scraper.url_to_string(self.test_url)
@@ -44,7 +45,7 @@ class Review_URL_ID_Data_Collector():
     def sleep(self):
         self.scraper.sleep(self.max_sleep_time)
 
-    def parse_review(self, review):
+    def parse_review(self):
 
         self.test_soup = self.parser.html_to_soup(self.test_scraped_string)
         self.is_test_valid = self.parser.review_soup_is_valid(self.test_soup)
@@ -55,13 +56,13 @@ class Review_URL_ID_Data_Collector():
             self.test_date = None
 
     def log_data(self):
-        self.datafile.write("{},{},{}".format(str(self.test_id), self.is_test_valid, self.test_date))
+        self.datafile.write("\n{},{},{}".format(str(self.test_id), self.is_test_valid, self.test_date))
 
         self.review_counter += 1
 
     def print_progress(self):
         self.percent_complete = 100 * self.review_counter // self.max_data_points
-        if self.percent_complete % self.self.progress_increments_perc:
+        if self.percent_complete % self.progress_increments_perc:
             now = datetime.now()
             now_string = now.strftime("%d/%m/%Y %H:%M:%S")
             print("Data Collection {}% Complete at {}".format(str(self.percent_complete), now_string))
@@ -78,3 +79,10 @@ class Review_URL_ID_Data_Collector():
 
         self.datafile.close()
         print("Data Collection Complete")
+
+## TESTING
+
+collection_tester = Review_URL_ID_Data_Collector(0, 20, 2, 1, "logging_file")
+#collection_tester.generate_test_url()
+#print(collection_tester.test_url)
+#collection_tester.data_collection_loop()

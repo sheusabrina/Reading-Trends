@@ -2,6 +2,7 @@
 
 import requests
 import random
+import time
 
 #import data
 from headers_data import ordered_headers_list
@@ -24,6 +25,6 @@ class Scraper():
         open(file_name+".html", "w").write(string)
 
     def sleep(self, max_sleep_time):
-        time_list = range(0, max_sleep_time, 0.1)
-        sleep_time = random.choices(time_list)
+        time_list = range(0, max_sleep_time*100, 1)
+        sleep_time = random.choice(time_list)/100
         time.sleep(sleep_time)

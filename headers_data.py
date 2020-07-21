@@ -58,5 +58,3 @@ for headers in headers_list:
     for header,value in headers.items():
         h[header]=value
     ordered_headers_list.append(h)
-
-print(len(ordered_headers_list))
