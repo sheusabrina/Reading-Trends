@@ -25,7 +25,7 @@ class Review_URL_ID_Data_Collector():
         #counters
         self.review_counter = 0
         self.max_data_points = max_data_points
-        self.progress_increments_perc = 10
+        self.progress_percent_next_benchmark = 10
 
         #creating scrapers
         self.scraper = Scraper()
@@ -62,10 +62,12 @@ class Review_URL_ID_Data_Collector():
 
     def print_progress(self):
         self.percent_complete = 100 * self.review_counter // self.max_data_points
-        if self.percent_complete % self.progress_increments_perc == 0:
+        if self.percent_complete >= self.progress_percent_next_benchmark:
             now = datetime.now()
             now_string = now.strftime("%d/%m/%Y %H:%M:%S")
             print("Data Collection {}% Complete at {}".format(str(self.percent_complete), now_string))
+
+            self.progress_percent_next_benchmark +=10
 
     def data_collection_loop(self):
         print("Beginning Data Collection...")
