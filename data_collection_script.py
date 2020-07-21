@@ -88,9 +88,9 @@ class Review_URL_ID_Data_Collector():
         #Part 2: Assess invalid review IDs for patterns in order to better estimate the number of reviews and optimize eventual scraping.
 
 #keeping this low until I am fully confident that this is working as expected.
-num_reviews_to_collect = 5
+num_reviews_to_collect = 100000
 estimated_num_reviews = int(3.5 * 10 **9)
 
 #Uncomment to run the data collector
-#review_id_collector = Review_URL_ID_Data_Collector(0, estimated_num_reviews, num_reviews_to_collect, 5, "review_id_data")
-#review_id_collector.data_collection_loop()
+review_id_collector = Review_URL_ID_Data_Collector(0, estimated_num_reviews, num_reviews_to_collect, 5, "review_id_data")
+review_id_collector.data_collection_loop()
