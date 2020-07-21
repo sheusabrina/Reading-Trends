@@ -17,7 +17,7 @@ from scraper_script import Scraper
 
 class Review_URL_ID_Data_Collector():
 
-    def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name, progress_increments_perc = 10):
+    def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name):
         self.max_sleep_time = max_sleep_time
         self.id_list = range(min_id, max_id)
         self.base_url = "https://www.goodreads.com/review/show/"
@@ -25,7 +25,7 @@ class Review_URL_ID_Data_Collector():
         #counters
         self.review_counter = 0
         self.max_data_points = max_data_points
-        self.progress_increments_perc = progress_increments_perc
+        self.progress_increments_perc = 10
 
         #creating scrapers
         self.scraper = Scraper()
@@ -62,7 +62,7 @@ class Review_URL_ID_Data_Collector():
 
     def print_progress(self):
         self.percent_complete = 100 * self.review_counter // self.max_data_points
-        if self.percent_complete % self.progress_increments_perc:
+        if self.percent_complete % self.progress_increments_perc == 0:
             now = datetime.now()
             now_string = now.strftime("%d/%m/%Y %H:%M:%S")
             print("Data Collection {}% Complete at {}".format(str(self.percent_complete), now_string))
@@ -78,11 +78,8 @@ class Review_URL_ID_Data_Collector():
             self.sleep()
 
         self.datafile.close()
-        print("Data Collection Complete")
 
-## TESTING
-
-collection_tester = Review_URL_ID_Data_Collector(0, 20, 2, 1, "logging_file")
+#collection_tester = Review_URL_ID_Data_Collector(0, 20, 2, 1, "logging_file")
 #collection_tester.generate_test_url()
 #print(collection_tester.test_url)
 #collection_tester.data_collection_loop()
