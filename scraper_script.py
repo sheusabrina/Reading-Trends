@@ -23,6 +23,8 @@ class Scraper():
         webpage_string = str(webpage)
         self.webpage_string = webpage_string
 
+        return self.webpage_string
+
     def string_to_file(self, file_name):
         open(file_name+".html", "w").write(self.webpage_string)
 
