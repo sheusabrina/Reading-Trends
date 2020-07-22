@@ -82,12 +82,18 @@ def visualize_dates():
     ordinal_df = add_date_ordinal(valid_df, "review_publication_date")
 
     with sns.axes_style("white"):
-        ax = sns.regplot(x = "review_publication_date_ordinal", y = "ID",  data = ordinal_df)
+        ax = sns.regplot(x = "review_publication_date_ordinal", y = "ID",  data = ordinal_df, ci = None, marker = ".", scatter_kws= {"alpha": 0.5}, line_kws = {"color": "gray"})
+
+        ax.set_ylim(ordinal_df["ID"].min(), ordinal_df["ID"].max())
 
         ax.set_xlabel("review_publication_date")
         new_xlabels = [date.fromordinal(int(x_val)) for x_val in ax.get_xticks() ]
         ax.set_xticklabels(new_xlabels)
+        plt.xticks(rotation = 90)
 
+        plt.title("Review URL IDs by Date")
+
+    plt.tight_layout()
     plt.show()
 
 visualize_dates()
