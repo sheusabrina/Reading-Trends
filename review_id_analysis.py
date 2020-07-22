@@ -18,8 +18,8 @@ df = pd.read_csv("review_id_sample_data.csv")
 
 df.rename(columns = {" is_URL_valid": "is_URL_valid", " review_publication_date": "review_publication_date"}, inplace = True)
 
-#df.review_publication_date = pd.to_datetime(df.review_publication_date, format = "%b %d %Y", errors = "ignore")
 df.review_publication_date = pd.to_datetime(df.review_publication_date, format = "%b %d %Y", errors = "coerce")
+df.sort_values(by = "ID", inplace = True)
 
 ## SUBDFS
 valid_df = df[df.is_URL_valid == True]
