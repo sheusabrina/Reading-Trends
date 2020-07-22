@@ -14,11 +14,18 @@ import matplotlib.pyplot as plt
 #This CSV contains a partial dataset and should not be used for analysis. But it will be enough start writing the code.
 df = pd.read_csv("review_id_sample_data.csv")
 
+#PROCESSING DF
+
 df.rename(columns = {" is_URL_valid": "is_URL_valid", " review_publication_date": "review_publication_date"}, inplace = True)
 
+#df.review_publication_date = pd.to_datetime(df.review_publication_date, format = "%b %d %Y", errors = "ignore")
+df.review_publication_date = pd.to_datetime(df.review_publication_date, format = "%b %d %Y", errors = "coerce")
+
+## SUBDFS
 valid_df = df[df.is_URL_valid == True]
 invalid_df = df[df.is_URL_valid == False]
 
+##COUNTS & PERCENTAGES
 num_ids_tested = len(df)
 num_ids_valid = len(valid_df)
 num_ids_invalid = len(invalid_df)
@@ -38,3 +45,5 @@ def print_data_summary():
     """.format(str(num_ids_tested), str(num_ids_valid), str(perc_ids_valid), str(num_ids_invalid), str(perc_ids_invalid)))
 
 #print_data_summary()
+
+#print(df.head())
