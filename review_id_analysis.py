@@ -14,6 +14,8 @@ import matplotlib.pyplot as plt
 #This CSV contains a partial dataset and should not be used for analysis. But it will be enough start writing the code.
 df = pd.read_csv("review_id_sample_data.csv")
 
+df = df.head(10)
+
 #PROCESSING DF
 
 df.rename(columns = {" is_URL_valid": "is_URL_valid", " review_publication_date": "review_publication_date"}, inplace = True)
@@ -46,4 +48,18 @@ def print_data_summary():
 
 #print_data_summary()
 
-#print(df.head())
+##PART II: SEQUENTIAL DATES
+
+def is_dates_sequential():
+    df_by_id = valid_df.sort_values(by = "ID").reset_index(drop = True)
+    df_by_date = valid_df.sort_values(by = "review_publication_date").reset_index(drop = True)
+
+    list_by_id = df_by_id.values.tolist()
+    list_by_date = df_by_date.values.tolist()
+    is_sequential = list_by_id == list_by_date
+
+    print("""
+    Dates Sequential: {}
+    """.format(is_sequential))
+
+#is_dates_sequential()
