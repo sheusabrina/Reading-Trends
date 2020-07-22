@@ -1,9 +1,12 @@
 #import libraries
 from bs4 import BeautifulSoup
 from datetime import datetime
+from datetime import date
 
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import seaborn as sns
 
 #REVIEW ID COLLECTOR
     #Purpose: collect data to test the assumption that there are roughly 3.5B reviews (seems too high?!) with IDs arranged sequentially by date from 0 upwards.
@@ -14,7 +17,7 @@ import matplotlib.pyplot as plt
 #This CSV contains a partial dataset and should not be used for analysis. But it will be enough start writing the code.
 df = pd.read_csv("review_id_sample_data.csv")
 
-df = df.head(10)
+#df = df.head(10)
 
 #PROCESSING DF
 
@@ -34,6 +37,16 @@ num_ids_invalid = len(invalid_df)
 
 perc_ids_valid = round(100 * num_ids_valid / num_ids_tested , 1)
 perc_ids_invalid = round(100 * num_ids_invalid / num_ids_tested, 1)
+
+##FORMATING FUNCTIONS
+
+def add_date_ordinal(df, date_column_name):
+    new_column_name = date_column_name+"_ordinal"
+    new_df = df.copy()
+    new_df[new_column_name] = pd.to_datetime(df[date_column_name]).apply(lambda date: date.toordinal())
+    return new_df
+
+#print(add_date_ordinal(df, "review_publication_date"))
 
 #PART I: DATA SUMMARY
 
@@ -63,3 +76,18 @@ def is_dates_sequential():
     """.format(is_sequential))
 
 #is_dates_sequential()
+
+def visualize_dates():
+
+    ordinal_df = add_date_ordinal(valid_df, "review_publication_date")
+
+    with sns.axes_style("white"):
+        ax = sns.regplot(x = "review_publication_date_ordinal", y = "ID",  data = ordinal_df)
+
+        ax.set_xlabel("review_publication_date")
+        new_xlabels = [date.fromordinal(int(x_val)) for x_val in ax.get_xticks() ]
+        ax.set_xticklabels(new_xlabels)
+
+    plt.show()
+
+visualize_dates()
