@@ -52,6 +52,16 @@ def add_date_ordinal(df, date_column_name):
     new_df[new_column_name] = pd.to_datetime(df[date_column_name]).apply(lambda date: date.toordinal())
     return new_df
 
+def add_year(df, date_column_name):
+    new_column_name = date_column_name+"_year"
+    new_df = df.copy()
+    new_df[new_column_name] = (pd.to_datetime(df[date_column_name]).apply(lambda date: date.year))
+    new_df[new_column_name] = new_df[new_column_name].apply(lambda year: int(year) if pd.notna(year) else pd.NaT)
+    return new_df
+
+df = df.head()
+print(add_year(df, "review_publication_date"))
+
 #print(add_date_ordinal(df, "review_publication_date"))
 
 #PART I: DATA SUMMARY
@@ -59,7 +69,6 @@ def add_date_ordinal(df, date_column_name):
 def print_data_summary():
 
     print("""
-    Data Summary:
     IDs Tested: {}
     Valid IDs: {} ({}%)
     Invalid IDs: {} ({}%)
