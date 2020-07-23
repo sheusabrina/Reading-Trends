@@ -26,6 +26,8 @@ df.rename(columns = {" is_URL_valid": "is_URL_valid", " review_publication_date"
 df.review_publication_date = pd.to_datetime(df.review_publication_date, format = "%b %d %Y", errors = "coerce")
 df.sort_values(by = "ID", inplace = True)
 
+df.reset_index(inplace = True, drop = True)
+
 ## SUBDFS
 valid_df = df[df.is_URL_valid == True]
 invalid_df = df[df.is_URL_valid == False]
@@ -37,6 +39,10 @@ num_ids_invalid = len(invalid_df)
 
 perc_ids_valid = round(100 * num_ids_valid / num_ids_tested , 1)
 perc_ids_invalid = round(100 * num_ids_invalid / num_ids_tested, 1)
+
+#Value Lists
+valid_ids= valid_df.ID.values.tolist()
+invalid_ids = invalid_df.ID.values.tolist()
 
 ##FORMATING FUNCTIONS
 
@@ -118,3 +124,5 @@ def visualize_validity_strip():
     plt.show()
 
 #visualize_validity_strip()
+
+#PART IV: FIND ACCEPTABLE DATECUTOFFS
