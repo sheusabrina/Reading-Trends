@@ -52,6 +52,8 @@ def add_date_ordinal(df, date_column_name):
     new_df[new_column_name] = pd.to_datetime(df[date_column_name]).apply(lambda date: date.toordinal())
     return new_df
 
+    #print(add_date_ordinal(df, "review_publication_date"))
+
 def add_year(df, date_column_name):
     new_column_name = date_column_name+"_year"
     new_df = df.copy()
@@ -59,10 +61,7 @@ def add_year(df, date_column_name):
     new_df[new_column_name] = new_df[new_column_name].apply(lambda year: int(year) if pd.notna(year) else pd.NaT)
     return new_df
 
-df = df.head()
-print(add_year(df, "review_publication_date"))
-
-#print(add_date_ordinal(df, "review_publication_date"))
+#print(add_year(df, "review_publication_date"))
 
 #PART I: DATA SUMMARY
 
@@ -135,3 +134,30 @@ def visualize_validity_strip():
 #visualize_validity_strip()
 
 #PART IV: FIND ACCEPTABLE DATECUTOFFS
+
+def generate_year_cutoff():
+
+    new_df = valid_df.copy()
+    new_df = add_year(new_df, "review_publication_date")
+    year_cutoff_dict = {}
+
+    #strip non-sequentials / outliers
+
+    ## THIS PART ISN'T BUILT YET!
+
+    #identify years
+
+    years_list = new_df.review_publication_date_year.unique().tolist()
+
+    #identify ID cutoffs
+
+    for year in years_list:
+        year_df = new_df[new_df.review_publication_date_year == year]
+        print(year_df)
+
+        id_min, id_max = year_df["ID"].min(), year_df["ID"].max()
+        year_cutoff_dict[year] = (id_min, id_max)
+
+    return year_cutoff_dict
+
+print(generate_year_cutoff())
