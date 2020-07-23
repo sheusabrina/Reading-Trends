@@ -29,8 +29,8 @@ df.sort_values(by = "ID", inplace = True)
 df.reset_index(inplace = True, drop = True)
 
 ## SUBDFS
-valid_df = df[df.is_URL_valid == True]
-invalid_df = df[df.is_URL_valid == False]
+valid_df = df[df.is_URL_valid == True].reset_index(drop = True)
+invalid_df = df[df.is_URL_valid == False].reset_index(drop = True)
 
 ##COUNTS & PERCENTAGES
 num_ids_tested = len(df)
