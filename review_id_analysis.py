@@ -28,6 +28,7 @@ df.sort_values(by = "ID", inplace = True)
 
 df.reset_index(inplace = True, drop = True)
 
+
 ## SUBDFS
 valid_df = df[df.is_URL_valid == True].reset_index(drop = True)
 invalid_df = df[df.is_URL_valid == False].reset_index(drop = True)
@@ -52,8 +53,6 @@ def add_date_ordinal(df, date_column_name):
     new_df[new_column_name] = pd.to_datetime(df[date_column_name]).apply(lambda date: date.toordinal())
     return new_df
 
-    #print(add_date_ordinal(df, "review_publication_date"))
-
 def add_year(df, date_column_name):
     new_column_name = date_column_name+"_year"
     new_df = df.copy()
@@ -62,6 +61,48 @@ def add_year(df, date_column_name):
     return new_df
 
 #print(add_year(df, "review_publication_date"))
+
+def add_is_sequential():
+
+    new_df = valid_df.copy()
+
+    ## select starting point (minimum value in first five lines)
+    #this will generally be the first row of the df, unless that is an unusually high date
+    min_index = None
+    min_date = None
+
+    for index in range(0, 5):
+        date = new_df.review_publication_date.iloc[index]
+
+        if (not min_date) or (date < min_date):
+            min_index, min_date = index, date
+
+    #Initial Data for Reviewing Sequentials
+    last_sequential_index = min_index
+    last_sequential_date = min_date
+    new_df.at[last_sequential_index, "is_sequential"] = True
+
+    #Review Sequential Loop
+    for index in range(min_index + 1, len(new_df) - 1):
+
+        date = new_df.review_publication_date.iloc[index]
+        next_date = new_df.review_publication_date.iloc[index + 1]
+
+        if (date >= last_sequential_date) and (next_date >= date):
+            new_df.at[index, "is_sequential"] = True
+            last_sequential_index = index
+            last_sequential_date = date
+
+        else:
+            new_df.at[index, "is_sequential"] = False
+
+    #Some data hasn't been tagged (last row and maybe first few rows.) Fix it later?
+    #It isn't the end of the world, but it would be good to fix.
+
+    ##return
+    return new_df
+
+valid_df = add_is_sequential()
 
 #PART I: DATA SUMMARY
 
@@ -153,11 +194,10 @@ def generate_year_cutoff():
 
     for year in years_list:
         year_df = new_df[new_df.review_publication_date_year == year]
-        print(year_df)
 
         id_min, id_max = year_df["ID"].min(), year_df["ID"].max()
         year_cutoff_dict[year] = (id_min, id_max)
 
     return year_cutoff_dict
 
-print(generate_year_cutoff())
+#print(generate_year_cutoff())
