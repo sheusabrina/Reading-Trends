@@ -96,4 +96,25 @@ def visualize_dates():
     plt.tight_layout()
     plt.show()
 
-visualize_dates()
+#visualize_dates()
+
+#PART III: INSPECT INVALID DATES
+
+def visualize_validity_kde():
+
+    with sns.axes_style("white"):
+        sns.kdeplot(valid_ids, shade=True, label = "Valid IDs")
+        sns.kdeplot(invalid_ids, shade=True, label = "Invalid IDs")
+
+        plt.legend()
+
+    plt.show()
+
+def visualize_validity_strip():
+
+    with sns.axes_style("white"):
+        sns.stripplot(x="is_URL_valid", y="ID", data=df)
+
+    plt.show()
+
+#visualize_validity_strip()
