@@ -77,6 +77,8 @@ def add_is_sequential():
         if (not min_date) or (date < min_date):
             min_index, min_date = index, date
 
+    print(min_index)
+
     #Initial Data for Reviewing Sequentials
     last_sequential_index = min_index
     last_sequential_date = min_date
@@ -96,13 +98,23 @@ def add_is_sequential():
         else:
             new_df.at[index, "is_sequential"] = False
 
-    #Some data hasn't been tagged (last row and maybe first few rows.) Fix it later?
-    #It isn't the end of the world, but it would be good to fix.
+    #Review Sequential, Last Row
+    index = len(new_df) - 1
+    date = new_df.review_publication_date.iloc[index]
+
+    if date >= last_sequential_date:
+        new_df.at[index, "is_sequential"] = True
+
+    #Review Sequential, First Rows
 
     ##return
+    print(min_index)
+
     return new_df
 
 valid_df = add_is_sequential()
+
+print(valid_df)
 
 #PART I: DATA SUMMARY
 
