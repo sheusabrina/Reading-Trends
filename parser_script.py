@@ -26,6 +26,10 @@ class Review_Parser(Parser):
 
         return review_date
 
+    def review_soup_to_book_title(self, review_soup):
+        book_title = review_soup.find(attrs = {"class": "bookTitle"}).get_text()
+        return book_title
+
 class Book_Parser(Parser):
 
     def soup_to_review_urls(self, book_soup):
@@ -38,3 +42,13 @@ class Book_Parser(Parser):
             link_list.append(link)
 
         return link_list
+
+## TESTING
+
+test_review = open("test_review.html")
+test_parser = Review_Parser()
+
+review_soup = test_parser.html_to_soup(test_review)
+review_book_title = test_parser.review_soup_to_book_title(review_soup)
+
+print(review_book_title)
