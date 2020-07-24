@@ -87,6 +87,18 @@ def add_is_sequential(df_to_modify):
 
     return new_df
 
+def select_by_year(df_to_modify, min_year, max_year):
+
+    new_df = df_to_modify.copy()
+    new_df = add_year(new_df, "review_publication_date")
+
+    new_df = new_df[(new_df.review_publication_date_year >= min_year) & (new_df.review_publication_date_year <= max_year)].reset_index(drop = True)
+
+    return new_df
+
+#cut_df = select_by_year(valid_df, 2007, 2008)
+#print(cut_df)
+
 ##DATA SUMMARY FUNCTIONS
 
 def print_data_summary():
