@@ -39,6 +39,12 @@ class Review_Parser(Parser):
 
         return book_id
 
+    def review_soup_to_rating(self, review_soup):
+        review = review_soup.find(attrs = {"itemprop": "reviewRating"})
+        rating = review.find(attrs = {"class": "value-title"}).get("title")
+
+        return rating
+
 class Book_Parser(Parser):
 
     def soup_to_review_urls(self, book_soup):
@@ -59,7 +65,9 @@ test_parser = Review_Parser()
 
 review_soup = test_parser.html_to_soup(test_review)
 #review_book_title = test_parser.review_soup_to_book_title(review_soup)
-book_id = test_parser.review_soup_to_book_id(review_soup)
+#book_id = test_parser.review_soup_to_book_id(review_soup)
+book_rating = test_parser.review_soup_to_rating(review_soup)
 
 #print(review_book_title)
-print(book_id)
+#print(book_id)
+print(book_rating)
