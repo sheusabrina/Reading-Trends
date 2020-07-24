@@ -176,9 +176,9 @@ def visualize_dates(df_to_show = valid_df):
     plt.tight_layout()
     plt.show()
 
-def visualize_sequential_strip():
+def visualize_sequential_strip(df_to_show = valid_df):
 
-    new_df = add_is_sequential(valid_df)
+    new_df = add_is_sequential(df_to_show)
 
     with sns.axes_style("white"):
         sns.stripplot(x="is_sequential", y="review_publication_date", data=new_df, jitter = 0.5)
