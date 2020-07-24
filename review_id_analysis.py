@@ -108,13 +108,8 @@ def add_is_sequential():
     #Review Sequential, First Rows
 
     ##return
-    print(min_index)
 
     return new_df
-
-valid_df = add_is_sequential()
-
-print(valid_df)
 
 #PART I: DATA SUMMARY
 
@@ -188,15 +183,19 @@ def visualize_validity_strip():
 
 #PART IV: FIND ACCEPTABLE DATECUTOFFS
 
-def generate_year_cutoff():
+def generate_year_cutoff(sequential_only = True):
 
-    new_df = valid_df.copy()
+    #Generate new_df (sequential or not)
+
+    if sequential_only:
+        new_df = add_is_sequential()
+        new_df = new_df[new_df.is_sequential == True].reset_index(drop = True)
+
+    else:
+        new_df = valid_df.copy()
+
     new_df = add_year(new_df, "review_publication_date")
     year_cutoff_dict = {}
-
-    #strip non-sequentials / outliers
-
-    ## THIS PART ISN'T BUILT YET!
 
     #identify years
 
