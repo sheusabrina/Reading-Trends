@@ -125,7 +125,7 @@ def visualize_validity_kde():
 def visualize_validity_strip():
 
     with sns.axes_style("white"):
-        sns.stripplot(x="is_URL_valid", y="ID", data=df)
+        sns.stripplot(x="is_URL_valid", y="ID", data=df, jitter = 0.5)
 
     plt.title("Review URL IDs")
 
@@ -169,7 +169,7 @@ def visualize_sequential_strip():
     new_df = add_is_sequential(valid_df)
 
     with sns.axes_style("white"):
-        sns.stripplot(x="is_sequential", y="review_publication_date", data=new_df)
+        sns.stripplot(x="is_sequential", y="review_publication_date", data=new_df, jitter = 0.5)
 
         plt.title("Review URL Publication Dates")
 
@@ -207,11 +207,11 @@ def generate_year_cutoff(sequential_only = True):
 
 ## ANALYSIS & FINDINGS
 
-print_data_summary()
+#print_data_summary()
 visualize_validity_strip()
 
-print_is_dates_sequential()
-visualize_dates()
+#print_is_dates_sequential()
+#visualize_dates()
 visualize_sequential_strip()
 
-print(generate_year_cutoff())
+#print(generate_year_cutoff())
