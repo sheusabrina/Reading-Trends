@@ -145,9 +145,9 @@ def print_is_dates_sequential():
     Dates Sequential: {}
     """.format(is_sequential))
 
-def visualize_dates():
+def visualize_dates(df_to_show = valid_df):
 
-    ordinal_df = add_date_ordinal(valid_df, "review_publication_date")
+    ordinal_df = add_date_ordinal(df_to_show, "review_publication_date")
 
     with sns.axes_style("white"):
         ax = sns.regplot(x = "review_publication_date_ordinal", y = "ID",  data = ordinal_df, ci = None, marker = ".", scatter_kws= {"alpha": 0.5}, line_kws = {"color": "gray"})
@@ -167,9 +167,11 @@ def visualize_dates():
 def visualize_sequential_strip():
 
     new_df = add_is_sequential(valid_df)
+    new_df = add_year(new_df, "review_publication_date")
 
     with sns.axes_style("white"):
         sns.stripplot(x="is_sequential", y="review_publication_date", data=new_df, jitter = 0.5)
+        #sns.stripplot(x="review_publication_date_year", y="review_publication_date", hue = "is_sequential", data=new_df, jiter = 0.5)
 
         plt.title("Review URL Publication Dates")
 
@@ -208,10 +210,10 @@ def generate_year_cutoff(sequential_only = True):
 ## ANALYSIS & FINDINGS
 
 #print_data_summary()
-visualize_validity_strip()
+#visualize_validity_strip()
 
 #print_is_dates_sequential()
-#visualize_dates()
-visualize_sequential_strip()
+visualize_dates()
+#visualize_sequential_strip()
 
 #print(generate_year_cutoff())
