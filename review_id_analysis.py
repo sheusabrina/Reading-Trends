@@ -47,16 +47,16 @@ invalid_ids = invalid_df.ID.values.tolist()
 
 ##FORMATING FUNCTIONS
 
-def add_date_ordinal(df, date_column_name):
+def add_date_ordinal(df_to_modify, date_column_name):
     new_column_name = date_column_name+"_ordinal"
-    new_df = df.copy()
-    new_df[new_column_name] = pd.to_datetime(df[date_column_name]).apply(lambda date: date.toordinal())
+    new_df = df_to_modify.copy()
+    new_df[new_column_name] = pd.to_datetime(df_to_modify[date_column_name]).apply(lambda date: date.toordinal())
     return new_df
 
-def add_year(df, date_column_name):
+def add_year(df_to_modify, date_column_name):
     new_column_name = date_column_name+"_year"
-    new_df = df.copy()
-    new_df[new_column_name] = (pd.to_datetime(df[date_column_name]).apply(lambda date: date.year))
+    new_df = df_to_modify.copy()
+    new_df[new_column_name] = (pd.to_datetime(new_df[date_column_name]).apply(lambda date: date.year))
     new_df[new_column_name] = new_df[new_column_name].apply(lambda year: int(year) if pd.notna(year) else pd.NaT)
     return new_df
 
