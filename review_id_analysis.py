@@ -77,8 +77,6 @@ def add_is_sequential(df_to_modify):
         if (not min_date) or (date < min_date):
             min_index, min_date = index, date
 
-    print(min_index)
-
     #Initial Data for Reviewing Sequentials
     last_sequential_index = min_index
     last_sequential_date = min_date
@@ -161,6 +159,18 @@ def visualize_dates():
     plt.show()
 
 #visualize_dates()
+
+def visualize_sequential_strip():
+
+    new_df = add_is_sequential(valid_df)
+
+    with sns.axes_style("white"):
+        #sns.stripplot(x="is_sequential", y="ID", data=new_df)
+        sns.stripplot(x="is_sequential", y="review_publication_date", data=new_df)
+
+    plt.show()
+
+visualize_sequential_strip()
 
 #PART III: INSPECT INVALID DATES
 
