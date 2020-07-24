@@ -242,6 +242,11 @@ def generate_year_cutoff(sequential_only = True):
 
 #What happened in 2016?
 
-visualize_sequential_strip_by_year()
-valid_df_2015_2017 = select_by_year(valid_df, 2015, 2017)
-visualize_dates(valid_df_2015_2017)
+#visualize_sequential_strip_by_year()
+#valid_df_2015_2017 = select_by_year(valid_df, 2015, 2017)
+#visualize_dates(valid_df_2015_2017)
+
+#What happened in 2017 - 2020?
+
+valid_df_2017_2020 = select_by_year(valid_df, 2017, 2020)
+visualize_dates(valid_df_2017_2020)
