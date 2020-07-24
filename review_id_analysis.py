@@ -62,9 +62,9 @@ def add_year(df_to_modify, date_column_name):
 
 #print(add_year(df, "review_publication_date"))
 
-def add_is_sequential():
+def add_is_sequential(df_to_modify):
 
-    new_df = valid_df.copy()
+    new_df = df_to_modify.copy()
 
     ## select starting point (minimum value in first five lines)
     #this will generally be the first row of the df, unless that is an unusually high date
@@ -190,7 +190,7 @@ def generate_year_cutoff(sequential_only = True):
     #Generate new_df (sequential or not)
 
     if sequential_only:
-        new_df = add_is_sequential()
+        new_df = add_is_sequential(valid_df)
         new_df = new_df[new_df.is_sequential == True].reset_index(drop = True)
 
     else:
