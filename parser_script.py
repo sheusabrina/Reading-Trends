@@ -30,6 +30,15 @@ class Review_Parser(Parser):
         book_title = review_soup.find(attrs = {"class": "bookTitle"}).get_text()
         return book_title
 
+    def review_soup_to_book_id(self, review_soup):
+        book = review_soup.find(attrs = {"class": "bookTitle"})
+        book_url = book.get("href")
+
+        book_id = book_url.replace("/book/show/", "")
+        book_id = book_id.split(".")[0]
+
+        return book_id
+
 class Book_Parser(Parser):
 
     def soup_to_review_urls(self, book_soup):
@@ -49,6 +58,8 @@ test_review = open("test_review.html")
 test_parser = Review_Parser()
 
 review_soup = test_parser.html_to_soup(test_review)
-review_book_title = test_parser.review_soup_to_book_title(review_soup)
+#review_book_title = test_parser.review_soup_to_book_title(review_soup)
+book_id = test_parser.review_soup_to_book_id(review_soup)
 
-print(review_book_title)
+#print(review_book_title)
+print(book_id)
