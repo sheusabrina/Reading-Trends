@@ -25,7 +25,6 @@ class Review_URL_ID_Data_Collector():
         #counters
         self.review_counter = 0
         self.max_data_points = max_data_points
-        self.progress_percent_next_benchmark = 5
 
         #creating scrapers
         self.scraper = Scraper()
@@ -61,13 +60,13 @@ class Review_URL_ID_Data_Collector():
         self.review_counter += 1
 
     def print_progress(self):
-        self.percent_complete = 100 * self.review_counter // self.max_data_points
-        if self.percent_complete >= self.progress_percent_next_benchmark:
+        if self.review_counter % 5 == 0:
+            percent_complete = round(100 * self.review_counter / self.max_data_points, 2)
+            percent_complete_string = str(percent_complete)
             now = datetime.now()
             now_string = now.strftime("%d/%m/%Y %H:%M:%S")
-            print("Data Collection {}% Complete at {}".format(str(self.percent_complete), now_string))
 
-            self.progress_percent_next_benchmark +=5
+            print("{} / {} Reviews Collected ({}% Complete) at {}". format(str(self.review_counter), str(self.max_data_points), percent_complete_string, now_string))
 
     def data_collection_loop(self):
         print("Beginning Data Collection...")
@@ -79,6 +78,7 @@ class Review_URL_ID_Data_Collector():
             self.print_progress()
             self.sleep()
 
+        print("Data Collection Complete")
         self.datafile.close()
 
 #REVIEW ID COLLECTOR
@@ -88,9 +88,9 @@ class Review_URL_ID_Data_Collector():
         #Part 2: Assess invalid review IDs for patterns in order to better estimate the number of reviews and optimize eventual scraping.
 
 #keeping this low until I am fully confident that this is working as expected.
-num_reviews_to_collect = 5
+num_reviews_to_collect = 10
 estimated_num_reviews = int(3.5 * 10 **9)
 
 #Uncomment to run the data collector
-#review_id_collector = Review_URL_ID_Data_Collector(0, estimated_num_reviews, num_reviews_to_collect, 5, "test_scrape")
-#review_id_collector.data_collection_loop()
+review_id_collector = Review_URL_ID_Data_Collector(0, estimated_num_reviews, num_reviews_to_collect, 5, "test_scrape")
+review_id_collector.data_collection_loop()
