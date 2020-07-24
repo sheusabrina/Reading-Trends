@@ -8,16 +8,15 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import seaborn as sns
 
-df = pd.read_csv("review_id_sample_data.csv")
-#df = pd.read_csv("review_id_data.csv")
+#df = pd.read_csv("review_id_sample_data.csv")
+df = pd.read_csv("review_id_data.csv")
 
 #PROCESSING DF
-
 df.rename(columns = {" is_URL_valid": "is_URL_valid", " review_publication_date": "review_publication_date"}, inplace = True)
 
 df.review_publication_date = pd.to_datetime(df.review_publication_date, format = "%b %d %Y", errors = "coerce")
-df.sort_values(by = "ID", inplace = True)
 
+df.sort_values(by = "ID", inplace = True)
 df.reset_index(inplace = True, drop = True)
 
 ## SUBDFS
@@ -208,11 +207,11 @@ def generate_year_cutoff(sequential_only = True):
 
 ## ANALYSIS & FINDINGS
 
-#print_data_summary()
-#visualize_validity_strip()
+print_data_summary()
+visualize_validity_strip()
 
-#print_is_dates_sequential()
-#visualize_dates()
-#visualize_sequential_strip()
+print_is_dates_sequential()
+visualize_dates()
+visualize_sequential_strip()
 
-#print(generate_year_cutoff())
+print(generate_year_cutoff())
