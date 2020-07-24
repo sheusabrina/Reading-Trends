@@ -235,7 +235,13 @@ def generate_year_cutoff(sequential_only = True):
 #visualize_validity_strip()
 
 #print_is_dates_sequential()
-visualize_dates()
-visualize_sequential_strip()
+#visualize_dates()
+#visualize_sequential_strip()
 
 #print(generate_year_cutoff())
+
+#What happened in 2016?
+
+visualize_sequential_strip_by_year()
+valid_df_2015_2017 = select_by_year(valid_df, 2015, 2017)
+visualize_dates(valid_df_2015_2017)
