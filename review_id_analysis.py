@@ -8,16 +8,8 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import seaborn as sns
 
-#REVIEW ID COLLECTOR
-    #Purpose: collect data to test the assumption that there are roughly 3.5B reviews (seems too high?!) with IDs arranged sequentially by date from 0 upwards.
-    #Analytic Plan:
-        #Part 1: For valid review IDs, confirm that IDs and publication dates are sequential. Additionally, identify ID cutoffs in order to limit eventual scraping to certain time periods.
-        #Part 2: Assess invalid review IDs for patterns in order to better estimate the number of reviews and optimize eventual scraping.
-
-#This CSV contains a partial dataset and should not be used for analysis. But it will be enough start writing the code.
 df = pd.read_csv("review_id_sample_data.csv")
-
-#df = df.head(10)
+#df = pd.read_csv("review_id_data.csv")
 
 #PROCESSING DF
 
@@ -28,22 +20,9 @@ df.sort_values(by = "ID", inplace = True)
 
 df.reset_index(inplace = True, drop = True)
 
-
 ## SUBDFS
 valid_df = df[df.is_URL_valid == True].reset_index(drop = True)
 invalid_df = df[df.is_URL_valid == False].reset_index(drop = True)
-
-##COUNTS & PERCENTAGES
-num_ids_tested = len(df)
-num_ids_valid = len(valid_df)
-num_ids_invalid = len(invalid_df)
-
-perc_ids_valid = round(100 * num_ids_valid / num_ids_tested , 1)
-perc_ids_invalid = round(100 * num_ids_invalid / num_ids_tested, 1)
-
-#Value Lists
-valid_ids= valid_df.ID.values.tolist()
-invalid_ids = invalid_df.ID.values.tolist()
 
 ##FORMATING FUNCTIONS
 
@@ -59,8 +38,6 @@ def add_year(df_to_modify, date_column_name):
     new_df[new_column_name] = (pd.to_datetime(new_df[date_column_name]).apply(lambda date: date.year))
     new_df[new_column_name] = new_df[new_column_name].apply(lambda year: int(year) if pd.notna(year) else pd.NaT)
     return new_df
-
-#print(add_year(df, "review_publication_date"))
 
 def add_is_sequential(df_to_modify):
 
@@ -111,9 +88,19 @@ def add_is_sequential(df_to_modify):
 
     return new_df
 
-#PART I: DATA SUMMARY
+##DATA SUMMARY FUNCTIONS
 
 def print_data_summary():
+
+    #Values & Calculations
+    num_ids_tested = len(df)
+    num_ids_valid = len(valid_df)
+    num_ids_invalid = len(invalid_df)
+
+    perc_ids_valid = round(100 * num_ids_valid / num_ids_tested , 1)
+    perc_ids_invalid = round(100 * num_ids_invalid / num_ids_tested, 1)
+
+    #Print Summary
 
     print("""
     IDs Tested: {}
@@ -121,11 +108,33 @@ def print_data_summary():
     Invalid IDs: {} ({}%)
     """.format(str(num_ids_tested), str(num_ids_valid), str(perc_ids_valid), str(num_ids_invalid), str(perc_ids_invalid)))
 
-#print_data_summary()
+##ID VALIDITY FUNCTIONS
 
-##PART II: SEQUENTIAL DATES
+def visualize_validity_kde():
 
-def is_dates_sequential():
+    valid_ids= valid_df.ID.values.tolist()
+    invalid_ids = invalid_df.ID.values.tolist()
+
+    with sns.axes_style("white"):
+        sns.kdeplot(valid_ids, shade=True, label = "Valid IDs")
+        sns.kdeplot(invalid_ids, shade=True, label = "Invalid IDs")
+
+        plt.legend()
+
+    plt.show()
+
+def visualize_validity_strip():
+
+    with sns.axes_style("white"):
+        sns.stripplot(x="is_URL_valid", y="ID", data=df)
+
+    plt.title("Review URL IDs")
+
+    plt.show()
+
+## DATE SEQUENTIAL FUNCTIONS
+
+def print_is_dates_sequential():
     df_by_id = valid_df.sort_values(by = "ID").reset_index(drop = True)
     df_by_date = valid_df.sort_values(by = "review_publication_date").reset_index(drop = True)
 
@@ -136,8 +145,6 @@ def is_dates_sequential():
     print("""
     Dates Sequential: {}
     """.format(is_sequential))
-
-#is_dates_sequential()
 
 def visualize_dates():
 
@@ -158,42 +165,18 @@ def visualize_dates():
     plt.tight_layout()
     plt.show()
 
-#visualize_dates()
-
 def visualize_sequential_strip():
 
     new_df = add_is_sequential(valid_df)
 
     with sns.axes_style("white"):
-        #sns.stripplot(x="is_sequential", y="ID", data=new_df)
         sns.stripplot(x="is_sequential", y="review_publication_date", data=new_df)
 
-    plt.show()
-
-visualize_sequential_strip()
-
-#PART III: INSPECT INVALID DATES
-
-def visualize_validity_kde():
-
-    with sns.axes_style("white"):
-        sns.kdeplot(valid_ids, shade=True, label = "Valid IDs")
-        sns.kdeplot(invalid_ids, shade=True, label = "Invalid IDs")
-
-        plt.legend()
+        plt.title("Review URL Publication Dates")
 
     plt.show()
 
-def visualize_validity_strip():
-
-    with sns.axes_style("white"):
-        sns.stripplot(x="is_URL_valid", y="ID", data=df)
-
-    plt.show()
-
-#visualize_validity_strip()
-
-#PART IV: FIND ACCEPTABLE DATECUTOFFS
+## DATE CUTOFF FUNCTIONS
 
 def generate_year_cutoff(sequential_only = True):
 
@@ -222,5 +205,14 @@ def generate_year_cutoff(sequential_only = True):
         year_cutoff_dict[year] = (id_min, id_max)
 
     return year_cutoff_dict
+
+## ANALYSIS & FINDINGS
+
+#print_data_summary()
+#visualize_validity_strip()
+
+#print_is_dates_sequential()
+#visualize_dates()
+#visualize_sequential_strip()
 
 #print(generate_year_cutoff())
