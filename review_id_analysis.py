@@ -106,6 +106,8 @@ def add_is_sequential():
         new_df.at[index, "is_sequential"] = True
 
     #Review Sequential, First Rows
+    if min_index != 0:
+        new_df.fillna(value = False, )
 
     ##return
 
