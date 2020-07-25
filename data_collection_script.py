@@ -4,6 +4,7 @@ from datetime import datetime
 import re
 import requests
 import random
+import pandas as pd
 
 #import classes
 
@@ -31,7 +32,30 @@ class Review_Data_Collector:
         self.parser = Review_Parser()
 
         #creating log file
-        self.datafile = open(file_name+".csv", "a")
+        self.log_file_name = file_name + ".csv"
+
+    def is_csv(self):
+
+        print("Entering is_csv...")
+
+        try:
+            print("trying...")
+            df = pd.read_csv(self.log_file_name)
+            is_csv = True
+
+        except (FileNotFoundError, pd.errors.EmptyDataError):
+            print("we're in the except statement")
+            is_csv = False
+
+        return is_csv
+
+    def open_log_file(self):
+
+        self.datafile = open(self.log_file_name, "a")
+
+    def add_headers_to_log_file(self):
+
+        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
     def generate_test_url(self):
         self.test_id = random.choice(self.id_list)
@@ -59,6 +83,11 @@ class Review_Data_Collector:
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
     def data_collection_loop(self):
+
+        if not self.is_csv():
+            self.open_log_file()
+            self.add_headers_to_log_file()
+
         print("Beginning Data Collection...")
         while self.review_counter < self.max_data_points:
             self.generate_test_url()
@@ -73,10 +102,7 @@ class Review_Data_Collector:
 
 class Review_URL_ID_Data_Collector(Review_Data_Collector):
 
-    def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name):
-
-        super().__init__(min_id, max_id, max_data_points, max_sleep_time, file_name)
-
+    def add_headers_to_log_file(self):
         self.datafile.write("ID,is_URL_valid,review_publication_date")
 
     def parse_review(self):
@@ -96,9 +122,7 @@ class Review_URL_ID_Data_Collector(Review_Data_Collector):
 
 class Review_Detail_Data_Collector(Review_Data_Collector):
 
-    def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name):
-
-        super().__init__(min_id, max_id, max_data_points, max_sleep_time, file_name)
+    def add_headers_to_log_file(self):
 
         self.datafile.write("ID,is_URL_valid,review_publication_date,book_title,book_id,rating,reviewer_href")
 
@@ -128,9 +152,11 @@ class Review_Detail_Data_Collector(Review_Data_Collector):
         self.review_counter += 1
 
 #keeping this low until I am fully confident that this is working as expected.
-num_reviews_to_collect = 10
+num_reviews_to_collect = 5
 estimated_num_reviews = int(3.5 * 10 **9)
 
-#Uncomment to run the data collector
-#review_id_collector = Review_URL_ID_Data_Collector(0, estimated_num_reviews, num_reviews_to_collect, 5, "test_scrape")
-#review_id_collector.data_collection_loop()
+#Uncomment to run the URL generation data collector
+review_id_collector = Review_URL_ID_Data_Collector(0, estimated_num_reviews, num_reviews_to_collect, 5, "test_scrape")
+review_id_collector.data_collection_loop()
+
+#review_id_collector = Review_Data_Collector(0, estimated_num_reviews, num_reviews_to_collect, 5, "test_scrape")
