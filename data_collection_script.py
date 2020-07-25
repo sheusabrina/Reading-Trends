@@ -105,15 +105,26 @@ class Review_Detail_Data_Collector(Review_Data_Collector):
 
     def parse_review(self):
 
-        pass
+        self.test_soup = self.parser.html_to_soup(self.test_scraped_string)
+        self.is_test_valid = self.parser.review_soup_is_valid(self.test_soup)
+
+        if self.is_test_valid:
+            self.test_date = self.parser.review_soup_to_date(self.test_soup)
+            self.test_title = self.parser.review_soup_to_book_title(self.test_soup)
+            self.test_book_id = self.parser.review_soup_to_book_id(self.test_soup)
+            self.test_rating = self.parser.review_soup_to_rating(self.test_soup)
+            self.test_reviewer_href = self.parser.review_soup_to_reviewer_href(self.test_soup)
+
+        else:
+            self.test_date = None
+            self.test_title = None
+            self.test_book_id = None
+            self.test_rating = None
+            self.test_reviewer_href = None
 
     def log_data(self):
 
-        pass 
-
-
-
-
+        pass
 
 #keeping this low until I am fully confident that this is working as expected.
 num_reviews_to_collect = 10
