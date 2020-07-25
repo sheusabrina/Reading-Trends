@@ -66,7 +66,23 @@ class Review_Parser(Parser):
 
         progress = review_soup.find(attrs = {"class": "readingTimeline"}).get_text().replace("\\n" , " ").strip()
         progress_list = progress.split("       ")
-        progress_dict = {item.split(" – ")[1].strip() : item.split(" – ")[0].strip().replace(",", "") for item in progress_list}
+
+        progress_dict = {}
+
+        for item in progress_list:
+
+            item = item.replace(",", "")
+
+            if " – " in item:
+                split_list = item.split(" – ")
+                milestone = split_list[1].strip()
+                date = split_list[0].strip()
+
+            else:
+                milestone = item
+                date = None
+
+            progress_dict[milestone] = date
 
         return progress_dict
 
@@ -100,21 +116,25 @@ class Book_Parser(Parser):
 
 ## TESTING
 
-test_review = open("test_review.html")
+#test_review = open("test_review.html")
 #test_unpopulated_review = open("test_review_unpopulated.html")
-test_parser = Review_Parser()
+#test_grounded_review = open("test_review_grounded.html")
 
-review_soup = test_parser.html_to_soup(test_review)
+#test_parser = Review_Parser()
+
+#review_soup = test_parser.html_to_soup(test_grounded_review)
+#review_soup = test_parser.html_to_soup(test_review)
+
 #review_book_title = test_parser.review_soup_to_book_title(review_soup)
 #book_id = test_parser.review_soup_to_book_id(review_soup)
 #review_book_is_rating = test_parser.review_soup_is_rating(review_soup)
 #book_rating = test_parser.review_soup_to_rating(review_soup)
 #reviewer_href = test_parser.review_soup_to_reviewer_href(review_soup)
-reading_timeline = test_parser.review_soup_to_progress_dict(review_soup)
+#reading_timeline = test_parser.review_soup_to_progress_dict(review_soup)
 
-start = test_parser.progress_dict_to_start_date(reading_timeline)
-finish = test_parser.progress_dict_to_finish_date(reading_timeline)
-shelved = test_parser.progress_dict_to_shelved_date(reading_timeline)
+#start = test_parser.progress_dict_to_start_date(reading_timeline)
+#finish = test_parser.progress_dict_to_finish_date(reading_timeline)
+#shelved = test_parser.progress_dict_to_shelved_date(reading_timeline)
 
 #print(review_book_title)
 #print(book_id)
@@ -122,7 +142,7 @@ shelved = test_parser.progress_dict_to_shelved_date(reading_timeline)
 #print(reviewer_href)
 #print(review_book_is_rating)
 
-print(reading_timeline)
-print(start)
-print(finish)
-print(shelved)
+#print(reading_timeline)
+#print(start)
+#print(finish)
+#print(shelved)
