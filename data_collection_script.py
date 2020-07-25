@@ -100,8 +100,7 @@ class Review_Detail_Data_Collector(Review_Data_Collector):
 
         super().__init__(min_id, max_id, max_data_points, max_sleep_time, file_name)
 
-        #NEED TO ADD COLUMN TITLES HERE
-        #self.datafile.write("ID,is_URL_valid,review_publication_date")
+        self.datafile.write("ID,is_URL_valid,review_publication_date,book_title,book_id,rating,reviewer_href")
 
     def parse_review(self):
 
