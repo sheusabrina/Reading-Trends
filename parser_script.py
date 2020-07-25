@@ -62,6 +62,14 @@ class Review_Parser(Parser):
 
         return reviewer_href
 
+    def review_soup_to_progress_dict(self, review_soup):
+
+        progress = review_soup.find(attrs = {"class": "readingTimeline"}).get_text().replace("\\n" , " ").strip()
+        progress_list = reading_progress.split("       ")
+        progress_dict = {item.split(" – ")[1].strip() : item.split(" – ")[0].strip().replace(",", "") for item in reading_progress_list}
+
+        return progress_dict
+
 class Book_Parser(Parser):
 
     def soup_to_review_urls(self, book_soup):
@@ -77,23 +85,21 @@ class Book_Parser(Parser):
 
 ## TESTING
 
-#test_review = open("test_review.html")
+test_review = open("test_review.html")
 #test_unpopulated_review = open("test_review_unpopulated.html")
-#test_parser = Review_Parser()
+test_parser = Review_Parser()
 
-#review_soup = test_parser.html_to_soup(test_unpopulated_review)
+review_soup = test_parser.html_to_soup(test_review)
 #review_book_title = test_parser.review_soup_to_book_title(review_soup)
 #book_id = test_parser.review_soup_to_book_id(review_soup)
 #review_book_is_rating = test_parser.review_soup_is_rating(review_soup)
 #book_rating = test_parser.review_soup_to_rating(review_soup)
 #reviewer_href = test_parser.review_soup_to_reviewer_href(review_soup)
+reading_timeline = test_parser.review_soup_to_progress_dict(review_soup)
 
 #print(review_book_title)
 #print(book_id)
 #print(book_rating)
 #print(reviewer_href)
 #print(review_book_is_rating)
-
-title = "Knots and Crosses (Inspector Rebus, #1)"
-title = title.replace(",", "")
-print(title)
+print(reading_timeline)
