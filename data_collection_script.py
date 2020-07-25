@@ -123,7 +123,9 @@ class Review_Detail_Data_Collector(Review_Data_Collector):
 
     def log_data(self):
 
-        pass
+        self.datafile.write("\n{},{},{},{},{},{},{}".format(str(self.test_id), self.is_test_valid, self.test_date, self.test_book_title, self.test_book_id, self.test_rating, self.test_reviewer_href))
+
+        self.review_counter += 1
 
 #keeping this low until I am fully confident that this is working as expected.
 num_reviews_to_collect = 10
