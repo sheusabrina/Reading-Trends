@@ -58,6 +58,7 @@ class Review_Data_Collector:
         self.test_url = self.base_url + str(self.test_id)
 
     def scrape_url(self):
+
         self.test_scraped_string = self.scraper.url_to_string(self.test_url)
 
     def sleep(self):
@@ -133,14 +134,14 @@ class Review_Detail_Data_Collector(Review_Data_Collector):
 
         if self.is_test_valid:
             self.test_date = self.parser.review_soup_to_date(self.test_soup)
-            self.test_title = self.parser.review_soup_to_book_title(self.test_soup)
+            self.test_book_title = self.parser.review_soup_to_book_title(self.test_soup)
             self.test_book_id = self.parser.review_soup_to_book_id(self.test_soup)
             self.test_rating = self.parser.review_soup_to_rating(self.test_soup)
             self.test_reviewer_href = self.parser.review_soup_to_reviewer_href(self.test_soup)
 
         else:
             self.test_date = None
-            self.test_title = None
+            self.test_book_title = None
             self.test_book_id = None
             self.test_rating = None
             self.test_reviewer_href = None
