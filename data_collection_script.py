@@ -81,7 +81,7 @@ class Review_Data_Collector:
 
     def data_collection_loop(self):
 
-        if self.is_csv:
+        if self.is_csv():
             self.open_log_file()
 
         else:
@@ -161,7 +161,7 @@ class Review_Detail_Data_Collector(Review_Data_Collector):
         self.review_counter += 1
 
 #keeping this low until I am fully confident that this is working as expected.
-num_reviews_to_collect = 10
+num_reviews_to_collect = 2
 estimated_num_reviews = int(3.5 * 10 **9)
 num_wait_seconds = 1
 
