@@ -34,8 +34,12 @@ class Review_Parser(Parser):
         book = review_soup.find(attrs = {"class": "bookTitle"})
         book_url = book.get("href")
 
+        #remove front of URL
         book_id = book_url.replace("/book/show/", "")
         book_id = book_id.split(".")[0]
+        
+        #remove back of URL
+        book_id = book_id.split("-")[0]
 
         return book_id
 
