@@ -94,6 +94,27 @@ class Review_URL_ID_Data_Collector(Review_Data_Collector):
 
         self.review_counter += 1
 
+class Review_Detail_Data_Collector(Review_Data_Collector):
+
+    def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name):
+
+        super().__init__(min_id, max_id, max_data_points, max_sleep_time, file_name)
+
+        #NEED TO ADD COLUMN TITLES HERE
+        #self.datafile.write("ID,is_URL_valid,review_publication_date")
+
+    def parse_review(self):
+
+        pass
+
+    def log_data(self):
+
+        pass 
+
+
+
+
+
 #keeping this low until I am fully confident that this is working as expected.
 num_reviews_to_collect = 10
 estimated_num_reviews = int(3.5 * 10 **9)
