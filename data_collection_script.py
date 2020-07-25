@@ -71,11 +71,6 @@ class Review_Data_Collector:
         print("Data Collection Complete")
         self.datafile.close()
 
-#REVIEW ID COLLECTOR
-    #Purpose: collect data to test the assumption that there are roughly 3.5B reviews (seems too high?!) with IDs arranged sequentially by date from 0 upwards.
-    #Analytic Plan:
-        #Part 1: For valid review IDs, confirm that IDs and publication dates are sequential. Additionally, identify ID cutoffs in order to limit eventual scraping to certain time periods.
-        #Part 2: Assess invalid review IDs for patterns in order to better estimate the number of reviews and optimize eventual scraping.
 class Review_URL_ID_Data_Collector(Review_Data_Collector):
 
     def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name):
@@ -104,5 +99,5 @@ num_reviews_to_collect = 10
 estimated_num_reviews = int(3.5 * 10 **9)
 
 #Uncomment to run the data collector
-review_id_collector = Review_URL_ID_Data_Collector(0, estimated_num_reviews, num_reviews_to_collect, 5, "test_scrape")
-review_id_collector.data_collection_loop()
+#review_id_collector = Review_URL_ID_Data_Collector(0, estimated_num_reviews, num_reviews_to_collect, 5, "test_scrape")
+#review_id_collector.data_collection_loop()
