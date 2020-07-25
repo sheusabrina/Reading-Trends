@@ -36,15 +36,11 @@ class Review_Data_Collector:
 
     def is_csv(self):
 
-        print("Entering is_csv...")
-
         try:
-            print("trying...")
             df = pd.read_csv(self.log_file_name)
             is_csv = True
 
         except (FileNotFoundError, pd.errors.EmptyDataError):
-            print("we're in the except statement")
             is_csv = False
 
         return is_csv
@@ -154,9 +150,15 @@ class Review_Detail_Data_Collector(Review_Data_Collector):
 #keeping this low until I am fully confident that this is working as expected.
 num_reviews_to_collect = 5
 estimated_num_reviews = int(3.5 * 10 **9)
+num_wait_seconds = 1
+
+min_2017_ID = 1484362322 #I want to actually analyze data from 2018-2020, but I'm pulling 2017 data too just because the ID generation isn't quite linear.
+max_2020_ID = 3455207761 #I'm not sure if i should use this, since reviews are going to continue to roll in...
 
 #Uncomment to run the URL generation data collector
-review_id_collector = Review_URL_ID_Data_Collector(0, estimated_num_reviews, num_reviews_to_collect, 5, "test_scrape")
-review_id_collector.data_collection_loop()
+#review_id_collector = Review_URL_ID_Data_Collector(0, estimated_num_reviews, num_reviews_to_collect, num_wait_seconds, "test_scrape")
+#review_id_collector.data_collection_loop()
 
-#review_id_collector = Review_Data_Collector(0, estimated_num_reviews, num_reviews_to_collect, 5, "test_scrape")
+#Uncomment to run the Review Detail collector
+review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
+review_collector.data_collection_loop()
