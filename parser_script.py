@@ -28,6 +28,7 @@ class Review_Parser(Parser):
 
     def review_soup_to_book_title(self, review_soup):
         book_title = review_soup.find(attrs = {"class": "bookTitle"}).get_text()
+        book_title = book_title.replace(",", "")
         return book_title
 
     def review_soup_to_book_id(self, review_soup):
@@ -37,7 +38,7 @@ class Review_Parser(Parser):
         #remove front of URL
         book_id = book_url.replace("/book/show/", "")
         book_id = book_id.split(".")[0]
-        
+
         #remove back of URL
         book_id = book_id.split("-")[0]
 
@@ -92,3 +93,7 @@ class Book_Parser(Parser):
 #print(book_rating)
 #print(reviewer_href)
 #print(review_book_is_rating)
+
+title = "Knots and Crosses (Inspector Rebus, #1)"
+title = title.replace(",", "")
+print(title)
