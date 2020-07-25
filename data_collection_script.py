@@ -125,7 +125,7 @@ class Review_Detail_Data_Collector(Review_Data_Collector):
 
     def add_headers_to_log_file(self):
 
-        self.datafile.write("ID,is_URL_valid,review_publication_date,book_title,book_id,rating,reviewer_href")
+        self.datafile.write("ID,is_URL_valid,review_publication_date,book_title,book_id,rating,reviewer_href,started_reading_date,finished_reading_date,shelved_date")
 
     def parse_review(self):
 
@@ -139,21 +139,29 @@ class Review_Detail_Data_Collector(Review_Data_Collector):
             self.test_rating = self.parser.review_soup_to_rating(self.test_soup)
             self.test_reviewer_href = self.parser.review_soup_to_reviewer_href(self.test_soup)
 
+            self.test_progress_dict = self.parser.review_soup_to_progress_dict(self.test_soup)
+            self.test_start_date = self.parser.progress_dict_to_start_date(self.test_progress_dict)
+            self.test_finished_date = self.parser.progress_dict_to_finish_date(self.test_progress_dict)
+            self.test_shelved_date = self.parser.progress_dict_to_shelved_date(self.test_progress_dict)
+
         else:
             self.test_date = None
             self.test_book_title = None
             self.test_book_id = None
             self.test_rating = None
             self.test_reviewer_href = None
+            self.test_start_date = None
+            self.test_finished_date = None
+            self.test_shelved_date = None
 
     def log_data(self):
 
-        self.datafile.write("\n{},{},{},{},{},{},{}".format(str(self.test_id), self.is_test_valid, self.test_date, self.test_book_title, self.test_book_id, self.test_rating, self.test_reviewer_href))
+        self.datafile.write("\n{},{},{},{},{},{},{},{},{},{}".format(str(self.test_id), self.is_test_valid, self.test_date, self.test_book_title, self.test_book_id, self.test_rating, self.test_reviewer_href, self.test_start_date, self.test_finished_date, self.test_shelved_date))
 
         self.review_counter += 1
 
 #keeping this low until I am fully confident that this is working as expected.
-num_reviews_to_collect = 5
+num_reviews_to_collect = 10
 estimated_num_reviews = int(3.5 * 10 **9)
 num_wait_seconds = 1
 
