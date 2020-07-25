@@ -76,7 +76,8 @@ class Review_URL_ID_Data_Collector(Review_Data_Collector):
     def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name):
 
         super().__init__(min_id, max_id, max_data_points, max_sleep_time, file_name)
-        self.datafile.write("ID, is_URL_valid, review_publication_date")
+
+        self.datafile.write("ID,is_URL_valid,review_publication_date")
 
     def parse_review(self):
 
@@ -92,7 +93,6 @@ class Review_URL_ID_Data_Collector(Review_Data_Collector):
         self.datafile.write("\n{},{},{}".format(str(self.test_id), self.is_test_valid, self.test_date))
 
         self.review_counter += 1
-
 
 #keeping this low until I am fully confident that this is working as expected.
 num_reviews_to_collect = 10
