@@ -80,7 +80,11 @@ class Review_Data_Collector:
 
     def data_collection_loop(self):
 
-        if not self.is_csv():
+        if self.is_csv:
+            self.open_log_file()
+
+        else:
+
             self.open_log_file()
             self.add_headers_to_log_file()
 
