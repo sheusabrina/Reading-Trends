@@ -103,9 +103,39 @@ class Review_Parser(Parser):
 
 class Book_Parser(Parser):
 
-    pass 
+    def book_soup_to_author(self, book_soup):
 
-## TESTING
+        pass
+
+    def book_soup_to_language(self, book_soup):
+
+        pass
+
+    def book_soup_to_num_reviews(self, book_soup):
+
+        pass
+
+    def book_soup_to_isbn10(self, book_soup):
+
+        pass
+
+    def book_soup_to_editions_url(self, book_soup):
+
+        pass
+
+    def book_soup_to_publication_date(self, book_soup):
+
+        pass
+
+    def book_soup_to_first_publication_date(self, book_soup):
+
+        pass
+
+    def book_soup_to_series(self, book_soup):
+
+        pass 
+
+## TESTING REVIEW PARSER
 
 #test_review = open("test_review.html")
 #test_unpopulated_review = open("test_review_unpopulated.html")
