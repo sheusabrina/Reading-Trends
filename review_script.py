@@ -23,6 +23,13 @@ class Review_Database():
         self.df = self.df[self.df.rating != "None"]
         self.df.reset_index(inplace = True, drop = True)
 
+    def limit_dates(self, min_year, max_year):
+
+        self.df["year"] = (pd.to_datetime(self.df["review_publication_date"]).apply(lambda date: date.year))
+        self.df = self.df[(self.df.year >= min_year) & (self.df.year <= max_year)]
+        self.df.drop(columns = ["year"], inplace = True)
+        self.df.reset_index(inplace = True, drop = True)
+
 class Review():
 
     def __init__(self, review_ID):
@@ -45,4 +52,5 @@ class Review():
 
 review_database = Review_Database("review_data_sample")
 review_database.drop_unrated()
+review_database.limit_dates(2018, 2019)
 print(review_database.df)
