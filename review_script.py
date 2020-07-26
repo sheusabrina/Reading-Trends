@@ -37,11 +37,18 @@ class Review_Database():
         self.df_by_book.sort_values(by = "review_count", ascending=False, inplace = True)
         self.df_by_book.reset_index(inplace = True, drop = True)
 
+    def generate_book_id_list(self):
+
+        self.generate_review_count_by_book()
+        book_id_list = self.df_by_book.book_id.unique()
+        return book_id_list
+
 ## TESTING
 
 review_database = Review_Database("review_data_sample")
 review_database.drop_unrated()
 review_database.limit_dates(2017, 2020)
-review_database.generate_review_count_by_book()
+#review_database.generate_review_count_by_book()
+book_list = review_database.generate_book_id_list()
 
-print(review_database.df_by_book)
+print(book_list)
