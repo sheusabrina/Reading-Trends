@@ -30,6 +30,13 @@ class Review_Database():
         self.df.drop(columns = ["year"], inplace = True)
         self.df.reset_index(inplace = True, drop = True)
 
+    def generate_review_count_by_book(self):
+
+        self.df_by_book = self.df.groupby(["book_id", "book_title"]).ID.count().reset_index()
+        self.df_by_book.rename(columns = {"ID": "review_count"}, inplace = True)
+        self.df_by_book.sort_values(by = "review_count", ascending=False, inplace = True)
+        self.df_by_book.reset_index(inplace = True, drop = True)
+
 class Review():
 
     def __init__(self, review_ID):
@@ -52,5 +59,7 @@ class Review():
 
 review_database = Review_Database("review_data_sample")
 review_database.drop_unrated()
-review_database.limit_dates(2018, 2019)
-print(review_database.df)
+review_database.limit_dates(2017, 2020)
+review_database.generate_review_count_by_book()
+
+print(review_database.df_by_book)
