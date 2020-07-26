@@ -1,3 +1,23 @@
+#import libraries
+import pandas as pd
+
+#Classes
+
+class Review_Database():
+
+    def __init__(self, file_name):
+
+        self.file_name = file_name + ".csv"
+        self.df = pd.read_csv(self.file_name)
+
+        self.df = self.df[self.df.is_URL_valid == True]
+
+        self.df.dropna(inplace = True)
+        self.df.drop_duplicates(inplace = True)
+
+        self.df.sort_values(by = "ID", inplace = True)
+        self.df.reset_index(inplace = True, drop = True)
+
 class Review():
 
     def __init__(self, review_ID):
@@ -15,3 +35,8 @@ class Review():
 
         self.is_review_populated = None
         self.review_best_date = None
+
+## TESTING
+
+review_database = Review_Database("review_data_sample")
+print(review_database.df)
