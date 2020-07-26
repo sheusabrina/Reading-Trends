@@ -18,6 +18,11 @@ class Review_Database():
         self.df.sort_values(by = "ID", inplace = True)
         self.df.reset_index(inplace = True, drop = True)
 
+    def drop_unrated(self):
+
+        self.df = self.df[self.df.rating != "None"]
+        self.df.reset_index(inplace = True, drop = True)
+
 class Review():
 
     def __init__(self, review_ID):
@@ -39,4 +44,5 @@ class Review():
 ## TESTING
 
 review_database = Review_Database("review_data_sample")
+review_database.drop_unrated()
 print(review_database.df)
