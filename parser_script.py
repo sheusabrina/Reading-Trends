@@ -103,16 +103,7 @@ class Review_Parser(Parser):
 
 class Book_Parser(Parser):
 
-    def soup_to_review_urls(self, book_soup):
-        #this method gets from the soup of a book page to urls for the top 30 reviews
-        link_list = []
-
-        review_list = book_soup.find_all(attrs = {"href": re.compile("^https://www.goodreads.com/review")})
-        for review in review_list:
-            link = review.get("href")
-            link_list.append(link)
-
-        return link_list
+    pass 
 
 ## TESTING
 
