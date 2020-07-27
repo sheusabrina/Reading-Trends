@@ -106,13 +106,17 @@ class Book_Parser(Parser):
     def book_soup_to_author(self, book_soup):
 
         author = book_soup.find(attrs = {"class": "authorName"}).get_text()
-        #Note: If there are multiple authors, this identifies the first one only. 
+        #Note: If there are multiple authors, this identifies the first one only.
 
         return author
 
     def book_soup_to_language(self, book_soup):
 
-        pass
+        details = book_soup.find(attrs = {"id": "details"})
+        book_info = details.find(attrs = {"id": "bookDataBox"})
+        language = book_info.find(attrs = {"itemprop": "inLanguage"})
+
+        return language
 
     def book_soup_to_num_reviews(self, book_soup):
 
@@ -148,11 +152,17 @@ test_book_meditations = open("test_book_meditations.html")
 book_soup_angels_demons = test_parser.html_to_soup(test_book_angels_demons)
 book_soup_meditations = test_parser.html_to_soup(test_book_meditations)
 
-author_angels_demons = test_parser.book_soup_to_author(book_soup_angels_demons)
-author_meditations = test_parser.book_soup_to_author(book_soup_meditations)
+#author_angels_demons = test_parser.book_soup_to_author(book_soup_angels_demons)
+#author_meditations = test_parser.book_soup_to_author(book_soup_meditations)
 
-print(author_angels_demons)
-print(author_meditations)
+#print(author_angels_demons)
+#print(author_meditations)
+
+language_angels_demons = test_parser.book_soup_to_language(book_soup_angels_demons)
+language_meditations = test_parser.book_soup_to_language(book_soup_meditations)
+
+print(language_angels_demons)
+print(language_meditations)
 
 ## TESTING REVIEW PARSER
 
