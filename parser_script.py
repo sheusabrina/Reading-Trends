@@ -122,6 +122,10 @@ class Book_Parser(Parser):
 
         pass
 
+    def book_soup_to_avg_reviews(self, book_soup):
+
+        pass
+
     def book_soup_to_isbn10(self, book_soup):
 
         pass
@@ -158,11 +162,11 @@ book_soup_meditations = test_parser.html_to_soup(test_book_meditations)
 #print(author_angels_demons)
 #print(author_meditations)
 
-language_angels_demons = test_parser.book_soup_to_language(book_soup_angels_demons)
-language_meditations = test_parser.book_soup_to_language(book_soup_meditations)
+#language_angels_demons = test_parser.book_soup_to_language(book_soup_angels_demons)
+#language_meditations = test_parser.book_soup_to_language(book_soup_meditations)
 
-print(language_angels_demons)
-print(language_meditations)
+#print(language_angels_demons)
+#print(language_meditations)
 
 ## TESTING REVIEW PARSER
 
