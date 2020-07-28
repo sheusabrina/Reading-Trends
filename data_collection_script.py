@@ -41,6 +41,10 @@ class Data_Collector():
 
         self.datafile = open(self.log_file_name, "a")
 
+    def scrape_url(self):
+
+        self.current_scraped_string = self.scraper.url_to_string(self.current_url)
+
 class Review_Data_Collector(Data_Collector):
 
     def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name):
@@ -57,8 +61,6 @@ class Review_Data_Collector(Data_Collector):
         #Review Parser
         self.parser = Review_Parser()
 
-
-
     def add_headers_to_log_file(self):
 
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
@@ -66,10 +68,6 @@ class Review_Data_Collector(Data_Collector):
     def generate_current_url(self):
         self.current_id = random.choice(self.id_list)
         self.current_url = self.base_url + str(self.current_id)
-
-    def scrape_url(self):
-
-        self.current_scraped_string = self.scraper.url_to_string(self.current_url)
 
     def sleep(self):
         self.scraper.sleep(self.max_sleep_time)
