@@ -16,6 +16,13 @@ from scraper_script import Scraper
 
 #Data Generation Classes
 
+class Data_Collector():
+
+    def __init__(self):
+
+        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
+
+
 class Review_Data_Collector:
 
     def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name):
@@ -159,9 +166,6 @@ class Review_Detail_Data_Collector(Review_Data_Collector):
         self.datafile.write("\n{},{},{},{},{},{},{},{},{},{}".format(str(self.test_id), self.is_test_valid, self.test_date, self.test_book_title, self.test_book_id, self.test_rating, self.test_reviewer_href, self.test_start_date, self.test_finished_date, self.test_shelved_date))
 
         self.review_counter += 1
-
-class Book_Data_Collector(self, book_id_list, max_sleep_time, file_name):
-    pass 
 
 #keeping this low until I am fully confident that this is working as expected.
 num_reviews_to_collect = 5 * 10 **6
