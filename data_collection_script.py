@@ -1,4 +1,4 @@
-#import libraries
+current_current_ratingis_current_validcurrent_idcurrent_soup#import libraries
 from bs4 import BeautifulSoup
 from datetime import datetime
 import re
@@ -59,13 +59,13 @@ class Review_Data_Collector(Data_Collector):
 
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
-    def generate_test_url(self):
-        self.test_id = random.choice(self.id_list)
-        self.test_url = self.base_url + str(self.test_id)
+    def generate_current_url(self):
+        self.current_id = random.choice(self.id_list)
+        self.current_url = self.base_url + str(self.current_id)
 
     def scrape_url(self):
 
-        self.test_scraped_string = self.scraper.url_to_string(self.test_url)
+        self.current_scraped_string = self.scraper.url_to_string(self.current_url)
 
     def sleep(self):
         self.scraper.sleep(self.max_sleep_time)
@@ -97,7 +97,7 @@ class Review_Data_Collector(Data_Collector):
 
         print("Beginning Data Collection...")
         while self.review_counter < self.max_data_points:
-            self.generate_test_url()
+            self.generate_current_url()
             self.scrape_url()
             self.parse_review()
             self.log_data()
@@ -114,16 +114,16 @@ class Review_URL_ID_Data_Collector(Review_Data_Collector):
 
     def parse_review(self):
 
-        self.test_soup = self.parser.html_to_soup(self.test_scraped_string)
-        self.is_test_valid = self.parser.review_soup_is_valid(self.test_soup)
+        self.current_soup = self.parser.html_to_soup(self.current_scraped_string)
+        self.is_current_valid = self.parser.review_soup_is_valid(self.current_soup)
 
-        if self.is_test_valid:
-            self.test_date = self.parser.review_soup_to_date(self.test_soup)
+        if self.is_current_valid:
+            self.current_date = self.parser.review_soup_to_date(self.current_soup)
         else:
-            self.test_date = None
+            self.current_date = None
 
     def log_data(self):
-        self.datafile.write("\n{},{},{}".format(str(self.test_id), self.is_test_valid, self.test_date))
+        self.datafile.write("\n{},{},{}".format(str(self.current_id), self.is_current_valid, self.current_date))
 
         self.review_counter += 1
 
@@ -135,40 +135,40 @@ class Review_Detail_Data_Collector(Review_Data_Collector):
 
     def parse_review(self):
 
-        self.test_soup = self.parser.html_to_soup(self.test_scraped_string)
-        self.is_test_valid = self.parser.review_soup_is_valid(self.test_soup)
+        self.current_soup = self.parser.html_to_soup(self.current_scraped_string)
+        self.is_current_valid = self.parser.review_soup_is_valid(self.current_soup)
 
-        if self.is_test_valid:
-            self.test_date = self.parser.review_soup_to_date(self.test_soup)
-            self.test_book_title = self.parser.review_soup_to_book_title(self.test_soup)
-            self.test_book_id = self.parser.review_soup_to_book_id(self.test_soup)
-            self.test_rating = self.parser.review_soup_to_rating(self.test_soup)
-            self.test_reviewer_href = self.parser.review_soup_to_reviewer_href(self.test_soup)
+        if self.is_current_valid:
+            self.current_date = self.parser.review_soup_to_date(self.current_soup)
+            self.current_book_title = self.parser.review_soup_to_book_title(self.current_soup)
+            self.current_book_id = self.parser.review_soup_to_book_id(self.current_soup)
+            self.current_rating = self.parser.review_soup_to_rating(self.current_soup)
+            self.current_reviewer_href = self.parser.review_soup_to_reviewer_href(self.current_soup)
 
-            self.test_progress_dict = self.parser.review_soup_to_progress_dict(self.test_soup)
-            self.test_start_date = self.parser.progress_dict_to_start_date(self.test_progress_dict)
-            self.test_finished_date = self.parser.progress_dict_to_finish_date(self.test_progress_dict)
-            self.test_shelved_date = self.parser.progress_dict_to_shelved_date(self.test_progress_dict)
+            self.current_progress_dict = self.parser.review_soup_to_progress_dict(self.current_soup)
+            self.current_start_date = self.parser.progress_dict_to_start_date(self.current_progress_dict)
+            self.current_finished_date = self.parser.progress_dict_to_finish_date(self.current_progress_dict)
+            self.current_shelved_date = self.parser.progress_dict_to_shelved_date(self.current_progress_dict)
 
         else:
-            self.test_date = None
-            self.test_book_title = None
-            self.test_book_id = None
-            self.test_rating = None
-            self.test_reviewer_href = None
-            self.test_start_date = None
-            self.test_finished_date = None
-            self.test_shelved_date = None
+            self.current_date = None
+            self.current_book_title = None
+            self.current_book_id = None
+            self.current_rating = None
+            self.current_reviewer_href = None
+            self.current_start_date = None
+            self.current_finished_date = None
+            self.current_shelved_date = None
 
     def log_data(self):
 
-        self.datafile.write("\n{},{},{},{},{},{},{},{},{},{}".format(str(self.test_id), self.is_test_valid, self.test_date, self.test_book_title, self.test_book_id, self.test_rating, self.test_reviewer_href, self.test_start_date, self.test_finished_date, self.test_shelved_date))
+        self.datafile.write("\n{},{},{},{},{},{},{},{},{},{}".format(str(self.current_id), self.is_current_valid, self.current_date, self.current_book_title, self.current_book_id, self.current_rating, self.current_reviewer_href, self.current_start_date, self.current_finished_date, self.current_shelved_date))
 
         self.review_counter += 1
 
 class Book_Data_Collector(Data_Collector):
 
-    pass 
+    pass
 
 #keeping this low until I am fully confident that this is working as expected.
 num_reviews_to_collect = 5 * 10 **6
