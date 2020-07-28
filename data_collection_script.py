@@ -185,6 +185,27 @@ class Book_Data_Collector(Data_Collector):
         super().__init__(max_sleep_time, file_name)
         self.requested_book_id_list = requested_book_id_list
 
+    def prepare_scope(self):
+
+        self.data_logged_at_start = pd.read_csv(self.log_file_name)
+        self.book_ids_already_scraped_list = data_logged_at_start.book_id.unique()
+        self.book_ids_to_be_scraped = []
+
+        for item in self.requested_book_id_list:
+
+            if item not in self.book_ids_already_scraped_list:
+                self.book_ids_to_be_scraped.append(item)
+
+        self.max_data_points = len(self.book_ids_to_be_scraped)
+
+    def data_collection_loop(self):
+
+        self.prepare_log_file()
+        self.prepare_scope()
+
+        print("Beginning Data Collection...")
+
+
 #keeping this low until I am fully confident that this is working as expected.
 num_reviews_to_collect = 5 * 10 **6
 estimated_num_reviews = int(3.5 * 10 **9)
