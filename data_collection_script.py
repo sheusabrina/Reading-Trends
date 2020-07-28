@@ -57,6 +57,7 @@ class Review_Data_Collector(Data_Collector):
         #Specifics for Review Data Collection
         self.id_list = range(min_id, max_id)
         self.base_url = "https://www.goodreads.com/review/show/"
+        self.data_point_type = "Reviews"
 
         #counter
         self.max_data_points = max_data_points
@@ -72,14 +73,17 @@ class Review_Data_Collector(Data_Collector):
         self.current_id = random.choice(self.id_list)
         self.current_url = self.base_url + str(self.current_id)
 
+    def calculate_progress(self):
+
+        self.percent_complete = round(100 * self.data_points_counter / self.max_data_points, 2)
+
     def print_progress(self):
         if self.data_points_counter % 5 == 0:
-            percent_complete = round(100 * self.data_points_counter / self.max_data_points, 2)
-            percent_complete_string = str(percent_complete)
+            self.calculate_progress()
+            percent_complete_string = str(self.percent_complete)
             now = datetime.now()
             now_string = now.strftime("%d/%m/%Y %H:%M:%S")
-
-            print("{} / {} Reviews Collected ({}% Complete) at {}". format(str(self.data_points_counter), str(self.max_data_points), percent_complete_string, now_string))
+            print("{} / {} {} Collected ({}% Complete) at {}". format(str(self.data_points_counter), str(self.max_data_points), self.data_point_type, percent_complete_string, now_string))
 
     def parse_review(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
