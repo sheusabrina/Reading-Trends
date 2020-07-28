@@ -1,4 +1,4 @@
-current_current_ratingis_current_validcurrent_idcurrent_soup#import libraries
+#import libraries
 from bs4 import BeautifulSoup
 from datetime import datetime
 import re
@@ -18,27 +18,29 @@ from scraper_script import Scraper
 
 class Data_Collector():
 
-    def __init__(self):
+    def __init__(max_sleep_time, file_name):
 
-        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
+        self.max_sleep_time = max_sleep_time
+
+        self.data_points_counter = 0
+        self.log_file_name = file_name + ".csv"
+        self.scraper = Scraper()
 
 class Review_Data_Collector(Data_Collector):
 
     def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name):
-        self.max_sleep_time = max_sleep_time
+
+        super().__init__(max_sleep_time, file_name)
+
+        #Specifics for Review Data Collection
         self.id_list = range(min_id, max_id)
         self.base_url = "https://www.goodreads.com/review/show/"
 
-        #counters
-        self.data_points_counter = 0
+        #counter
         self.max_data_points = max_data_points
 
-        #creating scrapers
-        self.scraper = Scraper()
+        #Review Parser
         self.parser = Review_Parser()
-
-        #creating log file
-        self.log_file_name = file_name + ".csv"
 
     def is_csv(self):
 
@@ -168,7 +170,10 @@ class Review_Detail_Data_Collector(Review_Data_Collector):
 
 class Book_Data_Collector(Data_Collector):
 
-    pass
+    def __init__(self, book_id_list, max_sleep_time, file_name):
+        
+        super().__init__(max_sleep_time, file_name)
+
 
 #keeping this low until I am fully confident that this is working as expected.
 num_reviews_to_collect = 5 * 10 **6
