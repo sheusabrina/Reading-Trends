@@ -26,6 +26,17 @@ class Data_Collector():
         self.log_file_name = file_name + ".csv"
         self.scraper = Scraper()
 
+    def is_csv(self):
+
+        try:
+            df = pd.read_csv(self.log_file_name)
+            is_csv = True
+
+        except (FileNotFoundError, pd.errors.EmptyDataError):
+            is_csv = False
+
+        return is_csv
+
 class Review_Data_Collector(Data_Collector):
 
     def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name):
@@ -41,17 +52,6 @@ class Review_Data_Collector(Data_Collector):
 
         #Review Parser
         self.parser = Review_Parser()
-
-    def is_csv(self):
-
-        try:
-            df = pd.read_csv(self.log_file_name)
-            is_csv = True
-
-        except (FileNotFoundError, pd.errors.EmptyDataError):
-            is_csv = False
-
-        return is_csv
 
     def open_log_file(self):
 
@@ -171,7 +171,7 @@ class Review_Detail_Data_Collector(Review_Data_Collector):
 class Book_Data_Collector(Data_Collector):
 
     def __init__(self, book_id_list, max_sleep_time, file_name):
-        
+
         super().__init__(max_sleep_time, file_name)
 
 
