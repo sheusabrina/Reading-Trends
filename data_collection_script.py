@@ -166,6 +166,10 @@ class Review_Detail_Data_Collector(Review_Data_Collector):
 
         self.review_counter += 1
 
+class Book_Data_Collector(Data_Collector):
+
+    pass 
+
 #keeping this low until I am fully confident that this is working as expected.
 num_reviews_to_collect = 5 * 10 **6
 estimated_num_reviews = int(3.5 * 10 **9)
