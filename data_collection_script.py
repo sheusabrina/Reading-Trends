@@ -41,6 +41,18 @@ class Data_Collector():
 
         self.datafile = open(self.log_file_name, "a")
 
+    def prepare_log_file(self):
+
+        if self.is_csv():
+            self.open_log_file()
+
+        else:
+
+            self.open_log_file()
+            self.add_headers_to_log_file()
+
+        print("Log File Ready")
+
     def scrape_url(self):
 
         self.current_scraped_string = self.scraper.url_to_string(self.current_url)
@@ -90,18 +102,6 @@ class Review_Data_Collector(Data_Collector):
 
     def log_data(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
-
-    def prepare_log_file(self):
-
-        if self.is_csv():
-            self.open_log_file()
-
-        else:
-
-            self.open_log_file()
-            self.add_headers_to_log_file()
-
-        print("Log File Ready")        
 
     def data_collection_loop(self):
 
@@ -184,9 +184,6 @@ class Book_Data_Collector(Data_Collector):
 
         super().__init__(max_sleep_time, file_name)
         self.requested_book_id_list = requested_book_id_list
-
-    def
-
 
 #keeping this low until I am fully confident that this is working as expected.
 num_reviews_to_collect = 5 * 10 **6
