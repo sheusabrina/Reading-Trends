@@ -112,11 +112,11 @@ class Book_Parser(Parser):
 
     def book_soup_to_language(self, book_soup):
 
-        #language = book_details.find(itemprop = "inLanguage")
+        language = book_details.find(itemprop = "inLanguage")
         #language = book_soup.find(attrs = {"itemprop": "\'inLanguage\'"})
         #language = book_soup.find_all("inLanguage")
 
-        book_info = book_soup.find(attrs = {"id": "bookDataBox"})
+        #book_info = book_soup.find(attrs = {"id": "bookDataBox"})
         #language = book_info.find(itemprop = "inLanguage")
         #language = book_info.find(attrs = {"itemprop": "inLanguage"})
 
