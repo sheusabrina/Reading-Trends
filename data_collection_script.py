@@ -173,6 +173,8 @@ class Book_Data_Collector(Data_Collector):
     def __init__(self, book_id_list, max_sleep_time, file_name):
 
         super().__init__(max_sleep_time, file_name)
+        self.book_id_list = book_id_list
+
 
 
 #keeping this low until I am fully confident that this is working as expected.
