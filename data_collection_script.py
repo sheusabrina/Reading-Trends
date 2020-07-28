@@ -160,8 +160,11 @@ class Review_Detail_Data_Collector(Review_Data_Collector):
 
         self.review_counter += 1
 
+class Book_Data_Collector(self, book_id_list, max_sleep_time, file_name):
+    pass 
+
 #keeping this low until I am fully confident that this is working as expected.
-num_reviews_to_collect = 50000
+num_reviews_to_collect = 5 * 10 **6
 estimated_num_reviews = int(3.5 * 10 **9)
 num_wait_seconds = 1
 
