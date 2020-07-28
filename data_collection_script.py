@@ -91,7 +91,7 @@ class Review_Data_Collector(Data_Collector):
     def log_data(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
-    def data_collection_loop(self):
+    def prepare_log_file(self):
 
         if self.is_csv():
             self.open_log_file()
@@ -100,6 +100,12 @@ class Review_Data_Collector(Data_Collector):
 
             self.open_log_file()
             self.add_headers_to_log_file()
+
+        print("Log File Ready")        
+
+    def data_collection_loop(self):
+
+        self.prepare_log_file()
 
         print("Beginning Data Collection...")
         while self.data_points_counter < self.max_data_points:
@@ -174,11 +180,12 @@ class Review_Detail_Data_Collector(Review_Data_Collector):
 
 class Book_Data_Collector(Data_Collector):
 
-    def __init__(self, book_id_list, max_sleep_time, file_name):
+    def __init__(self, requested_book_id_list, max_sleep_time, file_name):
 
         super().__init__(max_sleep_time, file_name)
-        self.book_id_list = book_id_list
+        self.requested_book_id_list = requested_book_id_list
 
+    def
 
 
 #keeping this low until I am fully confident that this is working as expected.
