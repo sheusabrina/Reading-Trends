@@ -30,7 +30,7 @@ class Review_Data_Collector(Data_Collector):
         self.base_url = "https://www.goodreads.com/review/show/"
 
         #counters
-        self.review_counter = 0
+        self.data_points_counter = 0
         self.max_data_points = max_data_points
 
         #creating scrapers
@@ -71,13 +71,13 @@ class Review_Data_Collector(Data_Collector):
         self.scraper.sleep(self.max_sleep_time)
 
     def print_progress(self):
-        if self.review_counter % 5 == 0:
-            percent_complete = round(100 * self.review_counter / self.max_data_points, 2)
+        if self.data_points_counter % 5 == 0:
+            percent_complete = round(100 * self.data_points_counter / self.max_data_points, 2)
             percent_complete_string = str(percent_complete)
             now = datetime.now()
             now_string = now.strftime("%d/%m/%Y %H:%M:%S")
 
-            print("{} / {} Reviews Collected ({}% Complete) at {}". format(str(self.review_counter), str(self.max_data_points), percent_complete_string, now_string))
+            print("{} / {} Reviews Collected ({}% Complete) at {}". format(str(self.data_points_counter), str(self.max_data_points), percent_complete_string, now_string))
 
     def parse_review(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
@@ -96,7 +96,7 @@ class Review_Data_Collector(Data_Collector):
             self.add_headers_to_log_file()
 
         print("Beginning Data Collection...")
-        while self.review_counter < self.max_data_points:
+        while self.data_points_counter < self.max_data_points:
             self.generate_current_url()
             self.scrape_url()
             self.parse_review()
@@ -125,7 +125,7 @@ class Review_URL_ID_Data_Collector(Review_Data_Collector):
     def log_data(self):
         self.datafile.write("\n{},{},{}".format(str(self.current_id), self.is_current_valid, self.current_date))
 
-        self.review_counter += 1
+        self.data_points_counter += 1
 
 class Review_Detail_Data_Collector(Review_Data_Collector):
 
@@ -164,7 +164,7 @@ class Review_Detail_Data_Collector(Review_Data_Collector):
 
         self.datafile.write("\n{},{},{},{},{},{},{},{},{},{}".format(str(self.current_id), self.is_current_valid, self.current_date, self.current_book_title, self.current_book_id, self.current_rating, self.current_reviewer_href, self.current_start_date, self.current_finished_date, self.current_shelved_date))
 
-        self.review_counter += 1
+        self.data_points_counter += 1
 
 class Book_Data_Collector(Data_Collector):
 
