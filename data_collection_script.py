@@ -45,6 +45,9 @@ class Data_Collector():
 
         self.current_scraped_string = self.scraper.url_to_string(self.current_url)
 
+    def sleep(self):
+        self.scraper.sleep(self.max_sleep_time)
+
 class Review_Data_Collector(Data_Collector):
 
     def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name):
@@ -68,9 +71,6 @@ class Review_Data_Collector(Data_Collector):
     def generate_current_url(self):
         self.current_id = random.choice(self.id_list)
         self.current_url = self.base_url + str(self.current_id)
-
-    def sleep(self):
-        self.scraper.sleep(self.max_sleep_time)
 
     def print_progress(self):
         if self.data_points_counter % 5 == 0:
