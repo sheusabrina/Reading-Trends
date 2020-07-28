@@ -185,6 +185,9 @@ class Book_Data_Collector(Data_Collector):
         super().__init__(max_sleep_time, file_name)
         self.requested_book_id_list = requested_book_id_list
 
+        self.base_url = "https://www.goodreads.com/book/show/"
+        self.data_point_type = "Books"
+
     def prepare_scope(self):
 
         self.data_logged_at_start = pd.read_csv(self.log_file_name)
@@ -198,6 +201,12 @@ class Book_Data_Collector(Data_Collector):
 
         self.max_data_points = len(self.book_ids_to_be_scraped)
 
+
+    def generate_current_url(self):
+
+        self.current_id = self.book_ids_to_be_scraped[self.data_points_counter]
+        self.current_url = self.base_url + self.current_id
+
     def data_collection_loop(self):
 
         self.prepare_log_file()
@@ -205,6 +214,9 @@ class Book_Data_Collector(Data_Collector):
 
         print("Beginning Data Collection...")
 
+        while self.data_points_counter < self.max_data_points:
+            self.generate_current_url()
+            self.scrape_url()
 
 #keeping this low until I am fully confident that this is working as expected.
 num_reviews_to_collect = 5 * 10 **6
