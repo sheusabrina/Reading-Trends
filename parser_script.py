@@ -112,9 +112,17 @@ class Book_Parser(Parser):
 
     def book_soup_to_language(self, book_soup):
 
-        details = book_soup.find(attrs = {"id": "details"})
-        book_info = details.find(attrs = {"id": "bookDataBox"})
-        language = book_info.find(attrs = {"itemprop": "inLanguage"})
+        #language = book_details.find(itemprop = "inLanguage")
+        #language = book_soup.find(attrs = {"itemprop": "\'inLanguage\'"})
+        #language = book_soup.find_all("inLanguage")
+
+        book_info = book_soup.find(attrs = {"id": "bookDataBox"})
+        #language = book_info.find(itemprop = "inLanguage")
+        #language = book_info.find(attrs = {"itemprop": "inLanguage"})
+
+        #details = book_soup.find(attrs = {"id": "details"})
+        #book_details = book_info.find(class_ = "infoBoxRowItem")
+        #language = book_soup.find_all(class_ = "infoBoxRowItem")
 
         return language
 
@@ -163,10 +171,10 @@ book_soup_meditations = test_parser.html_to_soup(test_book_meditations)
 #print(author_meditations)
 
 #language_angels_demons = test_parser.book_soup_to_language(book_soup_angels_demons)
-#language_meditations = test_parser.book_soup_to_language(book_soup_meditations)
+language_meditations = test_parser.book_soup_to_language(book_soup_meditations)
 
 #print(language_angels_demons)
-#print(language_meditations)
+print(language_meditations)
 
 ## TESTING REVIEW PARSER
 
