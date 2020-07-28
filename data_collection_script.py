@@ -37,6 +37,10 @@ class Data_Collector():
 
         return is_csv
 
+    def open_log_file(self):
+
+        self.datafile = open(self.log_file_name, "a")
+
 class Review_Data_Collector(Data_Collector):
 
     def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name):
@@ -53,9 +57,7 @@ class Review_Data_Collector(Data_Collector):
         #Review Parser
         self.parser = Review_Parser()
 
-    def open_log_file(self):
 
-        self.datafile = open(self.log_file_name, "a")
 
     def add_headers_to_log_file(self):
 
