@@ -22,8 +22,7 @@ class Data_Collector():
 
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
-
-class Review_Data_Collector:
+class Review_Data_Collector(Data_Collector):
 
     def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name):
         self.max_sleep_time = max_sleep_time
