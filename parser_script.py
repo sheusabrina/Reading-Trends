@@ -205,12 +205,12 @@ class Book_Parser(Parser):
 
 test_parser = Book_Parser()
 
-test_book_angels_demons = open("test_book_angels_demons.html", "rb")
-test_book_meditations = open("test_book_meditations.html", "rb")
-test_book_hp1 = open("test_book_hp1.html", "rb")
+test_book_angels_demons = open("html_files/test_book_angels_demons.html", "rb")
+test_book_meditations = open("html_files/test_book_meditations.html", "rb")
+test_book_hp1 = open("html_files/test_book_hp1.html", "rb")
 
-book_soup_angels_demons = test_parser.html_to_soup(test_book_angels_demons)
-book_soup_meditations = test_parser.html_to_soup(test_book_meditations)
+#book_soup_angels_demons = test_parser.html_to_soup(test_book_angels_demons)
+#book_soup_meditations = test_parser.html_to_soup(test_book_meditations)
 book_soup_hp1 = test_parser.html_to_soup(test_book_hp1)
 
 #author_angels_demons = test_parser.book_soup_to_author(book_soup_angels_demons)
@@ -237,11 +237,11 @@ book_soup_hp1 = test_parser.html_to_soup(test_book_hp1)
 
 #avg_rating_angels_demons = test_parser.book_soup_to_avg_rating(book_soup_angels_demons)
 #avg_rating_meditations = test_parser.book_soup_to_avg_rating(book_soup_meditations)
-avg_rating_hp1 = test_parser.book_soup_to_avg_rating(book_soup_hp1)
+#avg_rating_hp1 = test_parser.book_soup_to_avg_rating(book_soup_hp1)
 
 #print(avg_rating_meditations)
 #print(avg_rating_angels_demons)
-print(avg_rating_hp1)
+#print(avg_rating_hp1)
 
 #num_ratings_angels_demons = test_parser.book_soup_to_num_ratings(book_soup_angels_demons)
 #num_ratings_meditations = test_parser.book_soup_to_num_ratings(book_soup_meditations)

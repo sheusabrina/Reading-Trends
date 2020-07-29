@@ -7,7 +7,7 @@ class Review_Database():
 
     def __init__(self, file_name):
 
-        self.file_name = file_name + ".csv"
+        self.file_name = "databases/" + file_name + ".csv"
         self.df = pd.read_csv(self.file_name)
 
         self.df = self.df[self.df.is_URL_valid == True]

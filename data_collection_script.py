@@ -26,7 +26,7 @@ class Data_Collector():
         self.max_sleep_time = max_sleep_time
 
         self.data_points_counter = 0
-        self.log_file_name = file_name + ".csv"
+        self.log_file_name = "databases/"+ file_name + ".csv"
         self.scraper = Scraper()
 
     def is_csv(self):
@@ -293,8 +293,8 @@ max_2020_ID = 3455207761 #I'm not sure if i should use this, since reviews are g
 #review_id_collector.data_collection_loop()
 
 #Uncomment to run the Review Detail collector
-#review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
-#review_collector.data_collection_loop()
+review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
+review_collector.data_collection_loop()
 
 ## BOOK DATA COLLECTION
 
@@ -302,5 +302,5 @@ book_list = book_list[:3]
 num_wait_seconds = 1
 
 #uncomment to run Book Collector
-book_collector = Book_Data_Collector(book_list, num_wait_seconds, "book_data")
-book_collector.data_collection_loop()
+#book_collector = Book_Data_Collector(book_list, num_wait_seconds, "book_data")
+#book_collector.data_collection_loop()

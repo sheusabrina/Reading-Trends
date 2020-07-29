@@ -9,7 +9,7 @@ import matplotlib.dates as mdates
 import seaborn as sns
 
 #df = pd.read_csv("review_id_sample_data.csv")
-df = pd.read_csv("review_id_data.csv")
+df = pd.read_csv("databases/review_id_data.csv")
 
 #PROCESSING DF
 df.rename(columns = {" is_URL_valid": "is_URL_valid", " review_publication_date": "review_publication_date"}, inplace = True)
