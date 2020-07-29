@@ -18,7 +18,7 @@ from scraper_script import Scraper
 
 class Data_Collector():
 
-    def __init__(max_sleep_time, file_name):
+    def __init__(self, max_sleep_time, file_name):
 
         self.max_sleep_time = max_sleep_time
 
@@ -258,5 +258,5 @@ max_2020_ID = 3455207761 #I'm not sure if i should use this, since reviews are g
 #review_id_collector.data_collection_loop()
 
 #Uncomment to run the Review Detail collector
-#review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
-#review_collector.data_collection_loop()
+review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
+review_collector.data_collection_loop()
