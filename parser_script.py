@@ -113,7 +113,7 @@ class Book_Parser(Parser):
     def book_soup_to_language(self, book_soup):
 
         #FIND_ALL WITH DIV
-        #language = book_soup.find_all("div", {"itemprop": "inLanguage"}) #JG METHOD
+        language = book_soup.find_all("div", {"itemprop": "inLanguage"}) #JG METHOD
         #language = book_soup.find_all("div", {"itemprop": "\'inLanguage\'"})
 
         ##FIND_ALL
