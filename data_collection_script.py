@@ -221,6 +221,8 @@ class Book_Data_Collector(Data_Collector):
         self.base_url = "https://www.goodreads.com/book/show/"
         self.data_point_type = "Books"
 
+        self.parser = Book_Parser()
+
     def prepare_scope(self):
 
         if self.is_csv():
