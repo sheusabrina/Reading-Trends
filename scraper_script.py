@@ -15,28 +15,45 @@ class Scraper():
     def select_header(self):
         self.header = random.choice(self.headers_list)
 
-    def url_to_string(self, url):
+    def url_to_content(self, url):
         self.select_header()
 
-        webpage_response = requests.get(url, headers = self.header)
-        webpage = webpage_response.content
-        webpage_string = str(webpage)
-        self.webpage_string = webpage_string
+        self.webpage_response = requests.get(url, headers = self.header)
+        self.webpage = self.webpage_response.content
+        #webpage_string = str(webpage)
+        #self.webpage_string = webpage_string
 
-        return self.webpage_string
+        return self.webpage
 
     def string_to_file(self, file_name):
-        open(file_name+".html", "w").write(self.webpage_string)
+        open(file_name+".html", "wb").write(self.webpage)
 
     def sleep(self, max_sleep_time):
         time_list = range(0, max_sleep_time*100, 1)
         sleep_time = random.choice(time_list)/100
         time.sleep(sleep_time)
 
-##TESTING
+## CREATING TEST FILES
 
-#example_url = "https://docs.python.org/3/howto/regex.html"
+#scraper = Scraper()
 
-#testing_scraper = Scraper()
-#testing_scraper.url_to_string(example_url)
-#testing_scraper.string_to_file("test_scraper_output")
+#meditations book
+#scraper.url_to_content("https://www.goodreads.com/book/show/30659")
+#scraper.string_to_file("test_book_meditations")
+
+#angels & demons book
+#scraper.url_to_content("https://www.goodreads.com/book/show/960.Angels_Demons")
+#scraper.string_to_file("test_book_angels_demons")
+
+#review (meditations)
+#scraper.url_to_content("https://www.goodreads.com/review/show/2668957860")
+#scraper.string_to_file("test_review")
+
+#review, error page
+#scraper.url_to_content("https://www.goodreads.com/review/show/166895786")
+#scraper.string_to_file("test_review_error")
+
+#review, grounded (since it crashed the parser)
+
+#scraper.url_to_content("https://www.goodreads.com/review/show/2572722180")
+#scraper.string_to_file("test_review_grounded")

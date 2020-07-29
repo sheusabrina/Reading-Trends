@@ -122,7 +122,7 @@ class Book_Parser(Parser):
 
         ##FIND
 
-        #language = book_soup.find(attrs = {"itemprop": "inLanguage"}) ##THIS STRUCTURE WORKS ELSEWHERE
+        language = book_soup.find(attrs = {"itemprop": "inLanguage"}).get_text() ##THIS STRUCTURE WORKS ELSEWHERE
         #language = book_soup.find(attrs = {"itemprop": "'inLanguage'"})
         #language = book_soup.find(attrs = {"itemprop": \'inLanguage\'})
         #language = book_details.find(itemprop = "inLanguage")
@@ -139,11 +139,11 @@ class Book_Parser(Parser):
         #book_details = book_info.find(class_ = "infoBoxRowItem")
 
         ##FIND RE
-        book_data = book_soup.find(attrs = {"id": "bookDataBox"})
-        language = book_data.find(attrs = {"itemprop": re.compile("inLanguage")}).get_text()
+        #book_data = book_soup.find(attrs = {"id": "bookDataBox"})
+        #language = book_data.find(attrs = {"itemprop": re.compile("inLanguage")}).get_text()
 
         #NOTE: There's something odd about how this tag is structured (itemprop="\'inLanguage\'">) and the regex is the only way I can seem to identify it.
-        #Don't delete the book_data search as an intermediary step because it cuts down on the amount of text the code needs to run regex on. 
+        #Don't delete the book_data search as an intermediary step because it cuts down on the amount of text the code needs to run regex on.
 
         return language
 
@@ -179,29 +179,29 @@ class Book_Parser(Parser):
 
 test_parser = Book_Parser()
 
-test_book_angels_demons = open("test_book_angels_demons.html")
-test_book_meditations = open("test_book_meditations.html")
+#test_book_angels_demons = open("test_book_angels_demons.html", "rb")
+test_book_meditations = open("test_book_meditations.html", "rb")
 
-book_soup_angels_demons = test_parser.html_to_soup(test_book_angels_demons)
+#book_soup_angels_demons = test_parser.html_to_soup(test_book_angels_demons)
 book_soup_meditations = test_parser.html_to_soup(test_book_meditations)
 
-author_angels_demons = test_parser.book_soup_to_author(book_soup_angels_demons)
+#author_angels_demons = test_parser.book_soup_to_author(book_soup_angels_demons)
 author_meditations = test_parser.book_soup_to_author(book_soup_meditations)
 
-print(author_angels_demons)
+#print(author_angels_demons)
 print(author_meditations)
 
-language_angels_demons = test_parser.book_soup_to_language(book_soup_angels_demons)
+#language_angels_demons = test_parser.book_soup_to_language(book_soup_angels_demons)
 language_meditations = test_parser.book_soup_to_language(book_soup_meditations)
 
-print(language_angels_demons)
+#print(language_angels_demons)
 print(language_meditations)
 
 ## TESTING REVIEW PARSER
 
-#test_review = open("test_review.html")
-#test_unpopulated_review = open("test_review_unpopulated.html")
-#test_grounded_review = open("test_review_grounded.html")
+#test_review = open("test_review.html", "wb")
+#test_unpopulated_review = open("test_review_unpopulated.html", "wb")
+#test_grounded_review = open("test_review_grounded.html", "wb")
 
 #test_parser = Review_Parser()
 
