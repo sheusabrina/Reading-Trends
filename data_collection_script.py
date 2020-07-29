@@ -41,6 +41,10 @@ class Data_Collector():
 
         self.datafile = open(self.log_file_name, "a")
 
+    def add_headers_to_log_file(self):
+
+        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
+
     def prepare_log_file(self):
 
         if self.is_csv():
@@ -53,17 +57,54 @@ class Data_Collector():
 
         print("Log File Ready")
 
-    def scrape_url(self):
+    def generate_current_url(self):
 
-        self.current_scraped_string = self.scraper.url_to_string(self.current_url)
+        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
-    def sleep(self):
-        self.scraper.sleep(self.max_sleep_time)
+    def parse(self):
 
-    def is_collection_complete(self):
+        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
-        is_complete = self.data_points_counter >= self.max_data_points
-        return is_complete
+    def log_data(self):
+
+        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
+
+    def print_progress(self):
+        if self.data_points_counter % 5 == 0:
+            self.calculate_progress()
+            percent_complete_string = str(self.percent_complete)
+            now = datetime.now()
+            now_string = now.strftime("%d/%m/%Y %H:%M:%S")
+            print("{} / {} {} Collected ({}% Complete) at {}". format(str(self.data_points_counter), str(self.max_data_points), self.data_point_type, percent_complete_string, now_string))
+
+
+    def data_collection_loop(self):
+
+        self.prepare_log_file()
+
+        print("Beginning Data Collection...")
+        while not self.is_collection_complete():
+            self.generate_current_url()
+            self.scrape_url()
+            self.parse()
+            self.log_data()
+            self.print_progress()
+            self.sleep()
+
+        print("Data Collection Complete")
+        self.datafile.close()
+
+        def scrape_url(self):
+
+            self.current_scraped_string = self.scraper.url_to_string(self.current_url)
+
+        def sleep(self):
+            self.scraper.sleep(self.max_sleep_time)
+
+        def is_collection_complete(self):
+
+            is_complete = self.data_points_counter >= self.max_data_points
+            return is_complete
 
 class Review_Data_Collector(Data_Collector):
 
@@ -94,35 +135,11 @@ class Review_Data_Collector(Data_Collector):
 
         self.percent_complete = round(100 * self.data_points_counter / self.max_data_points, 2)
 
-    def print_progress(self):
-        if self.data_points_counter % 5 == 0:
-            self.calculate_progress()
-            percent_complete_string = str(self.percent_complete)
-            now = datetime.now()
-            now_string = now.strftime("%d/%m/%Y %H:%M:%S")
-            print("{} / {} {} Collected ({}% Complete) at {}". format(str(self.data_points_counter), str(self.max_data_points), self.data_point_type, percent_complete_string, now_string))
-
     def parse(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
     def log_data(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
-
-    def data_collection_loop(self):
-
-        self.prepare_log_file()
-
-        print("Beginning Data Collection...")
-        while not self.is_collection_complete():
-            self.generate_current_url()
-            self.scrape_url()
-            self.parse()
-            self.log_data()
-            self.print_progress()
-            self.sleep()
-
-        print("Data Collection Complete")
-        self.datafile.close()
 
 class Review_URL_ID_Data_Collector(Review_Data_Collector):
 
@@ -193,6 +210,8 @@ class Book_Data_Collector(Data_Collector):
         self.base_url = "https://www.goodreads.com/book/show/"
         self.data_point_type = "Books"
 
+        self.prepare_scope()
+
     def prepare_scope(self):
 
         self.data_logged_at_start = pd.read_csv(self.log_file_name)
@@ -218,19 +237,6 @@ class Book_Data_Collector(Data_Collector):
     def log_data(self):
 
         pass
-
-    def data_collection_loop(self):
-
-        self.prepare_log_file()
-        self.prepare_scope()
-
-        print("Beginning Data Collection...")
-
-        while not self.is_collection_complete:
-            self.generate_current_url()
-            self.scrape_url()
-            self.parse()
-            self.log_data()
 
 #keeping this low until I am fully confident that this is working as expected.
 num_reviews_to_collect = 5 * 10 **6
