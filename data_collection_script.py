@@ -97,7 +97,7 @@ class Review_Data_Collector(Data_Collector):
             now_string = now.strftime("%d/%m/%Y %H:%M:%S")
             print("{} / {} {} Collected ({}% Complete) at {}". format(str(self.data_points_counter), str(self.max_data_points), self.data_point_type, percent_complete_string, now_string))
 
-    def parse_review(self):
+    def parse(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
     def log_data(self):
@@ -111,7 +111,7 @@ class Review_Data_Collector(Data_Collector):
         while self.data_points_counter < self.max_data_points:
             self.generate_current_url()
             self.scrape_url()
-            self.parse_review()
+            self.parse()
             self.log_data()
             self.print_progress()
             self.sleep()
@@ -124,7 +124,7 @@ class Review_URL_ID_Data_Collector(Review_Data_Collector):
     def add_headers_to_log_file(self):
         self.datafile.write("ID,is_URL_valid,review_publication_date")
 
-    def parse_review(self):
+    def parse(self):
 
         self.current_soup = self.parser.html_to_soup(self.current_scraped_string)
         self.is_current_valid = self.parser.review_soup_is_valid(self.current_soup)
@@ -145,7 +145,7 @@ class Review_Detail_Data_Collector(Review_Data_Collector):
 
         self.datafile.write("ID,is_URL_valid,review_publication_date,book_title,book_id,rating,reviewer_href,started_reading_date,finished_reading_date,shelved_date")
 
-    def parse_review(self):
+    def parse(self):
 
         self.current_soup = self.parser.html_to_soup(self.current_scraped_string)
         self.is_current_valid = self.parser.review_soup_is_valid(self.current_soup)
@@ -201,11 +201,18 @@ class Book_Data_Collector(Data_Collector):
 
         self.max_data_points = len(self.book_ids_to_be_scraped)
 
-
     def generate_current_url(self):
 
         self.current_id = self.book_ids_to_be_scraped[self.data_points_counter]
         self.current_url = self.base_url + self.current_id
+
+    def parse(self):
+
+        pass
+
+    def log_data(self):
+
+        pass
 
     def data_collection_loop(self):
 
@@ -217,6 +224,8 @@ class Book_Data_Collector(Data_Collector):
         while self.data_points_counter < self.max_data_points:
             self.generate_current_url()
             self.scrape_url()
+            self.parse()
+            self.log_data()
 
 #keeping this low until I am fully confident that this is working as expected.
 num_reviews_to_collect = 5 * 10 **6
@@ -231,5 +240,5 @@ max_2020_ID = 3455207761 #I'm not sure if i should use this, since reviews are g
 #review_id_collector.data_collection_loop()
 
 #Uncomment to run the Review Detail collector
-review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
-review_collector.data_collection_loop()
+#review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
+#review_collector.data_collection_loop()
