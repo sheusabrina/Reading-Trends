@@ -155,7 +155,7 @@ class Book_Parser(Parser):
         editions = editions.find("a")
 
         editions_url = editions.get("href")
-        
+
         return editions_url
 
     def book_soup_to_details_soup(self, book_soup):
@@ -197,13 +197,13 @@ class Book_Parser(Parser):
 
 ## TESTING BOOK PARSER
 
-test_parser = Book_Parser()
+#test_parser = Book_Parser()
 
-test_book_angels_demons = open("test_book_angels_demons.html", "rb")
-test_book_meditations = open("test_book_meditations.html", "rb")
+#test_book_angels_demons = open("test_book_angels_demons.html", "rb")
+#test_book_meditations = open("test_book_meditations.html", "rb")
 
-book_soup_angels_demons = test_parser.html_to_soup(test_book_angels_demons)
-book_soup_meditations = test_parser.html_to_soup(test_book_meditations)
+#book_soup_angels_demons = test_parser.html_to_soup(test_book_angels_demons)
+#book_soup_meditations = test_parser.html_to_soup(test_book_meditations)
 
 #author_angels_demons = test_parser.book_soup_to_author(book_soup_angels_demons)
 #author_meditations = test_parser.book_soup_to_author(book_soup_meditations)
@@ -238,8 +238,8 @@ book_soup_meditations = test_parser.html_to_soup(test_book_meditations)
 #isbn_meditations = test_parser.book_soup_to_isbn13(book_soup_meditations)
 #print(isbn_meditations)
 
-editions_meditations = test_parser.book_soup_to_editions_href(book_soup_meditations)
-print(editions_meditations)
+#editions_meditations = test_parser.book_soup_to_editions_href(book_soup_meditations)
+#print(editions_meditations)
 
 #publication_date_meditations = test_parser.book_soup_to_publication_date(book_soup_meditations)
 #publication_date_angels_demons = test_parser.book_soup_to_publication_date(book_soup_angels_demons)

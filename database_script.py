@@ -51,4 +51,4 @@ review_database.limit_dates(2017, 2020)
 #review_database.generate_review_count_by_book()
 book_list = review_database.generate_book_id_list()
 
-print(book_list)
+#print(book_list)

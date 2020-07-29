@@ -14,6 +14,9 @@ from parser_script import Book_Parser
 
 from scraper_script import Scraper
 
+#import data
+from database_script import book_list
+
 #Data Generation Classes
 
 class Data_Collector():
@@ -247,7 +250,7 @@ class Book_Data_Collector(Data_Collector):
         self.num_ratings = self.parser.book_soup_to_num_ratings(self.current_soup)
         self.avg_rating = self.parser.book_soup_to_avg_rating(self.current_soup)
         self.isbn10 = self.parser.book_soup_to_isbn10(self.current_soup)
-        self.editions_url = self.parser.book_soup_to_editions_href(self.current_soup)
+        self.editions_url = self.parser.book_soup_to_editions_url(self.current_soup)
         self.publication_date = self.parser.book_soup_to_publiation_date(self.current_soup)
         self.first_publiation_date = self.parser.book_soup_to_first_publication_date(self.current_soup)
         self.series = self.parser.book_soup_to_series(self.current_soup)
@@ -257,6 +260,8 @@ class Book_Data_Collector(Data_Collector):
         self.datafile.write("\n{},{},{},{},{},{},{},{},{},{},{}".format(self.curent_id, self.author, self.language, self.num_reviews, self.num_ratings, self.avg_rating, self.isbn10, self.editions_url, self.publication_date, self.first_publication_date, self.series))
 
         self.data_points_counter += 1
+
+## REVIEW DATA COLLECTION
 
 #keeping this low until I am fully confident that this is working as expected.
 num_reviews_to_collect = 5 * 10 **6
@@ -271,5 +276,10 @@ max_2020_ID = 3455207761 #I'm not sure if i should use this, since reviews are g
 #review_id_collector.data_collection_loop()
 
 #Uncomment to run the Review Detail collector
-review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
-review_collector.data_collection_loop()
+#review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
+#review_collector.data_collection_loop()
+
+## BOOK DATA COLLECTION
+
+book_list = book_list[:3]
+print(book_list)
