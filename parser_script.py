@@ -159,9 +159,14 @@ class Book_Parser(Parser):
 
         return editions_url
 
-    def book_soup_to_publication_date(self, book_soup):
+    def book_soup_to_details_soup(self, book_soup):
 
         details = book_soup.find(attrs = {"id": "details"})
+        return details
+
+    def book_soup_to_publication_date(self, book_soup):
+
+        details = self.book_soup_to_details_soup(book_soup)
         publication_details = details.find(text = re.compile("Published")).strip()
         publication_details_list = publication_details.splitlines()
         publication_date = publication_details_list[1].strip()
@@ -170,7 +175,7 @@ class Book_Parser(Parser):
 
     def book_soup_to_first_publication_date(self, book_soup):
 
-        details = book_soup.find(attrs = {"id": "details"})
+        details = self.book_soup_to_details_soup(book_soup)
         publication_date = details.find(text = re.compile("first published")).strip()
         publication_date = publication_date.replace("(first published ","")
         publication_date = publication_date.replace(")","")
@@ -179,7 +184,7 @@ class Book_Parser(Parser):
 
     def book_soup_to_series(self, book_soup):
 
-        pass
+        details = self.book_soup_to_details_soup(book_soup)
 
 ## TESTING BOOK PARSER
 
@@ -227,11 +232,11 @@ book_soup_meditations = test_parser.html_to_soup(test_book_meditations)
 #editions_meditations = test_parser.book_soup_to_editions_url(book_soup_meditations)
 #print(editions_meditations)
 
-#publication_date_meditations = test_parser.book_soup_to_publication_date(book_soup_meditations)
-#publication_date_angels_demons = test_parser.book_soup_to_publication_date(book_soup_angels_demons)
+publication_date_meditations = test_parser.book_soup_to_publication_date(book_soup_meditations)
+publication_date_angels_demons = test_parser.book_soup_to_publication_date(book_soup_angels_demons)
 
-#print(publication_date_meditations)
-#print(publication_date_angels_demons)
+print(publication_date_meditations)
+print(publication_date_angels_demons)
 
 first_publication_date_meditations = test_parser.book_soup_to_first_publication_date(book_soup_meditations)
 first_publication_date_angels_demons = test_parser.book_soup_to_first_publication_date(book_soup_angels_demons)
