@@ -118,7 +118,13 @@ class Book_Parser(Parser):
 
     def book_soup_to_num_reviews(self, book_soup):
 
-        pass
+        num_reviews = book_soup.find(attrs = {"itemprop": "reviewCount"}).get_text()
+        num_reviews = num_reviews.replace("reviews","")
+        num_reviews = num_reviews.replace(",","")
+        num_reviews = num_reviews.strip()
+        num_reviews = int(num_reviews)
+
+        return num_reviews
 
     def book_soup_to_avg_rating(self, book_soup):
 
@@ -160,11 +166,17 @@ book_soup_meditations = test_parser.html_to_soup(test_book_meditations)
 #print(author_angels_demons)
 #print(author_meditations)
 
-language_angels_demons = test_parser.book_soup_to_language(book_soup_angels_demons)
-language_meditations = test_parser.book_soup_to_language(book_soup_meditations)
+#language_angels_demons = test_parser.book_soup_to_language(book_soup_angels_demons)
+#language_meditations = test_parser.book_soup_to_language(book_soup_meditations)
 
-print(language_angels_demons)
-print(language_meditations)
+#print(language_angels_demons)
+#print(language_meditations)
+
+num_reviews_angels_demons = test_parser.book_soup_to_num_reviews(book_soup_angels_demons)
+num_reviews_meditations = test_parser.book_soup_to_num_reviews(book_soup_meditations)
+
+print(num_reviews_angels_demons)
+print(num_reviews_meditations)
 
 ## TESTING REVIEW PARSER
 
