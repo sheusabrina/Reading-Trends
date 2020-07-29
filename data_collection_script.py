@@ -61,6 +61,10 @@ class Data_Collector():
 
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
+    def scrape_url(self):
+
+        self.current_scraped_string = self.scraper.url_to_string(self.current_url)
+
     def parse(self):
 
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
@@ -80,10 +84,6 @@ class Data_Collector():
     def calculate_progress(self):
 
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
-
-    def scrape_url(self):
-
-        self.current_scraped_string = self.scraper.url_to_string(self.current_url)
 
     def sleep(self):
         self.scraper.sleep(self.max_sleep_time)
