@@ -223,14 +223,20 @@ class Book_Data_Collector(Data_Collector):
 
     def prepare_scope(self):
 
-        self.data_logged_at_start = pd.read_csv(self.log_file_name)
-        self.book_ids_already_scraped_list = data_logged_at_start.book_id.unique()
-        self.book_ids_to_be_scraped = []
+        if self.is_csv():
 
-        for item in self.requested_book_id_list:
+            self.data_logged_at_start = pd.read_csv(self.log_file_name)
+            self.book_ids_already_scraped_list = self.data_logged_at_start.book_id.unique()
+            self.book_ids_to_be_scraped = []
 
-            if item not in self.book_ids_already_scraped_list:
-                self.book_ids_to_be_scraped.append(item)
+            for item in self.requested_book_id_list:
+
+                if item not in self.book_ids_already_scraped_list:
+                    self.book_ids_to_be_scraped.append(item)
+
+        else:
+
+            self.book_ids_to_be_scraped = self.requested_book_id_list
 
         self.max_data_points = len(self.book_ids_to_be_scraped)
 
@@ -289,3 +295,4 @@ num_wait_seconds = 1
 
 #uncomment to run Book Collector
 book_collector = Book_Data_Collector(book_list, num_wait_seconds, "book_data")
+book_collector.data_collection_loop()
