@@ -112,17 +112,26 @@ class Book_Parser(Parser):
 
     def book_soup_to_language(self, book_soup):
 
-        language = book_details.find(itemprop = "inLanguage")
-        #language = book_soup.find(attrs = {"itemprop": "\'inLanguage\'"})
+        #FIND_ALL WITH DIV
+        #language = book_soup.find_all("div", {"itemprop": "inLanguage"}) #JG METHOD
+        #language = book_soup.find_all("div", {"itemprop": "\'inLanguage\'"})
+
+        ##FIND_ALL
+
         #language = book_soup.find_all("inLanguage")
 
-        #book_info = book_soup.find(attrs = {"id": "bookDataBox"})
-        #language = book_info.find(itemprop = "inLanguage")
-        #language = book_info.find(attrs = {"itemprop": "inLanguage"})
+        ##FIND
 
+        language = book_soup.find(attrs = {"itemprop": "inLanguage"})
+
+        #language = book_details.find(itemprop = "inLanguage")
+        #language = book_soup.find(attrs = {"itemprop": "\'inLanguage\'"})
+
+        ## LARGER SECTIONS
+
+        #book_info = book_soup.find(attrs = {"id": "bookDataBox"})
         #details = book_soup.find(attrs = {"id": "details"})
         #book_details = book_info.find(class_ = "infoBoxRowItem")
-        #language = book_soup.find_all(class_ = "infoBoxRowItem")
 
         return language
 
@@ -164,16 +173,16 @@ test_book_meditations = open("test_book_meditations.html")
 book_soup_angels_demons = test_parser.html_to_soup(test_book_angels_demons)
 book_soup_meditations = test_parser.html_to_soup(test_book_meditations)
 
-#author_angels_demons = test_parser.book_soup_to_author(book_soup_angels_demons)
-#author_meditations = test_parser.book_soup_to_author(book_soup_meditations)
+author_angels_demons = test_parser.book_soup_to_author(book_soup_angels_demons)
+author_meditations = test_parser.book_soup_to_author(book_soup_meditations)
 
-#print(author_angels_demons)
-#print(author_meditations)
+print(author_angels_demons)
+print(author_meditations)
 
-#language_angels_demons = test_parser.book_soup_to_language(book_soup_angels_demons)
+language_angels_demons = test_parser.book_soup_to_language(book_soup_angels_demons)
 language_meditations = test_parser.book_soup_to_language(book_soup_meditations)
 
-#print(language_angels_demons)
+print(language_angels_demons)
 print(language_meditations)
 
 ## TESTING REVIEW PARSER
