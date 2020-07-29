@@ -239,8 +239,18 @@ class Book_Data_Collector(Data_Collector):
 
     def parse(self):
 
-        pass
+        self.current_soup = self.parser.html_to_soup(self.current_scraped_string)
 
+        self.author = self.parser.book_soup_to_author(self.current_soup)
+        self.language = self.parser.book_soup_to_language(self.current_soup)
+        self.num_reviews = self.parser.book_soup_to_num_reviews(self.current_soup)
+        self.avg_rating = self.parser.book_soup_to_avg_rating(self.current_soup)
+        self.isbn10 = self.parser.book_soup_to_isbn10(self.current_soup)
+        self.editions_url = self.parser.book_soup_to_editions_url(self.current_soup)
+        self.publication_date = self.parser.book_soup_to_publiation_date(self.current_soup)
+        self.first_publiation_date = self.parser.book_soup_to_first_publication_date(self.current_soup)
+        self.series = self.parser.book_soup_to_series(self.current_soup)
+        
     def log_data(self):
 
         pass
