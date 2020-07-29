@@ -122,10 +122,15 @@ class Book_Parser(Parser):
 
         ##FIND
 
-        language = book_soup.find(attrs = {"itemprop": "inLanguage"})
+        #language = book_soup.find(attrs = {"itemprop": "inLanguage"}) ##THIS STRUCTURE WORKS ELSEWHERE
 
+        #language = book_soup.find(attrs = {"itemprop": \'inLanguage\'})
         #language = book_details.find(itemprop = "inLanguage")
         #language = book_soup.find(attrs = {"itemprop": "\'inLanguage\'"})
+        #language = book_soup.find("inLanguage")
+
+        #META
+        #language = book_soup.find("meta", {"itemprop": "inLanguage"})
 
         ## LARGER SECTIONS
 
@@ -139,7 +144,7 @@ class Book_Parser(Parser):
 
         pass
 
-    def book_soup_to_avg_reviews(self, book_soup):
+    def book_soup_to_avg_rating(self, book_soup):
 
         pass
 
