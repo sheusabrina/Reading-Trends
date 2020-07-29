@@ -184,7 +184,17 @@ class Book_Parser(Parser):
 
     def book_soup_to_series(self, book_soup):
 
+        #NOTE: If series name has a "#" in it, it will get cut off. I can live with that.
+
         details = self.book_soup_to_details_soup(book_soup)
+        series = details.find(attrs = {"href": re.compile("series")})
+
+        if series:
+
+            series = series.get_text()
+            series = series[:series.index("#")]
+
+        return series
 
 ## TESTING BOOK PARSER
 
@@ -232,17 +242,23 @@ book_soup_meditations = test_parser.html_to_soup(test_book_meditations)
 #editions_meditations = test_parser.book_soup_to_editions_url(book_soup_meditations)
 #print(editions_meditations)
 
-publication_date_meditations = test_parser.book_soup_to_publication_date(book_soup_meditations)
-publication_date_angels_demons = test_parser.book_soup_to_publication_date(book_soup_angels_demons)
+#publication_date_meditations = test_parser.book_soup_to_publication_date(book_soup_meditations)
+#publication_date_angels_demons = test_parser.book_soup_to_publication_date(book_soup_angels_demons)
 
-print(publication_date_meditations)
-print(publication_date_angels_demons)
+#print(publication_date_meditations)
+#print(publication_date_angels_demons)
 
-first_publication_date_meditations = test_parser.book_soup_to_first_publication_date(book_soup_meditations)
-first_publication_date_angels_demons = test_parser.book_soup_to_first_publication_date(book_soup_angels_demons)
+#first_publication_date_meditations = test_parser.book_soup_to_first_publication_date(book_soup_meditations)
+#first_publication_date_angels_demons = test_parser.book_soup_to_first_publication_date(book_soup_angels_demons)
 
-print(first_publication_date_meditations)
-print(first_publication_date_angels_demons)
+#print(first_publication_date_meditations)
+#print(first_publication_date_angels_demons)
+
+series_angels_demons = test_parser.book_soup_to_series(book_soup_angels_demons)
+series_meditations = test_parser.book_soup_to_series(book_soup_meditations)
+
+print(series_angels_demons)
+print(series_meditations)
 
 ## TESTING REVIEW PARSER
 
