@@ -113,7 +113,7 @@ class Book_Parser(Parser):
     def book_soup_to_language(self, book_soup):
 
         #FIND_ALL WITH DIV
-        language = book_soup.find_all("div", {"itemprop": "inLanguage"}) #JG METHOD
+        #language = book_soup.find_all("div", {"itemprop": "inLanguage"}) #JG METHOD
         #language = book_soup.find_all("div", {"itemprop": "\'inLanguage\'"})
 
         ##FIND_ALL
@@ -123,7 +123,7 @@ class Book_Parser(Parser):
         ##FIND
 
         #language = book_soup.find(attrs = {"itemprop": "inLanguage"}) ##THIS STRUCTURE WORKS ELSEWHERE
-
+        #language = book_soup.find(attrs = {"itemprop": "'inLanguage'"})
         #language = book_soup.find(attrs = {"itemprop": \'inLanguage\'})
         #language = book_details.find(itemprop = "inLanguage")
         #language = book_soup.find(attrs = {"itemprop": "\'inLanguage\'"})
@@ -137,6 +137,13 @@ class Book_Parser(Parser):
         #book_info = book_soup.find(attrs = {"id": "bookDataBox"})
         #details = book_soup.find(attrs = {"id": "details"})
         #book_details = book_info.find(class_ = "infoBoxRowItem")
+
+        ##FIND RE
+        book_data = book_soup.find(attrs = {"id": "bookDataBox"})
+        language = book_data.find(attrs = {"itemprop": re.compile("inLanguage")}).get_text()
+
+        #NOTE: There's something odd about how this tag is structured (itemprop="\'inLanguage\'">) and the regex is the only way I can seem to identify it.
+        #Don't delete the book_data search as an intermediary step because it cuts down on the amount of text the code needs to run regex on. 
 
         return language
 
