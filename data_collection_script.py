@@ -230,7 +230,7 @@ class Book_Data_Collector(Data_Collector):
 
     def add_headers_to_log_file(self):
 
-        self.datafile.write("book_id,author,language,num_reviews_avg_rating,isbn10,editions_url,publication_date,first_publication_date,series")
+        self.datafile.write("book_id,author,language,num_reviews,num_ratings,avg_rating,isbn10,editions_url,publication_date,first_publication_date,series")
 
     def generate_current_url(self):
 
@@ -244,6 +244,7 @@ class Book_Data_Collector(Data_Collector):
         self.author = self.parser.book_soup_to_author(self.current_soup)
         self.language = self.parser.book_soup_to_language(self.current_soup)
         self.num_reviews = self.parser.book_soup_to_num_reviews(self.current_soup)
+        self.num_ratings = self.parser.book_soup_to_num_ratings(self.current_soup)
         self.avg_rating = self.parser.book_soup_to_avg_rating(self.current_soup)
         self.isbn10 = self.parser.book_soup_to_isbn10(self.current_soup)
         self.editions_url = self.parser.book_soup_to_editions_url(self.current_soup)
@@ -253,7 +254,7 @@ class Book_Data_Collector(Data_Collector):
 
     def log_data(self):
 
-        self.datafile.write("\n{},{},{},{},{},{},{},{},{},{}".format(self.curent_id, self.author, self.language, self.num_reviews, self.avg_rating, self.isbn10, self.editions_url, self.publication_date, self.first_publication_date, self.series))
+        self.datafile.write("\n{},{},{},{},{},{},{},{},{},{},{}".format(self.curent_id, self.author, self.language, self.num_reviews, self.num_ratings, self.avg_rating, self.isbn10, self.editions_url, self.publication_date, self.first_publication_date, self.series))
 
         self.data_points_counter += 1
 

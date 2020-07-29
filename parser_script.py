@@ -126,6 +126,16 @@ class Book_Parser(Parser):
 
         return num_reviews
 
+    def book_soup_to_num_ratings(self, book_soup):
+
+        num_ratings = book_soup.find(attrs = {"itemprop": "ratingCount"}).get_text()
+        num_ratings = num_ratings.replace("ratings","")
+        num_ratings = num_ratings.replace(",","")
+        num_ratings = num_ratings.strip()
+        num_ratings = int(num_ratings)
+
+        return num_ratings
+
     def book_soup_to_avg_rating(self, book_soup):
 
         avg_rating = book_soup.find(attrs = {"itemprop": "ratingValue"}).get_text().strip()
@@ -181,11 +191,17 @@ book_soup_meditations = test_parser.html_to_soup(test_book_meditations)
 #print(num_reviews_angels_demons)
 #print(num_reviews_meditations)
 
-avg_rating_angels_demons = test_parser.book_soup_to_avg_rating(book_soup_angels_demons)
-avg_rating_meditations = test_parser.book_soup_to_avg_rating(book_soup_meditations)
+#avg_rating_angels_demons = test_parser.book_soup_to_avg_rating(book_soup_angels_demons)
+#avg_rating_meditations = test_parser.book_soup_to_avg_rating(book_soup_meditations)
 
-print(avg_rating_meditations)
-print(avg_rating_angels_demons)
+#print(avg_rating_meditations)
+#print(avg_rating_angels_demons)
+
+num_ratings_angels_demons = test_parser.book_soup_to_num_ratings(book_soup_angels_demons)
+num_ratings_meditations = test_parser.book_soup_to_num_ratings(book_soup_meditations)
+
+print(num_ratings_meditations)
+print(num_ratings_angels_demons)
 
 ## TESTING REVIEW PARSER
 
