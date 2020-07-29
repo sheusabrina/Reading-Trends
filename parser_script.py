@@ -143,9 +143,11 @@ class Book_Parser(Parser):
 
         return avg_rating
 
-    def book_soup_to_isbn10(self, book_soup):
+    def book_soup_to_isbn13(self, book_soup):
 
-        pass
+        isbn = book_soup.find(attrs = {"itemprop": "isbn"}).get_text()
+
+        return isbn
 
     def book_soup_to_editions_url(self, book_soup):
 
@@ -197,11 +199,14 @@ book_soup_meditations = test_parser.html_to_soup(test_book_meditations)
 #print(avg_rating_meditations)
 #print(avg_rating_angels_demons)
 
-num_ratings_angels_demons = test_parser.book_soup_to_num_ratings(book_soup_angels_demons)
-num_ratings_meditations = test_parser.book_soup_to_num_ratings(book_soup_meditations)
+#num_ratings_angels_demons = test_parser.book_soup_to_num_ratings(book_soup_angels_demons)
+#num_ratings_meditations = test_parser.book_soup_to_num_ratings(book_soup_meditations)
 
-print(num_ratings_meditations)
-print(num_ratings_angels_demons)
+#print(num_ratings_meditations)
+#print(num_ratings_angels_demons)
+
+isbn_meditations = test_parser.book_soup_to_isbn13(book_soup_meditations)
+print(isbn_meditations)
 
 ## TESTING REVIEW PARSER
 
