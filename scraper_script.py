@@ -20,10 +20,16 @@ class Scraper():
 
         self.webpage_response = requests.get(url, headers = self.header)
         self.webpage = self.webpage_response.content
-        #webpage_string = str(webpage)
-        #self.webpage_string = webpage_string
 
         return self.webpage
+
+    def url_to_string(self, url):
+
+        self.url_to_content(url)
+
+        self.webpage_string = str(self.webpage)
+
+        return self.webpage_string
 
     def string_to_file(self, file_name):
         open(file_name+".html", "wb").write(self.webpage)

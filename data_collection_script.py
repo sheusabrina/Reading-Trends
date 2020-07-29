@@ -63,7 +63,7 @@ class Data_Collector():
 
     def scrape_url(self):
 
-        self.current_content = self.scraper.url_to_content(self.current_url)
+        self.current_content = self.scraper.url_to_string(self.current_url)
 
     def parse(self):
 
