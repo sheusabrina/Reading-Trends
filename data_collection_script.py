@@ -77,6 +77,21 @@ class Data_Collector():
             now_string = now.strftime("%d/%m/%Y %H:%M:%S")
             print("{} / {} {} Collected ({}% Complete) at {}". format(str(self.data_points_counter), str(self.max_data_points), self.data_point_type, percent_complete_string, now_string))
 
+    def calculate_progress(self):
+
+        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
+
+    def scrape_url(self):
+
+        self.current_scraped_string = self.scraper.url_to_string(self.current_url)
+
+    def sleep(self):
+        self.scraper.sleep(self.max_sleep_time)
+
+    def is_collection_complete(self):
+
+        is_complete = self.data_points_counter >= self.max_data_points
+        return is_complete
 
     def data_collection_loop(self):
 
@@ -93,18 +108,6 @@ class Data_Collector():
 
         print("Data Collection Complete")
         self.datafile.close()
-
-        def scrape_url(self):
-
-            self.current_scraped_string = self.scraper.url_to_string(self.current_url)
-
-        def sleep(self):
-            self.scraper.sleep(self.max_sleep_time)
-
-        def is_collection_complete(self):
-
-            is_complete = self.data_points_counter >= self.max_data_points
-            return is_complete
 
 class Review_Data_Collector(Data_Collector):
 
@@ -224,6 +227,10 @@ class Book_Data_Collector(Data_Collector):
                 self.book_ids_to_be_scraped.append(item)
 
         self.max_data_points = len(self.book_ids_to_be_scraped)
+
+    def add_headers_to_log_file(self):
+
+        pass
 
     def generate_current_url(self):
 
