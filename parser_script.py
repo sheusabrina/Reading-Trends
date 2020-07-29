@@ -151,7 +151,13 @@ class Book_Parser(Parser):
 
     def book_soup_to_editions_url(self, book_soup):
 
-        pass
+        editions = book_soup.find(attrs = {"class": "otherEditionsLink"})
+        #editions_url = editions.get("href")
+        editions_url = editions.get("a href")
+
+        #editions = book_soup.find(attrs = {"class": "otherEditionsLink", "href": True})
+
+        return editions_url
 
     def book_soup_to_publication_date(self, book_soup):
 
@@ -205,8 +211,11 @@ book_soup_meditations = test_parser.html_to_soup(test_book_meditations)
 #print(num_ratings_meditations)
 #print(num_ratings_angels_demons)
 
-isbn_meditations = test_parser.book_soup_to_isbn13(book_soup_meditations)
-print(isbn_meditations)
+#isbn_meditations = test_parser.book_soup_to_isbn13(book_soup_meditations)
+#print(isbn_meditations)
+
+editions_meditations = test_parser.book_soup_to_editions_url(book_soup_meditations)
+print(editions_meditations)
 
 ## TESTING REVIEW PARSER
 
