@@ -60,6 +60,11 @@ class Data_Collector():
     def sleep(self):
         self.scraper.sleep(self.max_sleep_time)
 
+    def is_collection_complete(self):
+
+        is_complete = self.data_points_counter >= self.max_data_points
+        return is_complete
+
 class Review_Data_Collector(Data_Collector):
 
     def __init__(self, min_id, max_id, max_data_points, max_sleep_time, file_name):
@@ -108,7 +113,7 @@ class Review_Data_Collector(Data_Collector):
         self.prepare_log_file()
 
         print("Beginning Data Collection...")
-        while self.data_points_counter < self.max_data_points:
+        while not self.is_collection_complete():
             self.generate_current_url()
             self.scrape_url()
             self.parse()
@@ -221,7 +226,7 @@ class Book_Data_Collector(Data_Collector):
 
         print("Beginning Data Collection...")
 
-        while self.data_points_counter < self.max_data_points:
+        while not self.is_collection_complete:
             self.generate_current_url()
             self.scrape_url()
             self.parse()
