@@ -230,7 +230,7 @@ class Book_Data_Collector(Data_Collector):
 
     def add_headers_to_log_file(self):
 
-        pass
+        self.datafile.write("book_id,author,language,num_reviews_avg_rating,isbn10,editions_url,publication_date,first_publication_date,series")
 
     def generate_current_url(self):
 
