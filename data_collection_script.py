@@ -40,6 +40,10 @@ class Data_Collector():
 
         return is_csv
 
+    def prepare_scope(self):
+
+        pass
+
     def open_log_file(self):
 
         self.datafile = open(self.log_file_name, "a")
@@ -99,6 +103,7 @@ class Data_Collector():
     def data_collection_loop(self):
 
         self.prepare_log_file()
+        self.prepare_scope()
 
         print("Beginning Data Collection...")
         while not self.is_collection_complete():
@@ -216,8 +221,6 @@ class Book_Data_Collector(Data_Collector):
         self.base_url = "https://www.goodreads.com/book/show/"
         self.data_point_type = "Books"
 
-        self.prepare_scope()
-
     def prepare_scope(self):
 
         self.data_logged_at_start = pd.read_csv(self.log_file_name)
@@ -282,4 +285,7 @@ max_2020_ID = 3455207761 #I'm not sure if i should use this, since reviews are g
 ## BOOK DATA COLLECTION
 
 book_list = book_list[:3]
-print(book_list)
+num_wait_seconds = 1
+
+#uncomment to run Book Collector
+book_collector = Book_Data_Collector(book_list, num_wait_seconds, "book_data")
