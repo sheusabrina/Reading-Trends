@@ -108,6 +108,8 @@ class Book_Parser(Parser):
         author = book_soup.find(attrs = {"class": "authorName"}).get_text()
         #Note: If there are multiple authors, this identifies the first one only.
 
+        print(author)
+
         return author
 
     def book_soup_to_language(self, book_soup):
@@ -179,6 +181,8 @@ class Book_Parser(Parser):
         publication_date = publication_date.replace("(first published ","")
         publication_date = publication_date.replace(")","")
 
+        print(publication_date)
+
         return publication_date
 
     def book_soup_to_series(self, book_soup):
@@ -193,17 +197,21 @@ class Book_Parser(Parser):
             series = series.get_text()
             series = series[:series.index("#")]
 
+        print(series)
+
         return series
 
 ## TESTING BOOK PARSER
 
-#test_parser = Book_Parser()
+test_parser = Book_Parser()
 
-#test_book_angels_demons = open("test_book_angels_demons.html", "rb")
-#test_book_meditations = open("test_book_meditations.html", "rb")
+test_book_angels_demons = open("test_book_angels_demons.html", "rb")
+test_book_meditations = open("test_book_meditations.html", "rb")
+test_book_hp1 = open("test_book_hp1.html", "rb")
 
-#book_soup_angels_demons = test_parser.html_to_soup(test_book_angels_demons)
-#book_soup_meditations = test_parser.html_to_soup(test_book_meditations)
+book_soup_angels_demons = test_parser.html_to_soup(test_book_angels_demons)
+book_soup_meditations = test_parser.html_to_soup(test_book_meditations)
+book_soup_hp1 = test_parser.html_to_soup(test_book_hp1)
 
 #author_angels_demons = test_parser.book_soup_to_author(book_soup_angels_demons)
 #author_meditations = test_parser.book_soup_to_author(book_soup_meditations)
@@ -213,27 +221,35 @@ class Book_Parser(Parser):
 
 #language_angels_demons = test_parser.book_soup_to_language(book_soup_angels_demons)
 #language_meditations = test_parser.book_soup_to_language(book_soup_meditations)
+#language_hp1 = test_parser.book_soup_to_language(book_soup_hp1)
 
 #print(language_angels_demons)
 #print(language_meditations)
+#print(language_hp1)
 
 #num_reviews_angels_demons = test_parser.book_soup_to_num_reviews(book_soup_angels_demons)
 #num_reviews_meditations = test_parser.book_soup_to_num_reviews(book_soup_meditations)
+#num_reviews_hp1 = test_parser.book_soup_to_num_reviews(book_soup_hp1)
 
 #print(num_reviews_angels_demons)
 #print(num_reviews_meditations)
+#print(num_reviews_hp1)
 
 #avg_rating_angels_demons = test_parser.book_soup_to_avg_rating(book_soup_angels_demons)
 #avg_rating_meditations = test_parser.book_soup_to_avg_rating(book_soup_meditations)
+avg_rating_hp1 = test_parser.book_soup_to_avg_rating(book_soup_hp1)
 
 #print(avg_rating_meditations)
 #print(avg_rating_angels_demons)
+print(avg_rating_hp1)
 
 #num_ratings_angels_demons = test_parser.book_soup_to_num_ratings(book_soup_angels_demons)
 #num_ratings_meditations = test_parser.book_soup_to_num_ratings(book_soup_meditations)
+#num_ratings_hp1 = test_parser.book_soup_to_num_ratings(book_soup_hp1)
 
 #print(num_ratings_meditations)
 #print(num_ratings_angels_demons)
+#print(num_ratings_hp1)
 
 #isbn_meditations = test_parser.book_soup_to_isbn13(book_soup_meditations)
 #print(isbn_meditations)

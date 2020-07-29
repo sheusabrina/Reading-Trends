@@ -251,24 +251,30 @@ class Book_Data_Collector(Data_Collector):
         self.current_id = self.book_ids_to_be_scraped[self.data_points_counter]
         self.current_url = self.base_url + self.current_id
 
+        print(self.current_url)
+
     def parse(self):
+
+        print("Beginning Parse...")
 
         self.current_soup = self.parser.html_to_soup(self.current_content)
 
-        self.author = self.parser.book_soup_to_author(self.current_soup)
-        self.language = self.parser.book_soup_to_language(self.current_soup)
-        self.num_reviews = self.parser.book_soup_to_num_reviews(self.current_soup)
-        self.num_ratings = self.parser.book_soup_to_num_ratings(self.current_soup)
-        self.avg_rating = self.parser.book_soup_to_avg_rating(self.current_soup)
-        self.isbn10 = self.parser.book_soup_to_isbn10(self.current_soup)
-        self.editions_url = self.parser.book_soup_to_editions_url(self.current_soup)
-        self.publication_date = self.parser.book_soup_to_publiation_date(self.current_soup)
-        self.first_publiation_date = self.parser.book_soup_to_first_publication_date(self.current_soup)
-        self.series = self.parser.book_soup_to_series(self.current_soup)
+        self.author = self.parser.book_soup_to_author(self.current_soup) #WORKS
+        #self.language = self.parser.book_soup_to_language(self.current_soup) #FAIL IN COLLECTOR, WORKS IN PARSER
+        #self.num_reviews = self.parser.book_soup_to_num_reviews(self.current_soup) #FAIL IN COLLECTOR, WORKS IN PARSER
+        #self.num_ratings = self.parser.book_soup_to_num_ratings(self.current_soup) #FAIL IN COLLECTOR, WORKS IN PARSER
+        #self.avg_rating = self.parser.book_soup_to_avg_rating(self.current_soup) #FAIL IN COLLECTOR, WORKS IN PARSER
+        #self.isbn13 = self.parser.book_soup_to_isbn13(self.current_soup)
+        #self.editions_href = self.parser.book_soup_to_editions_href(self.current_soup)
+        #self.publication_date = self.parser.book_soup_to_publication_date(self.current_soup)
+        #self.first_publiation_date = self.parser.book_soup_to_first_publication_date(self.current_soup)
+        self.series = self.parser.book_soup_to_series(self.current_soup) #WORKS
+
+        print("Parse Complete")
 
     def log_data(self):
 
-        self.datafile.write("\n{},{},{},{},{},{},{},{},{},{},{}".format(self.curent_id, self.author, self.language, self.num_reviews, self.num_ratings, self.avg_rating, self.isbn10, self.editions_url, self.publication_date, self.first_publication_date, self.series))
+        self.datafile.write("\n{},{},{},{},{},{},{},{},{},{},{}".format(self.current_id, self.author, self.language, self.num_reviews, self.num_ratings, self.avg_rating, self.isbn10, self.editions_url, self.publication_date, self.first_publication_date, self.series))
 
         self.data_points_counter += 1
 
