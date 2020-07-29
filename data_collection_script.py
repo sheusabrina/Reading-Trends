@@ -250,10 +250,12 @@ class Book_Data_Collector(Data_Collector):
         self.publication_date = self.parser.book_soup_to_publiation_date(self.current_soup)
         self.first_publiation_date = self.parser.book_soup_to_first_publication_date(self.current_soup)
         self.series = self.parser.book_soup_to_series(self.current_soup)
-        
+
     def log_data(self):
 
-        pass
+        self.datafile.write("\n{},{},{},{},{},{},{},{},{},{}".format(self.curent_id, self.author, self.language, self.num_reviews, self.avg_rating, self.isbn10, self.editions_url, self.publication_date, self.first_publication_date, self.series))
+
+        self.data_points_counter += 1
 
 #keeping this low until I am fully confident that this is working as expected.
 num_reviews_to_collect = 5 * 10 **6
