@@ -51,6 +51,10 @@ class Scraper():
 #scraper.url_to_content("https://www.goodreads.com/book/show/960.Angels_Demons")
 #scraper.string_to_file("test_book_angels_demons")
 
+#HP1 book
+#scraper.url_to_content("https://www.goodreads.com/book/show/3")
+#scraper.string_to_file("test_book_hp1")
+
 #review (meditations)
 #scraper.url_to_content("https://www.goodreads.com/review/show/2668957860")
 #scraper.string_to_file("test_review")
