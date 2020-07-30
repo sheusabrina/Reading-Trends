@@ -21,7 +21,7 @@ class Scraper():
         self.webpage_response = requests.get(url, headers = self.header)
         self.webpage = self.webpage_response.content
 
-        print("Scraper URL to bytes content format: {}".format(type(self.webpage)))
+        #print("Scraper URL to bytes content format: {}".format(type(self.webpage)))
 
         return self.webpage
 
