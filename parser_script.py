@@ -203,15 +203,25 @@ class Book_Parser(Parser):
 
 ## TESTING BOOK PARSER
 
+##BOOKS IN THE COLLECTION LOOP:
+# WEBPAGE CONTENT -> STRING(WEBPAGE CONTENT) -> SOUP
+##BOOKS IN THE PARSER TESTING:
+# WEBPAGE CONTENT -> SOUP
+
+##TAKEAWAYS:
+    #ADD CONVERSION OF HTML FILES TO STRING RIGHT BEFORE SOUPING
+    #REWORK METHODS ONE AT A TIME ON THE TWO TEST BOOKS (NO NEED FOR HP1)
+        #MOST WILL FAIL
+
 test_parser = Book_Parser()
 
 test_book_angels_demons = open("html_files/test_book_angels_demons.html", "rb")
 test_book_meditations = open("html_files/test_book_meditations.html", "rb")
 test_book_hp1 = open("html_files/test_book_hp1.html", "rb")
 
-#book_soup_angels_demons = test_parser.html_to_soup(test_book_angels_demons)
-#book_soup_meditations = test_parser.html_to_soup(test_book_meditations)
-book_soup_hp1 = test_parser.html_to_soup(test_book_hp1)
+book_soup_angels_demons = test_parser.html_to_soup(str(test_book_angels_demons))
+book_soup_meditations = test_parser.html_to_soup(str(test_book_meditations))
+#book_soup_hp1 = test_parser.html_to_soup(str(test_book_hp1))
 
 #author_angels_demons = test_parser.book_soup_to_author(book_soup_angels_demons)
 #author_meditations = test_parser.book_soup_to_author(book_soup_meditations)
