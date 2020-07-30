@@ -70,7 +70,7 @@ class Data_Collector():
 
     def scrape_url(self):
 
-        self.current_content = self.scraper.url_to_string(self.current_url)
+        self.current_webpage_as_string = self.scraper.url_to_string(self.current_url)
 
     def parse(self):
 
@@ -159,7 +159,7 @@ class Review_URL_ID_Data_Collector(Review_Data_Collector):
 
     def parse(self):
 
-        self.current_soup = self.parser.html_to_soup(self.current_content)
+        self.current_soup = self.parser.html_to_soup(self.current_webpage_as_string)
         self.is_current_valid = self.parser.review_soup_is_valid(self.current_soup)
 
         if self.is_current_valid:
@@ -180,7 +180,7 @@ class Review_Detail_Data_Collector(Review_Data_Collector):
 
     def parse(self):
 
-        self.current_soup = self.parser.html_to_soup(self.current_content)
+        self.current_soup = self.parser.html_to_soup(self.current_webpage_as_string)
         self.is_current_valid = self.parser.review_soup_is_valid(self.current_soup)
 
         if self.is_current_valid:
@@ -257,7 +257,7 @@ class Book_Data_Collector(Data_Collector):
 
         print("Beginning Parse...")
 
-        self.current_soup = self.parser.html_to_soup(self.current_content)
+        self.current_soup = self.parser.html_to_soup(self.current_webpage_as_string)
 
         self.author = self.parser.book_soup_to_author(self.current_soup) #WORKS
         #self.language = self.parser.book_soup_to_language(self.current_soup) #FAIL IN COLLECTOR, WORKS IN PARSER
