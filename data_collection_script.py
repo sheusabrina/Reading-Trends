@@ -257,6 +257,8 @@ class Book_Data_Collector(Data_Collector):
 
         print("Beginning Parse...")
 
+        self.current_soup = self.parser.html_to_soup(self.current_webpage_as_string)
+
         self.author = self.parser.book_soup_to_author(self.current_soup) #WORKS
         #self.language = self.parser.book_soup_to_language(self.current_soup) #FAIL IN COLLECTOR, WORKS IN PARSER
         #self.num_reviews = self.parser.book_soup_to_num_reviews(self.current_soup) #FAIL IN COLLECTOR, WORKS IN PARSER
@@ -291,8 +293,8 @@ max_2020_ID = 3455207761 #I'm not sure if i should use this, since reviews are g
 #review_id_collector.data_collection_loop()
 
 #Uncomment to run the Review Detail collector
-review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
-review_collector.data_collection_loop()
+#review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
+#review_collector.data_collection_loop()
 
 ## BOOK DATA COLLECTION
 
@@ -300,5 +302,5 @@ book_list = book_list[:3]
 num_wait_seconds = 1
 
 #uncomment to run Book Collector
-#book_collector = Book_Data_Collector(book_list, num_wait_seconds, "book_data")
-#book_collector.data_collection_loop()
+book_collector = Book_Data_Collector(book_list, num_wait_seconds, "book_data")
+book_collector.data_collection_loop()
