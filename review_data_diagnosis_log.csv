@@ -1,0 +1,91 @@
+rev_name,input_format,parser_method,parse_output,parse_output_type
+https://www.goodreads.com/review/show/2668957860,string_format,review_soup_is_valid,True,<class 'bool'>
+https://www.goodreads.com/review/show/2668957860,string_format,review_soup_to_date,Jan 11 2019,<class 'str'>
+https://www.goodreads.com/review/show/2668957860,string_format,review_soup_to_book_title,Meditations,<class 'str'>
+https://www.goodreads.com/review/show/2668957860,string_format,review_soup_to_book_id,30659,<class 'str'>
+https://www.goodreads.com/review/show/2668957860,string_format,review_soup_to_rating,5,<class 'str'>
+https://www.goodreads.com/review/show/2668957860,string_format,review_soup_to_reviewer_href,/user/show/27788046-sean-barrs,<class 'str'>
+https://www.goodreads.com/review/show/2668957860,string_format,progress_dict_to_start_date,None,<class 'NoneType'>
+https://www.goodreads.com/review/show/2668957860,string_format,progress_dict_to_finish_date,None,<class 'NoneType'>
+https://www.goodreads.com/review/show/2668957860,string_format,progress_dict_to_shelved_date,None,<class 'NoneType'>
+https://www.goodreads.com/review/show/2668957860,bytes_format,review_soup_is_valid,True,<class 'bool'>
+https://www.goodreads.com/review/show/2668957860,bytes_format,review_soup_to_date,Jan 11 2019,<class 'str'>
+https://www.goodreads.com/review/show/2668957860,bytes_format,review_soup_to_book_title,Meditations,<class 'str'>
+https://www.goodreads.com/review/show/2668957860,bytes_format,review_soup_to_book_id,30659,<class 'str'>
+https://www.goodreads.com/review/show/2668957860,bytes_format,review_soup_to_rating,5,<class 'str'>
+https://www.goodreads.com/review/show/2668957860,bytes_format,review_soup_to_reviewer_href,/user/show/27788046-sean-barrs,<class 'str'>
+https://www.goodreads.com/review/show/2668957860,bytes_format,progress_dict_to_start_date,January 10 2019,<class 'str'>
+https://www.goodreads.com/review/show/2668957860,bytes_format,progress_dict_to_finish_date,January 11 2019,<class 'str'>
+https://www.goodreads.com/review/show/2668957860,bytes_format,progress_dict_to_shelved_date,January 11 2019,<class 'str'>
+https://www.goodreads.com/review/show/153608751,string_format,review_soup_is_valid,True,<class 'bool'>
+https://www.goodreads.com/review/show/153608751,string_format,review_soup_to_date,Mar 10 2011,<class 'str'>
+https://www.goodreads.com/review/show/153608751,string_format,review_soup_to_book_title,Twilight (Twilight #1),<class 'str'>
+https://www.goodreads.com/review/show/153608751,string_format,review_soup_to_book_id,762743,<class 'str'>
+https://www.goodreads.com/review/show/153608751,string_format,review_soup_to_rating,1,<class 'str'>
+https://www.goodreads.com/review/show/153608751,string_format,review_soup_to_reviewer_href,/user/show/4642710-steph-sinclair,<class 'str'>
+https://www.goodreads.com/review/show/153608751,string_format,progress_dict_to_start_date,None,<class 'NoneType'>
+https://www.goodreads.com/review/show/153608751,string_format,progress_dict_to_finish_date,None,<class 'NoneType'>
+https://www.goodreads.com/review/show/153608751,string_format,progress_dict_to_shelved_date,None,<class 'NoneType'>
+https://www.goodreads.com/review/show/153608751,bytes_format,review_soup_is_valid,True,<class 'bool'>
+https://www.goodreads.com/review/show/153608751,bytes_format,review_soup_to_date,Mar 10 2011,<class 'str'>
+https://www.goodreads.com/review/show/153608751,bytes_format,review_soup_to_book_title,Twilight (Twilight #1),<class 'str'>
+https://www.goodreads.com/review/show/153608751,bytes_format,review_soup_to_book_id,762743,<class 'str'>
+https://www.goodreads.com/review/show/153608751,bytes_format,review_soup_to_rating,1,<class 'str'>
+https://www.goodreads.com/review/show/153608751,bytes_format,review_soup_to_reviewer_href,/user/show/4642710-steph-sinclair,<class 'str'>
+https://www.goodreads.com/review/show/153608751,bytes_format,progress_dict_to_start_date,July 28 2011,<class 'str'>
+https://www.goodreads.com/review/show/153608751,bytes_format,progress_dict_to_finish_date,October  9 2011,<class 'str'>
+https://www.goodreads.com/review/show/153608751,bytes_format,progress_dict_to_shelved_date,March 10 2011,<class 'str'>
+https://www.goodreads.com/review/show/1115578730,string_format,review_soup_is_valid,True,<class 'bool'>
+https://www.goodreads.com/review/show/1115578730,string_format,review_soup_to_date,Nov 25 2014,<class 'str'>
+https://www.goodreads.com/review/show/1115578730,string_format,review_soup_to_book_title,The Great Gatsby,<class 'str'>
+https://www.goodreads.com/review/show/1115578730,string_format,review_soup_to_book_id,6560516,<class 'str'>
+https://www.goodreads.com/review/show/1115578730,string_format,review_soup_to_rating,5,<class 'str'>
+https://www.goodreads.com/review/show/1115578730,string_format,review_soup_to_reviewer_href,/user/show/32879029-emma,<class 'str'>
+https://www.goodreads.com/review/show/1115578730,string_format,progress_dict_to_start_date,None,<class 'NoneType'>
+https://www.goodreads.com/review/show/1115578730,string_format,progress_dict_to_finish_date,None,<class 'NoneType'>
+https://www.goodreads.com/review/show/1115578730,string_format,progress_dict_to_shelved_date,None,<class 'NoneType'>
+https://www.goodreads.com/review/show/1115578730,bytes_format,review_soup_is_valid,True,<class 'bool'>
+https://www.goodreads.com/review/show/1115578730,bytes_format,review_soup_to_date,Nov 25 2014,<class 'str'>
+https://www.goodreads.com/review/show/1115578730,bytes_format,review_soup_to_book_title,The Great Gatsby,<class 'str'>
+https://www.goodreads.com/review/show/1115578730,bytes_format,review_soup_to_book_id,6560516,<class 'str'>
+https://www.goodreads.com/review/show/1115578730,bytes_format,review_soup_to_rating,5,<class 'str'>
+https://www.goodreads.com/review/show/1115578730,bytes_format,review_soup_to_reviewer_href,/user/show/32879029-emma,<class 'str'>
+https://www.goodreads.com/review/show/1115578730,bytes_format,progress_dict_to_start_date,July  6 2017,<class 'str'>
+https://www.goodreads.com/review/show/1115578730,bytes_format,progress_dict_to_finish_date,July  9 2017,<class 'str'>
+https://www.goodreads.com/review/show/1115578730,bytes_format,progress_dict_to_shelved_date,November 25 2014,<class 'str'>
+https://www.goodreads.com/review/show/166895786,string_format,review_soup_is_valid,None,None
+https://www.goodreads.com/review/show/166895786,string_format,review_soup_to_date,None,None
+https://www.goodreads.com/review/show/166895786,string_format,review_soup_to_book_title,None,None
+https://www.goodreads.com/review/show/166895786,string_format,review_soup_to_book_id,None,None
+https://www.goodreads.com/review/show/166895786,string_format,review_soup_to_rating,None,None
+https://www.goodreads.com/review/show/166895786,string_format,review_soup_to_reviewer_href,None,None
+https://www.goodreads.com/review/show/166895786,string_format,progress_dict_to_start_date,None,None
+https://www.goodreads.com/review/show/166895786,string_format,progress_dict_to_finish_date,None,None
+https://www.goodreads.com/review/show/166895786,string_format,progress_dict_to_shelved_date,None,None
+https://www.goodreads.com/review/show/166895786,bytes_format,review_soup_is_valid,None,None
+https://www.goodreads.com/review/show/166895786,bytes_format,review_soup_to_date,None,None
+https://www.goodreads.com/review/show/166895786,bytes_format,review_soup_to_book_title,None,None
+https://www.goodreads.com/review/show/166895786,bytes_format,review_soup_to_book_id,None,None
+https://www.goodreads.com/review/show/166895786,bytes_format,review_soup_to_rating,None,None
+https://www.goodreads.com/review/show/166895786,bytes_format,review_soup_to_reviewer_href,None,None
+https://www.goodreads.com/review/show/166895786,bytes_format,progress_dict_to_start_date,None,None
+https://www.goodreads.com/review/show/166895786,bytes_format,progress_dict_to_finish_date,None,None
+https://www.goodreads.com/review/show/166895786,bytes_format,progress_dict_to_shelved_date,None,None
+https://www.goodreads.com/review/show/2572722180,string_format,review_soup_is_valid,True,<class 'bool'>
+https://www.goodreads.com/review/show/2572722180,string_format,review_soup_to_date,Oct 24 2018,<class 'str'>
+https://www.goodreads.com/review/show/2572722180,string_format,review_soup_to_book_title,Grounded (Up in the Air #3),<class 'str'>
+https://www.goodreads.com/review/show/2572722180,string_format,review_soup_to_book_id,16139641,<class 'str'>
+https://www.goodreads.com/review/show/2572722180,string_format,review_soup_to_rating,3,<class 'str'>
+https://www.goodreads.com/review/show/2572722180,string_format,review_soup_to_reviewer_href,/user/show/27618930-tiffany-keys,<class 'str'>
+https://www.goodreads.com/review/show/2572722180,string_format,progress_dict_to_start_date,None,<class 'NoneType'>
+https://www.goodreads.com/review/show/2572722180,string_format,progress_dict_to_finish_date,None,<class 'NoneType'>
+https://www.goodreads.com/review/show/2572722180,string_format,progress_dict_to_shelved_date,None,<class 'NoneType'>
+https://www.goodreads.com/review/show/2572722180,bytes_format,review_soup_is_valid,True,<class 'bool'>
+https://www.goodreads.com/review/show/2572722180,bytes_format,review_soup_to_date,Oct 24 2018,<class 'str'>
+https://www.goodreads.com/review/show/2572722180,bytes_format,review_soup_to_book_title,Grounded (Up in the Air #3),<class 'str'>
+https://www.goodreads.com/review/show/2572722180,bytes_format,review_soup_to_book_id,16139641,<class 'str'>
+https://www.goodreads.com/review/show/2572722180,bytes_format,review_soup_to_rating,3,<class 'str'>
+https://www.goodreads.com/review/show/2572722180,bytes_format,review_soup_to_reviewer_href,/user/show/27618930-tiffany-keys,<class 'str'>
+https://www.goodreads.com/review/show/2572722180,bytes_format,progress_dict_to_start_date,None,<class 'NoneType'>
+https://www.goodreads.com/review/show/2572722180,bytes_format,progress_dict_to_finish_date,None,<class 'NoneType'>
+https://www.goodreads.com/review/show/2572722180,bytes_format,progress_dict_to_shelved_date,October 24 2018,<class 'str'>

@@ -41,7 +41,7 @@ class Scraper():
 
 ## CREATING TEST FILES
 
-#scraper = Scraper()
+scraper = Scraper()
 
 #meditations book
 #scraper.url_to_content("https://www.goodreads.com/book/show/30659")
@@ -65,5 +65,7 @@ class Scraper():
 
 #review, grounded (since it crashed the parser)
 
-#scraper.url_to_content("https://www.goodreads.com/review/show/2572722180")
+#print(type(scraper.url_to_content("https://www.goodreads.com/review/show/2572722180")))
+
+
 #scraper.string_to_file("test_review_grounded")
