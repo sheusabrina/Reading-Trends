@@ -31,7 +31,7 @@ class Scraper():
 
         return self.webpage_string
 
-    def string_to_file(self, file_name):
+    def webpage_bytes_content_to_file(self, file_name):
         open(file_name+".html", "wb").write(self.webpage)
 
     def sleep(self, max_sleep_time):
@@ -45,27 +45,27 @@ scraper = Scraper()
 
 #meditations book
 #scraper.url_to_bytes_content("https://www.goodreads.com/book/show/30659")
-#scraper.string_to_file("test_book_meditations")
+#scraper.webpage_bytes_content_to_file("test_book_meditations")
 
 #angels & demons book
 #scraper.url_to_bytes_content("https://www.goodreads.com/book/show/960.Angels_Demons")
-#scraper.string_to_file("test_book_angels_demons")
+#scraper.webpage_bytes_content_to_file("test_book_angels_demons")
 
 #HP1 book
 #scraper.url_to_bytes_content("https://www.goodreads.com/book/show/3")
-#scraper.string_to_file("test_book_hp1")
+#scraper.webpage_bytes_content_to_file("test_book_hp1")
 
 #review (meditations)
 #scraper.url_to_bytes_content("https://www.goodreads.com/review/show/2668957860")
-#scraper.string_to_file("test_review")
+#scraper.webpage_bytes_content_to_file("test_review")
 
 #review, error page
 #scraper.url_to_bytes_content("https://www.goodreads.com/review/show/166895786")
-#scraper.string_to_file("test_review_error")
+#scraper.webpage_bytes_content_to_file("test_review_error")
 
 #review, grounded (since it crashed the parser)
 
 #print(type(scraper.url_to_bytes_content("https://www.goodreads.com/review/show/2572722180")))
 
 
-#scraper.string_to_file("test_review_grounded")
+#scraper.webpage_bytes_content_to_file("test_review_grounded")
