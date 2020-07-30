@@ -70,7 +70,7 @@ class Data_Collector():
 
     def scrape_url(self):
 
-        self.current_webpage_as_string = self.scraper.url_to_string(self.current_url)
+        self.current_webpage_as_string = self.scraper.url_to_string_content(self.current_url)
 
     def parse(self):
 
@@ -256,8 +256,6 @@ class Book_Data_Collector(Data_Collector):
     def parse(self):
 
         print("Beginning Parse...")
-
-        self.current_soup = self.parser.html_to_soup(self.current_webpage_as_string)
 
         self.author = self.parser.book_soup_to_author(self.current_soup) #WORKS
         #self.language = self.parser.book_soup_to_language(self.current_soup) #FAIL IN COLLECTOR, WORKS IN PARSER

@@ -15,7 +15,7 @@ class Scraper():
     def select_header(self):
         self.header = random.choice(self.headers_list)
 
-    def url_to_content(self, url):
+    def url_to_bytes_content(self, url):
         self.select_header()
 
         self.webpage_response = requests.get(url, headers = self.header)
@@ -23,9 +23,9 @@ class Scraper():
 
         return self.webpage
 
-    def url_to_string(self, url):
+    def url_to_string_content(self, url):
 
-        self.url_to_content(url)
+        self.url_to_bytes_content(url)
 
         self.webpage_string = str(self.webpage)
 
@@ -44,28 +44,28 @@ class Scraper():
 scraper = Scraper()
 
 #meditations book
-#scraper.url_to_content("https://www.goodreads.com/book/show/30659")
+#scraper.url_to_bytes_content("https://www.goodreads.com/book/show/30659")
 #scraper.string_to_file("test_book_meditations")
 
 #angels & demons book
-#scraper.url_to_content("https://www.goodreads.com/book/show/960.Angels_Demons")
+#scraper.url_to_bytes_content("https://www.goodreads.com/book/show/960.Angels_Demons")
 #scraper.string_to_file("test_book_angels_demons")
 
 #HP1 book
-#scraper.url_to_content("https://www.goodreads.com/book/show/3")
+#scraper.url_to_bytes_content("https://www.goodreads.com/book/show/3")
 #scraper.string_to_file("test_book_hp1")
 
 #review (meditations)
-#scraper.url_to_content("https://www.goodreads.com/review/show/2668957860")
+#scraper.url_to_bytes_content("https://www.goodreads.com/review/show/2668957860")
 #scraper.string_to_file("test_review")
 
 #review, error page
-#scraper.url_to_content("https://www.goodreads.com/review/show/166895786")
+#scraper.url_to_bytes_content("https://www.goodreads.com/review/show/166895786")
 #scraper.string_to_file("test_review_error")
 
 #review, grounded (since it crashed the parser)
 
-#print(type(scraper.url_to_content("https://www.goodreads.com/review/show/2572722180")))
+#print(type(scraper.url_to_bytes_content("https://www.goodreads.com/review/show/2572722180")))
 
 
 #scraper.string_to_file("test_review_grounded")
