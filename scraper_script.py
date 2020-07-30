@@ -21,6 +21,8 @@ class Scraper():
         self.webpage_response = requests.get(url, headers = self.header)
         self.webpage = self.webpage_response.content
 
+        print("Scraper URL to bytes content format: {}".format(type(self.webpage)))
+
         return self.webpage
 
     def url_to_string_content(self, url):
@@ -62,10 +64,5 @@ scraper = Scraper()
 #review, error page
 #scraper.url_to_bytes_content("https://www.goodreads.com/review/show/166895786")
 #scraper.webpage_bytes_content_to_file("test_review_error")
-
-#review, grounded (since it crashed the parser)
-
-#print(type(scraper.url_to_bytes_content("https://www.goodreads.com/review/show/2572722180")))
-
 
 #scraper.webpage_bytes_content_to_file("test_review_grounded")

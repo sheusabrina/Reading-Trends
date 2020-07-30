@@ -105,12 +105,12 @@ class Book_Parser(Parser):
 
     def book_soup_to_author(self, book_soup):
 
-        author = book_soup.find(attrs = {"class": "authorName"}).get_text()
+        author = book_soup.find(attrs = {"class": "authorName"})#.get_text()
         #Note: If there are multiple authors, this identifies the first one only.
 
         print(author)
 
-        return author
+        #return author
 
     def book_soup_to_language(self, book_soup):
 
@@ -201,17 +201,21 @@ class Book_Parser(Parser):
 
         return series
 
-## TESTING BOOK PARSER
+## WHY IS PARSING WORKING BETTER IN THE DATA COLLECTOR THAN IN THE PARSER TESTING?
+    #SOMETHING BAD IS HAPPENING IN FILE CONVERSION
 
-##BOOKS IN THE COLLECTION LOOP:
-# WEBPAGE CONTENT -> STRING(WEBPAGE CONTENT) -> SOUP
-##BOOKS IN THE PARSER TESTING:
-# WEBPAGE CONTENT -> SOUP
+##BOOKS IN DATA COLLECTOR
+# URL -> WEBPAGE RESPONSE -> WEBPAGE CONTENT (BYTES) -> STRING -> SOUP
 
-##TAKEAWAYS:
-    #ADD CONVERSION OF HTML FILES TO STRING RIGHT BEFORE SOUPING
-    #REWORK METHODS ONE AT A TIME ON THE TWO TEST BOOKS (NO NEED FOR HP1)
-        #MOST WILL FAIL
+##BOOKS IN PARSER TESTING
+#URL -> WEBPAGE RESPONSE -> WEBPAGE CONTENT (BYTES) -> HTML FILE -> OPEN AS TEXTIOWRAPPER(NO RB) OR BUFFERED READER (RB) -> STRING -> SOUP
+
+#HYPOTHESIS: SOMETHING IS HAPPENING TO THE FILE IN THE TRANSITION FROM BYTES TO HTML TO TEXTIO/BUFFERED THAT HAS SOME IMPACT AS IT IS CONVERTED BACK TO A STRING
+#POTENTIAL SOLUTIONS:
+    #CAN YOU OPEN AN HTML AS BYTES INSTEAD OF TEXTIOWRAPPER / BUFFERED READER?
+    #IF YOU CONVERT FROM TEXTIOWRAPPER/BUFFERED READER TO BYTES, WILL THAT HELP?
+
+#WHAT ARE THESE DATA TYPES ANYWAY?
 
 test_parser = Book_Parser()
 
@@ -219,12 +223,22 @@ test_book_angels_demons = open("html_files/test_book_angels_demons.html", "rb")
 test_book_meditations = open("html_files/test_book_meditations.html", "rb")
 test_book_hp1 = open("html_files/test_book_hp1.html", "rb")
 
+test_book_angels_demons_no_rb = open("html_files/test_book_angels_demons.html")
+print("Parser pre-string format, without rb: {}".format(type(test_book_angels_demons_no_rb)))
+print("Parser pre-string format: {}".format(type(test_book_angels_demons)))
+
+print("Parser presoup format: {}".format(type(str(test_book_angels_demons))))
+
 book_soup_angels_demons = test_parser.html_to_soup(str(test_book_angels_demons))
 book_soup_meditations = test_parser.html_to_soup(str(test_book_meditations))
 #book_soup_hp1 = test_parser.html_to_soup(str(test_book_hp1))
 
-#author_angels_demons = test_parser.book_soup_to_author(book_soup_angels_demons)
-#author_meditations = test_parser.book_soup_to_author(book_soup_meditations)
+print("Parser soup format: {}".format(type(book_soup_angels_demons)))
+
+#print("Test soups ready...")
+
+author_angels_demons = test_parser.book_soup_to_author(book_soup_angels_demons)
+author_meditations = test_parser.book_soup_to_author(book_soup_meditations)
 
 #print(author_angels_demons)
 #print(author_meditations)
