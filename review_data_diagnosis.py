@@ -114,4 +114,11 @@ def run_data_test():
 
     log_file.close()
 
-run_data_test()
+#run_data_test()
+
+#RESULTS:
+    #This test shows that reading progress dates come back as none when run on bytes. They come back correctly when run on strings.
+    #An Excel review of the review_data.csv file does not show a block of data in which reading progress dates were not populated.
+        #The largest number of consecutive data points for which the shelved_date = None is four.
+    #This corresponds with my review of commits, which suggests that review_parsing was consistently run with strings rather than content.
+    #THE REVIEW DATA IS FINE! 
