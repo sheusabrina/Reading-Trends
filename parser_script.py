@@ -111,9 +111,13 @@ class Review_Parser(Parser):
 class Book_Parser(Parser):
 
     def book_soup_to_author(self, book_soup):
-
-        author = book_soup.find(attrs = {"class": "authorName"}).get_text()
         #Note: If there are multiple authors, this identifies the first one only.
+
+        author = book_soup.find(attrs = {"class": "authorName"}) ## THIS SHOULD USUALLY WORK
+        if not author: #TRY REGEX IF IT DOESN'T
+            author = book_soup.find(attrs = {"class": re.compile("authorName")})
+
+        author = author.get_text()
         return author
 
     def book_soup_to_language(self, book_soup):
@@ -222,7 +226,7 @@ class Book_Parser(Parser):
 
         if series: ##SOME BOOKS DON'T HAVE ONE
             series = series.get_text()
-            if "#" in series: #REMOVE NUMBER IF THERE IS ONE 
+            if "#" in series: #REMOVE NUMBER IF THERE IS ONE
                 series = series[:series.index("#")]
 
         return series
