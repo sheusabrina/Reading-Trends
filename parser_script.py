@@ -130,6 +130,7 @@ class Book_Parser(Parser):
 
         num_reviews = book_soup.find(attrs = {"itemprop": "reviewCount"}).get_text()
         num_reviews = num_reviews.replace("reviews","")
+        num_reviews = num_reviews.replace("review","")
         num_reviews = string_cleaner(num_reviews)
         num_reviews = int(num_reviews)
 
@@ -139,6 +140,7 @@ class Book_Parser(Parser):
 
         num_ratings = book_soup.find(attrs = {"itemprop": "ratingCount"}).get_text()
         num_ratings = num_ratings.replace("ratings","")
+        num_ratings = num_ratings.replace("rating", "")
         num_ratings = string_cleaner(num_ratings)
         num_ratings = int(num_ratings)
 
@@ -193,7 +195,7 @@ class Book_Parser(Parser):
             publication_date = publication_details[:publication_details.index("by")]
         else:
             publication_date = publication_details
-        
+
         publication_date = publication_date.replace("Published","")
         publication_date = string_cleaner(publication_date)
 
