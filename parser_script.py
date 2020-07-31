@@ -115,15 +115,16 @@ class Book_Parser(Parser):
 
         return language #FAILS REGULAR, FAILS BINARY, FAILS DC (CHECK RE COMMIT: 9c1cca2)
 
-    def book_soup_to_num_reviews(self, book_soup):
+    def book_soup_to_num_reviews(self, book_soup): #WORKS REGULAR, WORKS BINARY, WORKS DC
 
         num_reviews = book_soup.find(attrs = {"itemprop": "reviewCount"}).get_text()
         num_reviews = num_reviews.replace("reviews","")
+        num_reviews = num_reviews.replace("\\n", "")
         num_reviews = num_reviews.replace(",","")
         num_reviews = num_reviews.strip()
         num_reviews = int(num_reviews)
 
-        return num_reviews #FAILS REGULAR, WORKS BINARY, FAILS DC (LOOKS FIXABLE)
+        return num_reviews 
 
     def book_soup_to_num_ratings(self, book_soup): #FAILS REGULAR, FAILS BINARY, FAILS DC (LOOKS FIXABLE)
 
@@ -234,18 +235,18 @@ book_soup_hp1_regular = test_parser.html_to_soup(html_hp1_regular)
 #print(language_meditations)
 #print(language_hp1)
 
-#num_reviews_angels_demons = test_parser.book_soup_to_num_reviews(book_soup_angels_demons)
-#num_reviews_meditations = test_parser.book_soup_to_num_reviews(book_soup_meditations)
+num_reviews_angels_demons = test_parser.book_soup_to_num_reviews(book_soup_angels_demons)
+num_reviews_meditations = test_parser.book_soup_to_num_reviews(book_soup_meditations)
 #num_reviews_hp1 = test_parser.book_soup_to_num_reviews(book_soup_hp1)
 
-num_reviews_hp1_binary = test_parser.book_soup_to_num_reviews(book_soup_hp1_binary)
-#num_reviews_hp1_regular = test_parser.book_soup_to_num_reviews(book_soup_hp1_regular)
+#num_reviews_hp1_binary = test_parser.book_soup_to_num_reviews(book_soup_hp1_binary)
+num_reviews_hp1_regular = test_parser.book_soup_to_num_reviews(book_soup_hp1_regular)
 
-print(num_reviews_hp1_binary)
-#print(num_reviews_hp1_regular)
+#print(num_reviews_hp1_binary)
+print(num_reviews_hp1_regular)
 
-#print(num_reviews_angels_demons)
-#print(num_reviews_meditations)
+print(num_reviews_angels_demons)
+print(num_reviews_meditations)
 #print(num_reviews_hp1)
 
 #avg_rating_angels_demons = test_parser.book_soup_to_avg_rating(book_soup_angels_demons)

@@ -264,8 +264,8 @@ class Book_Data_Collector(Data_Collector):
         #self.language = self.parser.book_soup_to_language(self.current_soup)
         #print(self.language)
 
-        #self.num_reviews = self.parser.book_soup_to_num_reviews(self.current_soup)
-        #print(self.num_reviews)
+        self.num_reviews = self.parser.book_soup_to_num_reviews(self.current_soup)
+        print(self.num_reviews)
 
         #self.num_ratings = self.parser.book_soup_to_num_ratings(self.current_soup)
         #print(self.num_ratings)
