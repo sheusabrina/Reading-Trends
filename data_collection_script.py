@@ -261,16 +261,35 @@ class Book_Data_Collector(Data_Collector):
         #print("Data Collection presoup format: {}".format(type(self.current_webpage_as_string)))
         #print("Data Collection Soup Format: {}".format(type(self.current_soup)))
 
-        self.author = self.parser.book_soup_to_author(self.current_soup) #WORKS
-        #self.language = self.parser.book_soup_to_language(self.current_soup) #FAIL IN COLLECTOR, WORKS IN PARSER
-        #self.num_reviews = self.parser.book_soup_to_num_reviews(self.current_soup) #FAIL IN COLLECTOR, WORKS IN PARSER
-        #self.num_ratings = self.parser.book_soup_to_num_ratings(self.current_soup) #FAIL IN COLLECTOR, WORKS IN PARSER
-        #self.avg_rating = self.parser.book_soup_to_avg_rating(self.current_soup) #FAIL IN COLLECTOR, WORKS IN PARSER
+        self.author = self.parser.book_soup_to_author(self.current_soup)
+        print(self.author)
+
+        #self.language = self.parser.book_soup_to_language(self.current_soup)
+        #print(self.language)
+
+        #self.num_reviews = self.parser.book_soup_to_num_reviews(self.current_soup)
+        #print(self.num_reviews)
+
+        #self.num_ratings = self.parser.book_soup_to_num_ratings(self.current_soup)
+        #print(self.num_ratings)
+
+        #self.avg_rating = self.parser.book_soup_to_avg_rating(self.current_soup)
+        #print(self.avg_rating)
+
         #self.isbn13 = self.parser.book_soup_to_isbn13(self.current_soup)
+        #print(self.isbn13)
+
         #self.editions_href = self.parser.book_soup_to_editions_href(self.current_soup)
+        #print(self.editions_href)
+
         #self.publication_date = self.parser.book_soup_to_publication_date(self.current_soup)
-        #self.first_publiation_date = self.parser.book_soup_to_first_publication_date(self.current_soup)
-        #self.series = self.parser.book_soup_to_series(self.current_soup) #WORKS
+        #print(self.publication_date)
+
+        self.first_publication_date = self.parser.book_soup_to_first_publication_date(self.current_soup)
+        print(self.first_publication_date)
+
+        self.series = self.parser.book_soup_to_series(self.current_soup)
+        print(self.series)
 
         print("Parse Complete")
 
