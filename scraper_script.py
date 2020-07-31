@@ -19,22 +19,24 @@ class Scraper():
         self.select_header()
 
         self.webpage_response = requests.get(url, headers = self.header)
-        self.webpage = self.webpage_response.content
+        self.webpage_bytes = self.webpage_response.content
 
-        #print("Scraper URL to bytes content format: {}".format(type(self.webpage)))
-
-        return self.webpage
+        return self.webpage_bytes
 
     def url_to_string_content(self, url):
 
         self.url_to_bytes_content(url)
 
-        self.webpage_string = str(self.webpage)
+        self.webpage_string = str(self.webpage_bytes)
 
         return self.webpage_string
 
-    def webpage_bytes_content_to_file(self, file_name):
-        open(file_name+".html", "wb").write(self.webpage)
+    def webpage_bytes_to_html_binary(self, file_name):
+        open(file_name+".html", "wb").write(self.webpage_bytes)
+
+    def webpage_string_to_html_regular(self, file_name):
+
+        open(file_name+".html", "w").write(self.webpage_string)
 
     def sleep(self, max_sleep_time):
         time_list = range(0, max_sleep_time*100, 1)
@@ -47,22 +49,25 @@ scraper = Scraper()
 
 #meditations book
 #scraper.url_to_bytes_content("https://www.goodreads.com/book/show/30659")
-#scraper.webpage_bytes_content_to_file("test_book_meditations")
+#scraper.webpage_bytes_to_html_binary("test_book_meditations")
 
 #angels & demons book
 #scraper.url_to_bytes_content("https://www.goodreads.com/book/show/960.Angels_Demons")
-#scraper.webpage_bytes_content_to_file("test_book_angels_demons")
+#scraper.webpage_bytes_to_html_binary("test_book_angels_demons")
 
 #HP1 book
-#scraper.url_to_bytes_content("https://www.goodreads.com/book/show/3")
-#scraper.webpage_bytes_content_to_file("test_book_hp1")
+scraper.url_to_bytes_content("https://www.goodreads.com/book/show/3")
+scraper.webpage_bytes_to_html_binary("test_book_hp1_binary")
+
+scraper.url_to_string_content("https://www.goodreads.com/book/show/3")
+scraper.webpage_string_to_html_regular("test_book_hp1_regular")
 
 #review (meditations)
 #scraper.url_to_bytes_content("https://www.goodreads.com/review/show/2668957860")
-#scraper.webpage_bytes_content_to_file("test_review")
+#scraper.webpage_bytes_to_html_binary("test_review")
 
 #review, error page
 #scraper.url_to_bytes_content("https://www.goodreads.com/review/show/166895786")
-#scraper.webpage_bytes_content_to_file("test_review_error")
+#scraper.webpage_bytes_to_html_binary("test_review_error")
 
-#scraper.webpage_bytes_content_to_file("test_review_grounded")
+#scraper.webpage_bytes_to_html_binary("test_review_grounded")

@@ -105,12 +105,12 @@ class Book_Parser(Parser):
 
     def book_soup_to_author(self, book_soup):
 
-        author = book_soup.find(attrs = {"class": "authorName"})#.get_text()
+        author = book_soup.find(attrs = {"class": "authorName"}).get_text()
         #Note: If there are multiple authors, this identifies the first one only.
 
         print(author)
 
-        #return author
+        return author
 
     def book_soup_to_language(self, book_soup):
 
@@ -215,7 +215,7 @@ class Book_Parser(Parser):
     #CAN YOU OPEN AN HTML AS BYTES INSTEAD OF TEXTIOWRAPPER / BUFFERED READER?
     #IF YOU CONVERT FROM TEXTIOWRAPPER/BUFFERED READER TO BYTES, WILL THAT HELP?
 
-#WHAT ARE THESE DATA TYPES ANYWAY?
+#HYPOTHESIS: I SHOULD JUST GO BACK TO HOW I WAS DOING THIS EARLIER: CONFIRM THAT WILL MAKE METHODS WORK HERE AND IN COLLECTOR:
 
 test_parser = Book_Parser()
 
