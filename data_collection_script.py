@@ -262,7 +262,7 @@ class Book_Data_Collector(Data_Collector):
         #print(self.author)
 
         self.language = self.parser.book_soup_to_language(self.current_soup)
-        print(self.language)
+        #print(self.language)
 
         self.num_reviews = self.parser.book_soup_to_num_reviews(self.current_soup)
         #print(self.num_reviews)
@@ -276,7 +276,7 @@ class Book_Data_Collector(Data_Collector):
         self.isbn13 = self.parser.book_soup_to_isbn13(self.current_soup)
         #print(self.isbn13)
 
-        #self.editions_href = self.parser.book_soup_to_editions_href(self.current_soup)
+        self.editions_href = self.parser.book_soup_to_editions_href(self.current_soup)
         #print(self.editions_href)
 
         self.publication_date = self.parser.book_soup_to_publication_date(self.current_soup)

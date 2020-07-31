@@ -160,14 +160,15 @@ class Book_Parser(Parser):
 
         return isbn
 
-    def book_soup_to_editions_href(self, book_soup):
+    def book_soup_to_editions_href(self, book_soup): #WORKS REGULAR, WORKS BINARY, FAILS DC
 
-        editions = book_soup.find(attrs = {"class": "otherEditionsLink"})
-        editions = editions.find("a")
+        details = self.book_soup_to_details_soup(book_soup) # REDUCING AMOUNT OF PAGE TO RUN REGEX ON
+        editions = details.find(attrs = {"class": re.compile("otherEditionsLink")}) #DOESN'T WORK WITHOUT THE REGEX. DON'T TRY.
+        editions = editions.find(href = True)
 
         editions_url = editions.get("href")
 
-        return editions_url #FAILS REGULAR, WORKS BINARY, FAILS DC
+        return editions_url
 
     def book_soup_to_details_soup(self, book_soup): # WORKS REGULAR, WORKS BINARY
 
@@ -238,16 +239,16 @@ book_soup_hp1_regular = test_parser.html_to_soup(html_hp1_regular)
 #print(author_hp1_binary)
 #print(author_hp1_regular)
 
-language_angels_demons = test_parser.book_soup_to_language(book_soup_angels_demons)
-language_meditations = test_parser.book_soup_to_language(book_soup_meditations)
+#language_angels_demons = test_parser.book_soup_to_language(book_soup_angels_demons)
+#language_meditations = test_parser.book_soup_to_language(book_soup_meditations)
 #language_hp1 = test_parser.book_soup_to_language(book_soup_hp1)
 
 #language_hp1_binary = test_parser.book_soup_to_language(book_soup_hp1_binary)
-language_hp1_regular = test_parser.book_soup_to_language(book_soup_hp1_regular)
+#language_hp1_regular = test_parser.book_soup_to_language(book_soup_hp1_regular)
 
-print(language_angels_demons)
-print(language_meditations)
-print(language_hp1_regular)
+#print(language_angels_demons)
+#print(language_meditations)
+#print(language_hp1_regular)
 #print(language_hp1)
 
 #num_reviews_angels_demons = test_parser.book_soup_to_num_reviews(book_soup_angels_demons)
@@ -264,8 +265,8 @@ print(language_hp1_regular)
 #print(num_reviews_meditations)
 #print(num_reviews_hp1)
 
-avg_rating_angels_demons = test_parser.book_soup_to_avg_rating(book_soup_angels_demons)
-avg_rating_meditations = test_parser.book_soup_to_avg_rating(book_soup_meditations)
+#avg_rating_angels_demons = test_parser.book_soup_to_avg_rating(book_soup_angels_demons)
+#avg_rating_meditations = test_parser.book_soup_to_avg_rating(book_soup_meditations)
 #avg_rating_hp1 = test_parser.book_soup_to_avg_rating(book_soup_hp1)
 
 #avg_rating_hp1_binary = test_parser.book_soup_to_avg_rating(book_soup_hp1_binary)
@@ -305,13 +306,15 @@ avg_rating_meditations = test_parser.book_soup_to_avg_rating(book_soup_meditatio
 #print(isbn_angels_demons)
 
 #editions_meditations = test_parser.book_soup_to_editions_href(book_soup_meditations)
-#print(editions_meditations)
+#editions_angels_demons = test_parser.book_soup_to_editions_href(book_soup_angels_demons)
 
 #editions_hp1_binary = test_parser.book_soup_to_editions_href(book_soup_hp1_binary)
 #editions_hp1_regular = test_parser.book_soup_to_editions_href(book_soup_hp1_regular)
 
-#print(editions_hp1_binary)
+#print(editions_meditations)
+#print(editions_angels_demons)
 #print(editions_hp1_regular)
+#print(editions_hp1_binary)
 
 #details_hp1_binary = test_parser.book_soup_to_details_soup(book_soup_hp1_binary)
 #details_hp1_regular = test_parser.book_soup_to_details_soup(book_soup_hp1_regular)
