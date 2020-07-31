@@ -241,18 +241,9 @@ class Book_Data_Collector(Data_Collector):
             self.data_logged_at_start = pd.read_csv(self.log_file_name)
             self.book_ids_already_scraped_list = self.data_logged_at_start.book_id.unique()
             self.book_ids_already_scraped_list = [str(id) for id in self.book_ids_already_scraped_list]
-
-            print("IDS from workbook:")
-            print(self.book_ids_already_scraped_list[1])
-            print(type(self.book_ids_already_scraped_list[1]))
-
             self.book_ids_to_be_scraped = []
 
             for item in self.requested_book_id_list:
-
-                print("IDS from requested:")
-                print(item)
-                print(type(item))
 
                 if item not in self.book_ids_already_scraped_list:
                     self.book_ids_to_be_scraped.append(item)
