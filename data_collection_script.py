@@ -261,8 +261,8 @@ class Book_Data_Collector(Data_Collector):
         self.author = self.parser.book_soup_to_author(self.current_soup)
         #print(self.author)
 
-        #self.language = self.parser.book_soup_to_language(self.current_soup)
-        #print(self.language)
+        self.language = self.parser.book_soup_to_language(self.current_soup)
+        print(self.language)
 
         self.num_reviews = self.parser.book_soup_to_num_reviews(self.current_soup)
         #print(self.num_reviews)
@@ -274,7 +274,7 @@ class Book_Data_Collector(Data_Collector):
         #print(self.avg_rating)
 
         self.isbn13 = self.parser.book_soup_to_isbn13(self.current_soup)
-        print(self.isbn13)
+        #print(self.isbn13)
 
         #self.editions_href = self.parser.book_soup_to_editions_href(self.current_soup)
         #print(self.editions_href)
