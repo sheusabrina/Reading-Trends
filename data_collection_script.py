@@ -279,8 +279,8 @@ class Book_Data_Collector(Data_Collector):
         #self.editions_href = self.parser.book_soup_to_editions_href(self.current_soup)
         #print(self.editions_href)
 
-        #self.publication_date = self.parser.book_soup_to_publication_date(self.current_soup)
-        #print(self.publication_date)
+        self.publication_date = self.parser.book_soup_to_publication_date(self.current_soup)
+        print(self.publication_date)
 
         #self.first_publication_date = self.parser.book_soup_to_first_publication_date(self.current_soup)
         #print(self.first_publication_date)
