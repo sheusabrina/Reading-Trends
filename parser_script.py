@@ -167,9 +167,15 @@ class Book_Parser(Parser):
 
         details = self.book_soup_to_details_soup(book_soup) # REDUCING AMOUNT OF PAGE TO RUN REGEX ON
         editions = details.find(attrs = {"class": re.compile("otherEditionsLink")}) #DOESN'T WORK WITHOUT THE REGEX. DON'T TRY.
-        editions = editions.find(href = True)
 
-        editions_url = editions.get("href")
+        if editions: #SOME BOOKS DO NOT HAVE EDITIONS
+
+            editions = editions.find(href = True)
+            editions_url = editions.get("href")
+
+        else:
+
+            editions_url = None 
 
         return editions_url
 
