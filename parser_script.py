@@ -175,7 +175,7 @@ class Book_Parser(Parser):
 
         else:
 
-            editions_url = None 
+            editions_url = None
 
         return editions_url
 
@@ -199,9 +199,11 @@ class Book_Parser(Parser):
 
         details = self.book_soup_to_details_soup(book_soup)
         publication_date = details.find(text = re.compile("first published"))
-        publication_date = publication_date.replace("(first published ","")
-        publication_date = publication_date.replace(")","")
-        publication_date = string_cleaner(publication_date)
+
+        if publication_date: ## SOME BOOKS DON'T HAVE ONE
+            publication_date = publication_date.replace("(first published ","")
+            publication_date = publication_date.replace(")","")
+            publication_date = string_cleaner(publication_date)
 
         return publication_date
 
