@@ -189,7 +189,11 @@ class Book_Parser(Parser):
         details = self.book_soup_to_details_soup(book_soup)
         publication_details = details.find(text = re.compile("Published"))
 
-        publication_date = publication_details[:publication_details.index("by")]
+        if "by" in publication_details: #REMOVE PUBLISHER IF LISTED
+            publication_date = publication_details[:publication_details.index("by")]
+        else:
+            publication_date = publication_details
+        
         publication_date = publication_date.replace("Published","")
         publication_date = string_cleaner(publication_date)
 
