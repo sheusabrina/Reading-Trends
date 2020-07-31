@@ -31,8 +31,8 @@ class Scraper():
 
         return self.webpage_string
 
-    def webpage_bytes_to_html_binary(self, file_name):
-        open(file_name+".html", "wb").write(self.webpage_bytes) ## DELETE THIS
+    #def webpage_bytes_to_html_binary(self, file_name):
+        #open(file_name+".html", "wb").write(self.webpage_bytes) ## DELETE THIS
 
     def webpage_string_to_html_regular(self, file_name):
 
@@ -52,13 +52,13 @@ class Scraper():
 scraper = Scraper()
 
 #meditations book
-scraper.url_to_html_regular("https://www.goodreads.com/book/show/30659", "test_book_meditations")
+#scraper.url_to_html_regular("https://www.goodreads.com/book/show/30659", "test_book_meditations")
 
 #angels & demons book
-scraper.url_to_html_regular("https://www.goodreads.com/book/show/960.Angels_Demons", "test_book_angels_demons")
+#scraper.url_to_html_regular("https://www.goodreads.com/book/show/960.Angels_Demons", "test_book_angels_demons")
 
 #HP1 book
-scraper.url_to_html_regular("https://www.goodreads.com/book/show/3", "test_book_hp1")
+#scraper.url_to_html_regular("https://www.goodreads.com/book/show/3", "test_book_hp1")
 #scraper.url_to_bytes_content("https://www.goodreads.com/book/show/3")
 #scraper.webpage_bytes_to_html_binary("test_book_hp1_binary")
 
@@ -66,7 +66,7 @@ scraper.url_to_html_regular("https://www.goodreads.com/book/show/3", "test_book_
 #scraper.webpage_string_to_html_regular("test_book_hp1_regular")
 
 #review (meditations)
-scraper.url_to_html_regular("https://www.goodreads.com/review/show/2668957860", "test_review")
+#scraper.url_to_html_regular("https://www.goodreads.com/review/show/2668957860", "test_review")
 
 #review, error page
-scraper.url_to_html_regular("https://www.goodreads.com/review/show/166895786", "test_review_error")
+#scraper.url_to_html_regular("https://www.goodreads.com/review/show/166895786", "test_review_error")

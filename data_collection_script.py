@@ -258,11 +258,8 @@ class Book_Data_Collector(Data_Collector):
 
         self.current_soup = self.parser.html_to_soup(self.current_webpage_as_string)
 
-        #print("Data Collection presoup format: {}".format(type(self.current_webpage_as_string)))
-        #print("Data Collection Soup Format: {}".format(type(self.current_soup)))
-
         self.author = self.parser.book_soup_to_author(self.current_soup)
-        print(self.author)
+        #print(self.author)
 
         #self.language = self.parser.book_soup_to_language(self.current_soup)
         #print(self.language)
@@ -285,8 +282,8 @@ class Book_Data_Collector(Data_Collector):
         #self.publication_date = self.parser.book_soup_to_publication_date(self.current_soup)
         #print(self.publication_date)
 
-        self.first_publication_date = self.parser.book_soup_to_first_publication_date(self.current_soup)
-        print(self.first_publication_date)
+        #self.first_publication_date = self.parser.book_soup_to_first_publication_date(self.current_soup)
+        #print(self.first_publication_date)
 
         self.series = self.parser.book_soup_to_series(self.current_soup)
         print(self.series)

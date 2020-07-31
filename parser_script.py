@@ -1,8 +1,3 @@
-##TEST FINDINGS:
-    #BINARY FORMAT MAY WORK BETTER THAN REGULAR FORMAT, BUT REGULAR FORMAT ALIGNS WITH RESULTS IN DATA COLLECTOR
-        #DELETE EVERYTHING HAVING TO DO WITH BINARY
-    #MANY METHODS ARE FAILING, THOUGH SOME LOOK EASILY FIXABLE
-
 from bs4 import BeautifulSoup
 import re
 
@@ -199,48 +194,20 @@ class Book_Parser(Parser):
 
         return series
 
-## WHY IS PARSING WORKING BETTER IN THE DATA COLLECTOR THAN IN THE PARSER TESTING?
-    #SOMETHING BAD IS HAPPENING IN FILE CONVERSION
-
-##BOOKS IN DATA COLLECTOR
-# URL -> WEBPAGE RESPONSE -> WEBPAGE CONTENT (BYTES) -> STRING -> SOUP
-
-##BOOKS IN PARSER TESTING
-#URL -> WEBPAGE RESPONSE -> WEBPAGE CONTENT (BYTES) -> HTML FILE -> OPEN AS TEXTIOWRAPPER(NO RB) OR BUFFERED READER (RB) -> STRING -> SOUP
-
-#HYPOTHESIS: SOMETHING IS HAPPENING TO THE FILE IN THE TRANSITION FROM BYTES TO HTML TO TEXTIO/BUFFERED THAT HAS SOME IMPACT AS IT IS CONVERTED BACK TO A STRING
-#POTENTIAL SOLUTIONS:
-    #CAN YOU OPEN AN HTML AS BYTES INSTEAD OF TEXTIOWRAPPER / BUFFERED READER?
-    #IF YOU CONVERT FROM TEXTIOWRAPPER/BUFFERED READER TO BYTES, WILL THAT HELP?
-
-#HYPOTHESIS: I SHOULD JUST GO BACK TO HOW I WAS DOING THIS EARLIER: CONFIRM THAT WILL MAKE METHODS WORK HERE AND IN COLLECTOR:
-
 test_parser = Book_Parser()
 
-#test_book_angels_demons = open("html_files/test_book_angels_demons.html", "rb")
-#test_book_meditations = open("html_files/test_book_meditations.html", "rb")
-
-#test_book_hp1 = open("html_files/test_book_hp1.html", "rb")
-
-html_hp1_binary = open("html_files/test_book_hp1_binary.html", "rb")
+#html_hp1_binary = open("html_files/test_book_hp1_binary.html", "rb")
 html_hp1_regular = open("html_files/test_book_hp1_regular.html")
+html_angels_demons = open("html_files/test_book_angels_demons.html")
+html_meditations = open("html_files/test_book_meditations.html")
 
-#print("Parser pre-string format, without rb: {}".format(type(test_book_angels_demons_no_rb)))
-#print("Parser pre-string format: {}".format(type(test_book_angels_demons)))
-#print("Parser presoup format: {}".format(type(str(test_book_angels_demons))))
+book_soup_angels_demons = test_parser.html_to_soup(html_angels_demons)
+book_soup_meditations = test_parser.html_to_soup(html_meditations)
 
-#book_soup_angels_demons = test_parser.html_to_soup(str(test_book_angels_demons))
-#book_soup_meditations = test_parser.html_to_soup(str(test_book_meditations))
-
-#test_book_hp1 = test_book_hp1.flush()
-#test_book_hp1 = str(test_book_hp1)
-
-book_soup_hp1_binary = test_parser.html_to_soup(html_hp1_binary)
+#book_soup_hp1_binary = test_parser.html_to_soup(html_hp1_binary)
 book_soup_hp1_regular = test_parser.html_to_soup(html_hp1_regular)
 
 #book_soup_hp1 = test_parser.html_to_soup(test_book_hp1)
-
-#print("Parser soup format: {}".format(type(book_soup_angels_demons)))
 
 #print("Test soups ready...")
 
@@ -248,13 +215,13 @@ book_soup_hp1_regular = test_parser.html_to_soup(html_hp1_regular)
 #author_meditations = test_parser.book_soup_to_author(book_soup_meditations)
 #author_hp1 = test_parser.book_soup_to_author(book_soup_hp1)
 
-author_hp1_binary = test_parser.book_soup_to_author(book_soup_hp1_binary)
-author_hp1_regular = test_parser.book_soup_to_author(book_soup_hp1_regular)
+#author_hp1_binary = test_parser.book_soup_to_author(book_soup_hp1_binary)
+#author_hp1_regular = test_parser.book_soup_to_author(book_soup_hp1_regular)
 
 #print(author_angels_demons)
 #print(author_meditations)
-print(author_hp1_binary)
-print(author_hp1_regular)
+#print(author_hp1_binary)
+#print(author_hp1_regular)
 
 #language_angels_demons = test_parser.book_soup_to_language(book_soup_angels_demons)
 #language_meditations = test_parser.book_soup_to_language(book_soup_meditations)
@@ -285,7 +252,7 @@ print(num_reviews_hp1_binary)
 #avg_rating_meditations = test_parser.book_soup_to_avg_rating(book_soup_meditations)
 #avg_rating_hp1 = test_parser.book_soup_to_avg_rating(book_soup_hp1)
 
-avg_rating_hp1_binary = test_parser.book_soup_to_avg_rating(book_soup_hp1_binary)
+#avg_rating_hp1_binary = test_parser.book_soup_to_avg_rating(book_soup_hp1_binary)
 #avg_rating_hp1_regular = test_parser.book_soup_to_avg_rating(book_soup_hp1_regular)
 
 #print(avg_rating_meditations)
@@ -322,10 +289,10 @@ avg_rating_hp1_binary = test_parser.book_soup_to_avg_rating(book_soup_hp1_binary
 #editions_meditations = test_parser.book_soup_to_editions_href(book_soup_meditations)
 #print(editions_meditations)
 
-editions_hp1_binary = test_parser.book_soup_to_editions_href(book_soup_hp1_binary)
+#editions_hp1_binary = test_parser.book_soup_to_editions_href(book_soup_hp1_binary)
 #editions_hp1_regular = test_parser.book_soup_to_editions_href(book_soup_hp1_regular)
 
-print(editions_hp1_binary)
+#print(editions_hp1_binary)
 #print(editions_hp1_regular)
 
 #details_hp1_binary = test_parser.book_soup_to_details_soup(book_soup_hp1_binary)
@@ -349,23 +316,23 @@ print(editions_hp1_binary)
 #first_publication_date_meditations = test_parser.book_soup_to_first_publication_date(book_soup_meditations)
 #first_publication_date_angels_demons = test_parser.book_soup_to_first_publication_date(book_soup_angels_demons)
 
-first_publication_date_hp1_binary = test_parser.book_soup_to_first_publication_date(book_soup_hp1_binary)
-first_publication_date_hp1_regular = test_parser.book_soup_to_first_publication_date(book_soup_hp1_regular)
+#first_publication_date_hp1_binary = test_parser.book_soup_to_first_publication_date(book_soup_hp1_binary)
+#first_publication_date_hp1_regular = test_parser.book_soup_to_first_publication_date(book_soup_hp1_regular)
 
 #print(first_publication_date_meditations)
 #print(first_publication_date_angels_demons)
 
-print(first_publication_date_hp1_binary)
-print(first_publication_date_hp1_regular)
+#print(first_publication_date_hp1_binary)
+#print(first_publication_date_hp1_regular)
 
 #series_angels_demons = test_parser.book_soup_to_series(book_soup_angels_demons)
 #series_meditations = test_parser.book_soup_to_series(book_soup_meditations)
 
-series_hp1_binary = test_parser.book_soup_to_series(book_soup_hp1_binary)
-series_hp1_regular = test_parser.book_soup_to_series(book_soup_hp1_regular)
+#series_hp1_binary = test_parser.book_soup_to_series(book_soup_hp1_binary)
+#series_hp1_regular = test_parser.book_soup_to_series(book_soup_hp1_regular)
 
-print(series_hp1_binary)
-print(series_hp1_regular)
+#print(series_hp1_binary)
+#print(series_hp1_regular)
 
 #print(series_angels_demons)
 #print(series_meditations)
