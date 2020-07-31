@@ -5,7 +5,7 @@ import re
 import requests
 import random
 import pandas as pd
-import sys
+#import sys
 
 #import classes
 
@@ -257,40 +257,18 @@ class Book_Data_Collector(Data_Collector):
         print("Beginning Parse...")
 
         self.current_soup = self.parser.html_to_soup(self.current_webpage_as_string)
-
         self.author = self.parser.book_soup_to_author(self.current_soup)
-        #print(self.author)
-
         self.language = self.parser.book_soup_to_language(self.current_soup)
-        #print(self.language)
-
         self.num_reviews = self.parser.book_soup_to_num_reviews(self.current_soup)
-        #print(self.num_reviews)
-
         self.num_ratings = self.parser.book_soup_to_num_ratings(self.current_soup)
-        #print(self.num_ratings)
-
         self.avg_rating = self.parser.book_soup_to_avg_rating(self.current_soup)
-        #print(self.avg_rating)
-
         self.isbn13 = self.parser.book_soup_to_isbn13(self.current_soup)
-        #print(self.isbn13)
-
         self.editions_href = self.parser.book_soup_to_editions_href(self.current_soup)
-        #print(self.editions_href)
-
         self.publication_date = self.parser.book_soup_to_publication_date(self.current_soup)
-        #print(self.publication_date)
-
         self.first_publication_date = self.parser.book_soup_to_first_publication_date(self.current_soup)
-        #print(self.first_publication_date)
-
         self.series = self.parser.book_soup_to_series(self.current_soup)
-        #print(self.series)
 
         print("Parse Complete")
-
-        sys.exit()
 
     def log_data(self):
 
@@ -322,5 +300,5 @@ book_list = book_list[:3]
 num_wait_seconds = 1
 
 #uncomment to run Book Collector
-book_collector = Book_Data_Collector(book_list, num_wait_seconds, "book_data")
-book_collector.data_collection_loop()
+#book_collector = Book_Data_Collector(book_list, num_wait_seconds, "book_data")
+#book_collector.data_collection_loop()
