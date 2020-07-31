@@ -265,10 +265,10 @@ class Book_Data_Collector(Data_Collector):
         #print(self.language)
 
         self.num_reviews = self.parser.book_soup_to_num_reviews(self.current_soup)
-        print(self.num_reviews)
+        #print(self.num_reviews)
 
-        #self.num_ratings = self.parser.book_soup_to_num_ratings(self.current_soup)
-        #print(self.num_ratings)
+        self.num_ratings = self.parser.book_soup_to_num_ratings(self.current_soup)
+        print(self.num_ratings)
 
         #self.avg_rating = self.parser.book_soup_to_avg_rating(self.current_soup)
         #print(self.avg_rating)
@@ -286,7 +286,7 @@ class Book_Data_Collector(Data_Collector):
         #print(self.first_publication_date)
 
         self.series = self.parser.book_soup_to_series(self.current_soup)
-        print(self.series)
+        #print(self.series)
 
         print("Parse Complete")
 
