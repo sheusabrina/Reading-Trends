@@ -273,8 +273,8 @@ class Book_Data_Collector(Data_Collector):
         self.avg_rating = self.parser.book_soup_to_avg_rating(self.current_soup)
         #print(self.avg_rating)
 
-        #self.isbn13 = self.parser.book_soup_to_isbn13(self.current_soup)
-        #print(self.isbn13)
+        self.isbn13 = self.parser.book_soup_to_isbn13(self.current_soup)
+        print(self.isbn13)
 
         #self.editions_href = self.parser.book_soup_to_editions_href(self.current_soup)
         #print(self.editions_href)
@@ -283,7 +283,7 @@ class Book_Data_Collector(Data_Collector):
         #print(self.publication_date)
 
         self.first_publication_date = self.parser.book_soup_to_first_publication_date(self.current_soup)
-        print(self.first_publication_date)
+        #print(self.first_publication_date)
 
         self.series = self.parser.book_soup_to_series(self.current_soup)
         #print(self.series)

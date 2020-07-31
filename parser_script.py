@@ -148,9 +148,14 @@ class Book_Parser(Parser):
 
         return avg_rating
 
-    def book_soup_to_isbn13(self, book_soup): #FAILS REGULAR, FAILS BINARY, FAILS DC
+    def book_soup_to_isbn13(self, book_soup): #WORKS REGULAR, FAILS BINARY, WORKS DC
 
-        isbn = book_soup.find(attrs = {"itemprop": "isbn"}).get_text()
+        details = self.book_soup_to_details_soup(book_soup) # REDUCING AMOUNT OF PAGE TO RUN REGEX ON
+        isbn = details.find(attrs = {"itemprop": re.compile("isbn")}) #DOESN'T WORK WITHOUT THE REGEX. DON'T TRY.
+
+        if isbn: #SOME BOOK PAGES DON'T HAVE ISBN
+
+            isbn = isbn.get_text()
 
         return isbn
 
@@ -285,15 +290,17 @@ avg_rating_meditations = test_parser.book_soup_to_avg_rating(book_soup_meditatio
 #print(num_ratings_hp1_regular)
 #print(num_ratings_hp1_binary)
 
-#isbn_meditations = test_parser.book_soup_to_isbn13(book_soup_meditations)
+isbn_meditations = test_parser.book_soup_to_isbn13(book_soup_meditations)
+isbn_angels_demons = test_parser.book_soup_to_isbn13(book_soup_angels_demons)
 
 #isbn13_hp1_binary = test_parser.book_soup_to_isbn13(book_soup_hp1_binary)
-#isbn13_hp1_regular = test_parser.book_soup_to_isbn13(book_soup_hp1_regular)
+isbn13_hp1_regular = test_parser.book_soup_to_isbn13(book_soup_hp1_regular)
 
 #print(isbn13_hp1_binary)
-#print(isbn13_hp1_regular)
+print(isbn13_hp1_regular)
 
-#print(isbn_meditations)
+print(isbn_meditations)
+print(isbn_angels_demons)
 
 #editions_meditations = test_parser.book_soup_to_editions_href(book_soup_meditations)
 #print(editions_meditations)
@@ -322,17 +329,17 @@ avg_rating_meditations = test_parser.book_soup_to_avg_rating(book_soup_meditatio
 #print(publication_date_meditations)
 #print(publication_date_angels_demons)
 
-first_publication_date_meditations = test_parser.book_soup_to_first_publication_date(book_soup_meditations)
-first_publication_date_angels_demons = test_parser.book_soup_to_first_publication_date(book_soup_angels_demons)
+#first_publication_date_meditations = test_parser.book_soup_to_first_publication_date(book_soup_meditations)
+#first_publication_date_angels_demons = test_parser.book_soup_to_first_publication_date(book_soup_angels_demons)
 
 #first_publication_date_hp1_binary = test_parser.book_soup_to_first_publication_date(book_soup_hp1_binary)
-first_publication_date_hp1_regular = test_parser.book_soup_to_first_publication_date(book_soup_hp1_regular)
+#first_publication_date_hp1_regular = test_parser.book_soup_to_first_publication_date(book_soup_hp1_regular)
 
-print(first_publication_date_meditations)
-print(first_publication_date_angels_demons)
+#print(first_publication_date_meditations)
+#print(first_publication_date_angels_demons)
 
 #print(first_publication_date_hp1_binary)
-print(first_publication_date_hp1_regular)
+#print(first_publication_date_hp1_regular)
 
 #series_angels_demons = test_parser.book_soup_to_series(book_soup_angels_demons)
 #series_meditations = test_parser.book_soup_to_series(book_soup_meditations)
