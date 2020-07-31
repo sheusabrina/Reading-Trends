@@ -90,7 +90,7 @@ class Data_Collector():
 
     def calculate_progress(self):
 
-        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
+        self.percent_complete = round(100 * self.data_points_counter / self.max_data_points, 2)
 
     def sleep(self):
         self.scraper.sleep(self.max_sleep_time)
@@ -152,10 +152,6 @@ class Review_Data_Collector(Data_Collector):
     def generate_current_url(self):
         self.current_id = random.choice(self.id_list)
         self.current_url = self.base_url + str(self.current_id)
-
-    def calculate_progress(self):
-
-        self.percent_complete = round(100 * self.data_points_counter / self.max_data_points, 2)
 
     def parse(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
@@ -247,7 +243,6 @@ class Book_Data_Collector(Data_Collector):
 
                 if item not in self.book_ids_already_scraped_list:
                     self.book_ids_to_be_scraped.append(item)
-
         else:
 
             self.book_ids_to_be_scraped = self.requested_book_id_list
@@ -305,7 +300,7 @@ max_2020_ID = 3455207761 #I'm not sure if i should use this, since reviews are g
 
 ## BOOK DATA COLLECTION
 
-book_list = book_list[:5]
+book_list = book_list[:10]
 num_wait_seconds = 1
 
 #uncomment to run Book Collector
