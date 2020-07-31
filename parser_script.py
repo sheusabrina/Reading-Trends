@@ -119,7 +119,10 @@ class Book_Parser(Parser):
     def book_soup_to_language(self, book_soup):
 
         details = self.book_soup_to_details_soup(book_soup) # REDUCING AMOUNT OF PAGE TO RUN REGEX ON
-        language = details.find(attrs = {"itemprop": re.compile("inLanguage")}).get_text() #DOESN'T WORK WITHOUT THE REGEX. DON'T TRY.
+        language = details.find(attrs = {"itemprop": re.compile("inLanguage")}) #DOESN'T WORK WITHOUT THE REGEX. DON'T TRY.
+
+        if language: #SOME BOOKS DON'T HAVE LANGUAGE
+            language = language.get_text()
 
         return language
 
