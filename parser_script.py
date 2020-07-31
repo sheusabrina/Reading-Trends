@@ -118,6 +118,8 @@ class Book_Parser(Parser):
             author = book_soup.find(attrs = {"class": re.compile("authorName")})
 
         author = author.get_text()
+        author = string_cleaner(author)
+
         return author
 
     def book_soup_to_language(self, book_soup):
@@ -228,6 +230,8 @@ class Book_Parser(Parser):
             series = series.get_text()
             if "#" in series: #REMOVE NUMBER IF THERE IS ONE
                 series = series[:series.index("#")]
+
+            series = string_cleaner(series)
 
         return series
 
