@@ -268,9 +268,9 @@ class Book_Data_Collector(Data_Collector):
         #print(self.num_reviews)
 
         self.num_ratings = self.parser.book_soup_to_num_ratings(self.current_soup)
-        print(self.num_ratings)
+        #print(self.num_ratings)
 
-        #self.avg_rating = self.parser.book_soup_to_avg_rating(self.current_soup)
+        self.avg_rating = self.parser.book_soup_to_avg_rating(self.current_soup)
         #print(self.avg_rating)
 
         #self.isbn13 = self.parser.book_soup_to_isbn13(self.current_soup)

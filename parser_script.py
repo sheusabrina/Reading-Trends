@@ -1,6 +1,13 @@
 from bs4 import BeautifulSoup
 import re
 
+def string_cleaner(input_string):
+    output_string = input_string.replace(",","")
+    output_string = output_string.replace("\\n", "")
+    output_string = output_string.strip()
+
+    return output_string
+
 class Parser():
 
     def __init__(self):
@@ -119,9 +126,7 @@ class Book_Parser(Parser):
 
         num_reviews = book_soup.find(attrs = {"itemprop": "reviewCount"}).get_text()
         num_reviews = num_reviews.replace("reviews","")
-        num_reviews = num_reviews.replace("\\n", "")
-        num_reviews = num_reviews.replace(",","")
-        num_reviews = num_reviews.strip()
+        num_reviews = string_cleaner(num_reviews)
         num_reviews = int(num_reviews)
 
         return num_reviews
@@ -130,19 +135,18 @@ class Book_Parser(Parser):
 
         num_ratings = book_soup.find(attrs = {"itemprop": "ratingCount"}).get_text()
         num_ratings = num_ratings.replace("ratings","")
-        num_ratings = num_ratings.replace(",","")
-        num_ratings = num_ratings.replace("\\n", "")
-        num_ratings = num_ratings.strip()
+        num_ratings = string_cleaner(num_ratings)
         num_ratings = int(num_ratings)
 
         return num_ratings
 
-    def book_soup_to_avg_rating(self, book_soup):
+    def book_soup_to_avg_rating(self, book_soup):  #WORKS REGULAR, WORKS BINARY, WORKS DC
 
-        avg_rating = book_soup.find(attrs = {"itemprop": "ratingValue"}).get_text().strip()
+        avg_rating = book_soup.find(attrs = {"itemprop": "ratingValue"}).get_text()
+        avg_rating = string_cleaner(avg_rating)
         avg_rating = float(avg_rating)
 
-        return avg_rating #FAILS REGULAR, WORKS BINARY, FAILS DC (LOOKS FIXABLE)
+        return avg_rating
 
     def book_soup_to_isbn13(self, book_soup): #FAILS REGULAR, FAILS BINARY, FAILS DC
 
@@ -250,32 +254,32 @@ book_soup_hp1_regular = test_parser.html_to_soup(html_hp1_regular)
 #print(num_reviews_meditations)
 #print(num_reviews_hp1)
 
-#avg_rating_angels_demons = test_parser.book_soup_to_avg_rating(book_soup_angels_demons)
-#avg_rating_meditations = test_parser.book_soup_to_avg_rating(book_soup_meditations)
+avg_rating_angels_demons = test_parser.book_soup_to_avg_rating(book_soup_angels_demons)
+avg_rating_meditations = test_parser.book_soup_to_avg_rating(book_soup_meditations)
 #avg_rating_hp1 = test_parser.book_soup_to_avg_rating(book_soup_hp1)
 
 #avg_rating_hp1_binary = test_parser.book_soup_to_avg_rating(book_soup_hp1_binary)
-#avg_rating_hp1_regular = test_parser.book_soup_to_avg_rating(book_soup_hp1_regular)
+avg_rating_hp1_regular = test_parser.book_soup_to_avg_rating(book_soup_hp1_regular)
 
-#print(avg_rating_meditations)
-#print(avg_rating_angels_demons)
+print(avg_rating_meditations)
+print(avg_rating_angels_demons)
 #print(avg_rating_hp1)
 
 #print(avg_rating_hp1_binary)
-#print(avg_rating_hp1_regular)
+print(avg_rating_hp1_regular)
 
-num_ratings_angels_demons = test_parser.book_soup_to_num_ratings(book_soup_angels_demons)
-num_ratings_meditations = test_parser.book_soup_to_num_ratings(book_soup_meditations)
+#num_ratings_angels_demons = test_parser.book_soup_to_num_ratings(book_soup_angels_demons)
+#num_ratings_meditations = test_parser.book_soup_to_num_ratings(book_soup_meditations)
 #num_ratings_hp1 = test_parser.book_soup_to_num_ratings(book_soup_hp1)
 
 #num_ratings_hp1_binary = test_parser.book_soup_to_num_ratings(book_soup_hp1_binary)
-num_ratings_hp1_regular = test_parser.book_soup_to_num_ratings(book_soup_hp1_regular)
+#num_ratings_hp1_regular = test_parser.book_soup_to_num_ratings(book_soup_hp1_regular)
 
-print(num_ratings_meditations)
-print(num_ratings_angels_demons)
+#print(num_ratings_meditations)
+#print(num_ratings_angels_demons)
 #print(num_ratings_hp1)
 
-print(num_ratings_hp1_regular)
+#print(num_ratings_hp1_regular)
 #print(num_ratings_hp1_binary)
 
 #isbn_meditations = test_parser.book_soup_to_isbn13(book_soup_meditations)
