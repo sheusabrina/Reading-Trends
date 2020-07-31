@@ -220,10 +220,10 @@ class Book_Parser(Parser):
         details = self.book_soup_to_details_soup(book_soup)
         series = details.find(attrs = {"href": re.compile("series")})
 
-        if series:
-
+        if series: ##SOME BOOKS DON'T HAVE ONE
             series = series.get_text()
-            series = series[:series.index("#")]
+            if "#" in series: #REMOVE NUMBER IF THERE IS ONE 
+                series = series[:series.index("#")]
 
         return series
 
