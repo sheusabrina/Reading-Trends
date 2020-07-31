@@ -85,9 +85,8 @@ class Data_Collector():
         if self.data_points_counter % 5 == 0:
             self.calculate_progress()
             percent_complete_string = str(self.percent_complete)
-            now = datetime.now()
-            now_string = now.strftime("%d/%m/%Y %H:%M:%S")
-            print("{} / {} {} Collected ({}% Complete) at {}". format(str(self.data_points_counter), str(self.max_data_points), self.data_point_type, percent_complete_string, now_string))
+
+            print("{} / {} {} Collected ({}% Complete) at {}". format(str(self.data_points_counter), str(self.max_data_points), self.data_point_type, percent_complete_string, self.now_string))
 
     def calculate_progress(self):
 
@@ -95,6 +94,15 @@ class Data_Collector():
 
     def sleep(self):
         self.scraper.sleep(self.max_sleep_time)
+
+    def generate_datetime(self):
+
+        now = datetime.now()
+        self.now_string = now.strftime("%m/%d/%Y %H:%M:%S")
+
+    def timestamp(self):
+
+        self.datafile.write(","+self.now_string)
 
     def is_collection_complete(self):
 
@@ -112,6 +120,8 @@ class Data_Collector():
             self.scrape_url()
             self.parse()
             self.log_data()
+            self.generate_datetime()
+            self.timestamp()
             self.print_progress()
             self.sleep()
 
@@ -156,7 +166,7 @@ class Review_Data_Collector(Data_Collector):
 class Review_URL_ID_Data_Collector(Review_Data_Collector):
 
     def add_headers_to_log_file(self):
-        self.datafile.write("ID,is_URL_valid,review_publication_date")
+        self.datafile.write("ID,is_URL_valid,review_publication_date,log_time")
 
     def parse(self):
 
@@ -177,7 +187,7 @@ class Review_Detail_Data_Collector(Review_Data_Collector):
 
     def add_headers_to_log_file(self):
 
-        self.datafile.write("ID,is_URL_valid,review_publication_date,book_title,book_id,rating,reviewer_href,started_reading_date,finished_reading_date,shelved_date")
+        self.datafile.write("ID,is_URL_valid,review_publication_date,book_title,book_id,rating,reviewer_href,started_reading_date,finished_reading_date,shelved_date,log_time")
 
     def parse(self):
 
@@ -245,7 +255,7 @@ class Book_Data_Collector(Data_Collector):
 
     def add_headers_to_log_file(self):
 
-        self.datafile.write("book_id,author,language,num_reviews,num_ratings,avg_rating,isbn10,editions_url,publication_date,first_publication_date,series")
+        self.datafile.write("book_id,author,language,num_reviews,num_ratings,avg_rating,isbn10,editions_url,publication_date,first_publication_date,series,log_time")
 
     def generate_current_url(self):
 
@@ -279,7 +289,7 @@ class Book_Data_Collector(Data_Collector):
 ## REVIEW DATA COLLECTION
 
 #keeping this low until I am fully confident that this is working as expected.
-num_reviews_to_collect = 5 * 10 **6
+num_reviews_to_collect = 3 ##5 * 10 **6
 estimated_num_reviews = int(3.5 * 10 **9)
 num_wait_seconds = 1
 
@@ -291,8 +301,8 @@ max_2020_ID = 3455207761 #I'm not sure if i should use this, since reviews are g
 #review_id_collector.data_collection_loop()
 
 #Uncomment to run the Review Detail collector
-#review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
-#review_collector.data_collection_loop()
+review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
+review_collector.data_collection_loop()
 
 ## BOOK DATA COLLECTION
 
