@@ -57,6 +57,9 @@ scraper = Scraper()
 #angels & demons book
 #scraper.url_to_html_regular("https://www.goodreads.com/book/show/960.Angels_Demons", "test_book_angels_demons")
 
+#deep fathom book
+#scraper.url_to_html_regular("https://www.goodreads.com/book/show/294045", "test_book_deep_fathom")
+
 #HP1 book
 #scraper.url_to_html_regular("https://www.goodreads.com/book/show/3", "test_book_hp1")
 #scraper.url_to_bytes_content("https://www.goodreads.com/book/show/3")
