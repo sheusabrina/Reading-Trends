@@ -255,7 +255,7 @@ class Book_Data_Collector(Data_Collector):
 
     def add_headers_to_log_file(self):
 
-        self.datafile.write("book_id,author,language,num_reviews,num_ratings,avg_rating,isbn10,editions_url,publication_date,first_publication_date,series,log_time")
+        self.datafile.write("book_id,author,language,num_reviews,num_ratings,avg_rating,isbn13,editions_url,publication_date,first_publication_date,series,log_time")
 
     def generate_current_url(self):
 
@@ -263,8 +263,6 @@ class Book_Data_Collector(Data_Collector):
         self.current_url = self.base_url + self.current_id
 
     def parse(self):
-
-        print("Beginning Parse...")
 
         self.current_soup = self.parser.html_to_soup(self.current_webpage_as_string)
         self.author = self.parser.book_soup_to_author(self.current_soup)
@@ -278,11 +276,9 @@ class Book_Data_Collector(Data_Collector):
         self.first_publication_date = self.parser.book_soup_to_first_publication_date(self.current_soup)
         self.series = self.parser.book_soup_to_series(self.current_soup)
 
-        print("Parse Complete")
-
     def log_data(self):
 
-        self.datafile.write("\n{},{},{},{},{},{},{},{},{},{},{}".format(self.current_id, self.author, self.language, self.num_reviews, self.num_ratings, self.avg_rating, self.isbn10, self.editions_url, self.publication_date, self.first_publication_date, self.series))
+        self.datafile.write("\n{},{},{},{},{},{},{},{},{},{},{}".format(self.current_id, self.author, self.language, self.num_reviews, self.num_ratings, self.avg_rating, self.isbn13, self.editions_href, self.publication_date, self.first_publication_date, self.series))
 
         self.data_points_counter += 1
 
@@ -301,14 +297,14 @@ max_2020_ID = 3455207761 #I'm not sure if i should use this, since reviews are g
 #review_id_collector.data_collection_loop()
 
 #Uncomment to run the Review Detail collector
-review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
-review_collector.data_collection_loop()
+#review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
+#review_collector.data_collection_loop()
 
 ## BOOK DATA COLLECTION
 
-book_list = book_list[:3]
+book_list = book_list[:10]
 num_wait_seconds = 1
 
 #uncomment to run Book Collector
-#book_collector = Book_Data_Collector(book_list, num_wait_seconds, "book_data")
-#book_collector.data_collection_loop()
+book_collector = Book_Data_Collector(book_list, num_wait_seconds, "book_data")
+book_collector.data_collection_loop()
