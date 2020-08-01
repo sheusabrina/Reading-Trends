@@ -5,7 +5,7 @@ import re
 import requests
 import random
 import pandas as pd
-#import sys
+import sys
 
 #import classes
 
@@ -300,23 +300,27 @@ max_2020_ID = 3455207761 #I'm not sure if i should use this, since reviews are g
 
 ## BOOK DATA COLLECTION
 
-book_list = list(book_list)
-book_list.remove("26760312") #BREAKS AUTHOR
-book_list.remove("28386273") #BREAKS AUTHOR
-book_list.remove("2855165") #BREAKS AUTHOR
-book_list.remove("26544945") #BREAKS AUTHOR
-book_list.remove("294045") #BREAKS AUTHOR
-book_list.remove("29812492") #BREAKS AUTHOR
-book_list.remove("29944") #BREAKS AUTHOR
-book_list.remove("30184856") #BREAKS AUTHOR
-book_list.remove("2147462") #BREAKS AUTHOR
-book_list.remove("21826085") #BREAKS AUTHOR
-book_list.remove("23692271") #BREAKS AUTHOR
-book_list.remove("25944798") #BREAKS AUTHOR
-book_list.remove("25258931") #BREAKS AUTHOR
-book_list.remove("25310678") #BREAKS AUTHOR
-book_list.remove("25938480") #BREAKS AUTHOR
-book_list.remove("968") #BREAKS AUTHOR 
+book_list = book_list
+
+#print(book_list)
+#print(type(book_list))
+
+#book_list.remove("26760312") #BREAKS AUTHOR
+#book_list.remove("28386273") #BREAKS AUTHOR
+#book_list.remove("2855165") #BREAKS AUTHOR
+#book_list.remove("26544945") #BREAKS AUTHOR
+#book_list.remove("294045") #BREAKS AUTHOR
+#book_list.remove("29812492") #BREAKS AUTHOR
+#book_list.remove("29944") #BREAKS AUTHOR
+#book_list.remove("30184856") #BREAKS AUTHOR
+#book_list.remove("2147462") #BREAKS AUTHOR
+#book_list.remove("21826085") #BREAKS AUTHOR
+#book_list.remove("23692271") #BREAKS AUTHOR
+#book_list.remove("25944798") #BREAKS AUTHOR
+#book_list.remove("25258931") #BREAKS AUTHOR
+#book_list.remove("25310678") #BREAKS AUTHOR
+#book_list.remove("25938480") #BREAKS AUTHOR
+#book_list.remove("968") #BREAKS AUTHOR
 
 num_wait_seconds = 1
 
