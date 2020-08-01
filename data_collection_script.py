@@ -283,7 +283,7 @@ class Book_Data_Collector(Data_Collector):
 ## REVIEW DATA COLLECTION
 
 #keeping this low until I am fully confident that this is working as expected.
-num_reviews_to_collect = 3 ##5 * 10 **6
+num_reviews_to_collect = 5 * 10 **6
 estimated_num_reviews = int(3.5 * 10 **9)
 num_wait_seconds = 1
 
@@ -295,8 +295,8 @@ max_2020_ID = 3455207761 #I'm not sure if i should use this, since reviews are g
 #review_id_collector.data_collection_loop()
 
 #Uncomment to run the Review Detail collector
-#review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
-#review_collector.data_collection_loop()
+review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
+review_collector.data_collection_loop()
 
 ## BOOK DATA COLLECTION
 
@@ -304,5 +304,5 @@ book_list = book_list[:10]
 num_wait_seconds = 1
 
 #uncomment to run Book Collector
-book_collector = Book_Data_Collector(book_list, num_wait_seconds, "book_data")
-book_collector.data_collection_loop()
+#book_collector = Book_Data_Collector(book_list, num_wait_seconds, "book_data")
+#book_collector.data_collection_loop()
