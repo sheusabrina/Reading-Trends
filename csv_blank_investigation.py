@@ -14,6 +14,29 @@ import sys
         #NATURAL TERMINATION OF CODE WITHOUT CLOSE
         #EARLY TERMINATION THROUGH SYS EXIT
 
-def csv_tester(file_name, print_string):
+##RESULTS
+    #FIRST TEST: CLOSE VS NO CLOSE:
+        #blank line was created once, at start of file. Why would that be?
+        #Ran the same code again, still just the single line.
+        #HYPOTHESIS: Blank line is created only when running open on a file that doesn't exist...but that's not possible beause the blanks appear in the middle of my log file.
 
-    pass 
+##TESTING
+
+def csv_tester(file_name, text_string, num_repeats, close = True):
+
+    ##NAMING & OPENING LOG FILE
+
+    log_file_name = file_name + ".csv"
+    log_file =open(log_file_name, "a")
+
+    for i in range(0, num_repeats):
+        log_file.write("\n" + text_string)
+
+    if close:
+        log_file.close()
+
+csv_tester("csv_blank_investigation_log", "natural termination w/ close: run1", 5)
+csv_tester("csv_blank_investigation_log", "natural termination w/ close: run2", 5)
+
+csv_tester("csv_blank_investigation_log", "natural termination w/o close: run1", 5, close = False)
+csv_tester("csv_blank_investigation_log", "natural termination w/o close: run2", 5, close = False)
