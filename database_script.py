@@ -74,6 +74,11 @@ class Merged_Database():
         self.df.rename(columns = {"ID": "review_id"}, inplace = True)
         self.df.drop(columns = ["log_time"], inplace = True)
 
+    def select_language(self, language):
+
+        self.df = self.df[self.df.language == language]
+        self.df.reset_index(inplace = True, drop = True)
+
 ## TESTING
 
 review_database = Review_Database("review_data_sample")
@@ -85,5 +90,6 @@ book_list = review_database.generate_book_id_list()
 book_database = Book_Database("book_data")
 
 merged_database = Merged_Database(review_database, book_database)
+merged_database.select_language("English")
 
 #print(book_list)
