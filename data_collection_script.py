@@ -128,10 +128,9 @@ class Data_Collector():
                 self.sleep()
 
             except requests.exceptions.ConnectionError: #I THINK THIS IS WHEN THE INTERNET DISCONNECTS
-                self.datafile.close()
-
                 print("Connection Error! \n Restarting Data Collection...")
-                self.data_collection_loop()
+
+                continue
 
         print("Data Collection Complete")
         self.datafile.close()
@@ -303,8 +302,8 @@ max_2020_ID = 3455207761 #I'm not sure if i should use this, since reviews are g
 #review_id_collector.data_collection_loop()
 
 #Uncomment to run the Review Detail collector
-#review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
-#review_collector.data_collection_loop()
+review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
+review_collector.data_collection_loop()
 
 ## BOOK DATA COLLECTION
 
@@ -312,5 +311,5 @@ max_2020_ID = 3455207761 #I'm not sure if i should use this, since reviews are g
 num_wait_seconds = 1
 
 #uncomment to run Book Collector
-book_collector = Book_Data_Collector(book_list, num_wait_seconds, "book_data")
-book_collector.data_collection_loop()
+#book_collector = Book_Data_Collector(book_list, num_wait_seconds, "book_data")
+#book_collector.data_collection_loop()
