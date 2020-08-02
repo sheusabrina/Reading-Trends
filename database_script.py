@@ -13,6 +13,10 @@ class Database():
 
         self.df.reset_index(inplace = True, drop = True)
 
+    def get_df(self):
+
+        return self.df 
+
 class Review_Database(Database):
 
     def __init__(self, file_name):
