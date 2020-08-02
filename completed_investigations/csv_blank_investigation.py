@@ -20,11 +20,12 @@ import sys
         #Ran the same code again, still just the single line.
         #HYPOTHESIS: Blank line is created only when running open on a file that doesn't exist...but that's not possible beause the blanks appear in the middle of my log file.
 
+        #WHAT ELSE IS DIFFERENT THE FIRST TIME THE FILE IS OPENED?
+        #WHEN \n is written, where does it go?
+
 ##TESTING
 
 def csv_tester(file_name, text_string, num_repeats, close = True):
-
-    ##NAMING & OPENING LOG FILE
 
     log_file_name = file_name + ".csv"
     log_file =open(log_file_name, "a")
