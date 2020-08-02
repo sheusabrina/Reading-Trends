@@ -300,7 +300,7 @@ max_2020_ID = 3455207761 #I'm not sure if i should use this, since reviews are g
 
 ## BOOK DATA COLLECTION
 
-book_list = book_list[:10]
+#book_list = book_list[:10]
 num_wait_seconds = 1
 
 #uncomment to run Book Collector
