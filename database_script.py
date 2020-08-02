@@ -48,6 +48,15 @@ class Review_Database(Database):
         book_id_list = self.df_by_book.book_id.unique()
         return book_id_list
 
+class Book_Database(Database):
+
+    def __init__(self, file_name):
+        super().__init__(file_name)
+
+        self.df.sort_values(by = "book_id", inplace = True)
+        self.df.reset_index(inplace = True, drop = True)
+        
+
 ## TESTING
 
 review_database = Review_Database("review_data_sample")
