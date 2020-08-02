@@ -79,6 +79,11 @@ class Merged_Database():
         self.df = self.df[self.df.language == language]
         self.df.reset_index(inplace = True, drop = True)
 
+    def select_book(self, title):
+
+        self.df = self.df[self.df.book_title == title]
+        self.df.reset_index(inplace = True, drop = True)
+
 ## TESTING
 
 review_database = Review_Database("review_data_sample")
@@ -91,5 +96,6 @@ book_database = Book_Database("book_data")
 
 merged_database = Merged_Database(review_database, book_database)
 merged_database.select_language("English")
+merged_database.select_book("Harry Potter and the Sorcerer's Stone (Harry Potter #1)")
 
 #print(book_list)
