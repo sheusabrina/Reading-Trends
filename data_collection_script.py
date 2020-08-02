@@ -116,14 +116,22 @@ class Data_Collector():
 
         print("Beginning Data Collection...")
         while not self.is_collection_complete():
-            self.generate_current_url()
-            self.scrape_url()
-            self.parse()
-            self.log_data()
-            self.generate_datetime()
-            self.timestamp()
-            self.print_progress()
-            self.sleep()
+
+            try:
+                self.generate_current_url()
+                self.scrape_url()
+                self.parse()
+                self.log_data()
+                self.generate_datetime()
+                self.timestamp()
+                self.print_progress()
+                self.sleep()
+
+            except requests.exceptions.ConnectionError: #I THINK THIS IS WHEN THE INTERNET DISCONNECTS
+                self.datafile.close()
+
+                print("Connection Error! \n Restarting Data Collection...")
+                self.data_collection_loop()
 
         print("Data Collection Complete")
         self.datafile.close()
