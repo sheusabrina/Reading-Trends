@@ -15,7 +15,7 @@ class Database():
 
     def get_df(self):
 
-        return self.df 
+        return self.df
 
 class Review_Database(Database):
 
@@ -59,7 +59,20 @@ class Book_Database(Database):
 
         self.df.sort_values(by = "book_id", inplace = True)
         self.df.reset_index(inplace = True, drop = True)
-        
+
+class Merged_Database():
+
+    def __init__(self, review_database, book_database):
+
+        review_df = review_database.get_df()
+        review_df = review_df.astype({"book_id": "int64"}) #It's an object by default, and I need matching datatypes for the merge.
+
+        book_df = book_database.get_df()
+
+        self.df = pd.merge(review_df, book_df, how = "left", on = "book_id")
+
+        self.df.rename(columns = {"ID": "review_id"}, inplace = True)
+        self.df.drop(columns = ["log_time"], inplace = True)
 
 ## TESTING
 
@@ -68,5 +81,9 @@ review_database.drop_unrated()
 review_database.limit_dates(2017, 2020)
 #review_database.generate_review_count_by_book()
 book_list = review_database.generate_book_id_list()
+
+book_database = Book_Database("book_data")
+
+merged_database = Merged_Database(review_database, book_database)
 
 #print(book_list)
