@@ -3,17 +3,22 @@ import pandas as pd
 
 #Classes
 
-class Review_Database():
+class Database():
 
     def __init__(self, file_name):
-
         self.file_name = "databases/" + file_name + ".csv"
         self.df = pd.read_csv(self.file_name)
-
-        self.df = self.df[self.df.is_URL_valid == True]
-
         self.df.dropna(inplace = True)
         self.df.drop_duplicates(inplace = True)
+
+        self.df.reset_index(inplace = True, drop = True)
+
+class Review_Database(Database):
+
+    def __init__(self, file_name):
+        super().__init__(file_name)
+
+        self.df = self.df[self.df.is_URL_valid == True]
 
         self.df.sort_values(by = "ID", inplace = True)
         self.df.reset_index(inplace = True, drop = True)
