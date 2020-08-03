@@ -8,6 +8,20 @@ def string_cleaner(input_string):
 
     return output_string
 
+def date_suffix_cleaner(input_string):
+
+    date_suffix = re.search("\d(st|rd|nd|th)", input_string)
+
+    if date_suffix:
+        date_suffix = date_suffix.group(0)
+        date = re.search("\d", date_suffix).group(0)
+        output_string = input_string.replace(date_suffix, date)
+
+    else:
+        output_string = input_string
+
+    return output_string
+
 class Parser():
 
     def __init__(self):
@@ -204,6 +218,7 @@ class Book_Parser(Parser):
 
         publication_date = publication_date.replace("Published","")
         publication_date = string_cleaner(publication_date)
+        publication_date = date_suffix_cleaner(publication_date)
 
         return publication_date
 
@@ -216,6 +231,7 @@ class Book_Parser(Parser):
             publication_date = publication_date.replace("(first published ","")
             publication_date = publication_date.replace(")","")
             publication_date = string_cleaner(publication_date)
+            publication_date = date_suffix_cleaner(publication_date)
 
         return publication_date
 
