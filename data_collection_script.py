@@ -96,8 +96,8 @@ class Data_Collector():
 
         self.percent_complete = round(100 * self.data_points_counter / self.max_data_points, 2)
 
-    def sleep(self):
-        self.scraper.sleep(self.max_sleep_time)
+    def sleep(self, max_sleep_time = self.max_sleep_time):
+        self.scraper.sleep(max_sleep_time)
 
     def generate_datetime(self):
 
