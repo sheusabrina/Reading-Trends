@@ -5,7 +5,7 @@ import re
 import requests
 import random
 import pandas as pd
-#import sys
+import sys
 
 #import classes
 
@@ -76,6 +76,29 @@ class Data_Collector():
     def generate_soup(self):
 
         self.current_soup = self.parser.html_to_soup(self.current_webpage_as_string)
+
+        invalid_count = 0
+
+        while parser.is_soup_populated(self.current_soup) == False:
+
+            if invalid_count < 10:
+                self.generate_datetime()
+                print("Recieved Invalid Response from Website. Pausing Data Collection at {}...".format(self.self.now_string))
+
+                pause_time = max(self.max_sleep_time, invalid_count*60) #IF IT'S THE FIRST ERROR, REGULAR SLEEPTIME. FOR SUBSEQUENT ERRORS, INCREASINGLY LARGE WAIT TIMES.
+                self.sleep(pause_time)
+
+                self.generate_datetime()
+                print("Restarting Data Collection at {}...".format(self.now_string))
+                self.current_soup = self.parser.html_to_soup(self.current_webpage_as_string)
+
+                invalid_count += 1
+
+            else:
+
+                print("Too Many Invalid Requests Recieved. Terminating Data Collection.")
+                self.datafile.close()
+                sys.exit()
 
     def parse(self):
 
