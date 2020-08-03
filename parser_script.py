@@ -31,6 +31,18 @@ class Parser():
         soup = BeautifulSoup(html, "html.parser")
         return soup
 
+    def is_populated(self, soup):
+
+        text = soup.findAll(text = True)
+
+        if text:
+            is_populated = True
+        else:
+            is_populated = False
+
+        return is_populated
+
+
 class Review_Parser(Parser):
 
     def review_soup_is_valid(self, review_soup):
@@ -255,21 +267,24 @@ test_parser = Book_Parser()
 
 #html_hp1_regular = open("html_files/test_book_hp1_regular.html")
 #html_angels_demons = open("html_files/test_book_angels_demons.html")
-#html_meditations = open("html_files/test_book_meditations.html")
+html_meditations = open("html_files/test_book_meditations.html")
 #html_deep_fathom = open("html_files/test_book_deep_fathom.html")
 
 #book_soup_angels_demons = test_parser.html_to_soup(html_angels_demons)
-#book_soup_meditations = test_parser.html_to_soup(html_meditations)
+book_soup_meditations = test_parser.html_to_soup(html_meditations)
 #book_soup_deep_fathom = test_parser.html_to_soup(html_deep_fathom)
 
 #book_soup_hp1_regular = test_parser.html_to_soup(html_hp1_regular)
 
-#print("Test soups ready...")
+print("Test soups ready...")
 
 #author_angels_demons = test_parser.book_soup_to_author(book_soup_angels_demons)
 #author_meditations = test_parser.book_soup_to_author(book_soup_meditations)
 #author_hp1 = test_parser.book_soup_to_author(book_soup_hp1)
 #author_deep_fathom = test_parser.book_soup_to_author(book_soup_deep_fathom)
+
+first_element_meditations = test_parser.is_populated(book_soup_meditations)
+print(first_element_meditations)
 
 #author_hp1_regular = test_parser.book_soup_to_author(book_soup_hp1_regular)
 
