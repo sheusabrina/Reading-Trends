@@ -27,6 +27,10 @@ class Review_Database(Database):
         self.df.sort_values(by = "ID", inplace = True)
         self.df.reset_index(inplace = True, drop = True)
 
+        self.df.review_publication_date = pd.to_datetime(self.df.review_publication_date, errors = "ignore")
+        self.df.started_reading_date = pd.to_datetime(self.df.started_reading_date, errors = "ignore")
+        self.df.finished_reading_date = pd.to_datetime(self.df.finished_reading_date, errors = "ignore")
+
     def drop_unrated(self):
 
         self.df = self.df[self.df.rating != "None"]
@@ -34,7 +38,7 @@ class Review_Database(Database):
 
     def limit_dates(self, min_year, max_year):
 
-        self.df["year"] = (pd.to_datetime(self.df["review_publication_date"]).apply(lambda date: date.year))
+        self.df["year"] = self.df["review_publication_date"].apply(lambda date: date.year)
         self.df = self.df[(self.df.year >= min_year) & (self.df.year <= max_year)]
         self.df.drop(columns = ["year"], inplace = True)
         self.df.reset_index(inplace = True, drop = True)
@@ -56,6 +60,11 @@ class Book_Database(Database):
 
     def __init__(self, file_name):
         super().__init__(file_name)
+
+        ##THESE DATES HAVE SUFFIXES: ST, RD,ND & THESE KEEP DATETIME FROM WORKING
+
+        self.df.publication_date = pd.to_datetime(self.df.publication_date, errors = "ignore")
+        self.df.first_publication_date = pd.to_datetime(self.df.first_publication_date, errors = "ignore")
 
         self.df.sort_values(by = "book_id", inplace = True)
         self.df.reset_index(inplace = True, drop = True)
@@ -83,6 +92,8 @@ class Merged_Database():
 
         self.df = self.df[self.df.book_title == title]
         self.df.reset_index(inplace = True, drop = True)
+
+        print(self.df)
 
 ## TESTING
 
