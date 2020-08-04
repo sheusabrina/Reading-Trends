@@ -31,17 +31,16 @@ class Parser():
         soup = BeautifulSoup(html, "html.parser")
         return soup
 
-    def is_populated(self, soup):
+    def is_soup_populated(self, soup):
 
         text = soup.findAll(text = True)
 
         if text:
-            is_populated = True
+            is_soup_populated = True
         else:
-            is_populated = False
+            is_soup_populated = False
 
-        return is_populated
-
+        return is_soup_populated
 
 class Review_Parser(Parser):
 
@@ -283,8 +282,8 @@ print("Test soups ready...")
 #author_hp1 = test_parser.book_soup_to_author(book_soup_hp1)
 #author_deep_fathom = test_parser.book_soup_to_author(book_soup_deep_fathom)
 
-first_element_meditations = test_parser.is_populated(book_soup_meditations)
-print(first_element_meditations)
+#first_element_meditations = test_parser.is_soup_populated(book_soup_meditations)
+#print(first_element_meditations)
 
 #author_hp1_regular = test_parser.book_soup_to_author(book_soup_hp1_regular)
 
