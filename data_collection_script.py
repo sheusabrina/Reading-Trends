@@ -79,7 +79,7 @@ class Data_Collector():
 
         invalid_count = 0
 
-        while parser.is_soup_populated(self.current_soup) == False:
+        while self.parser.is_soup_populated(self.current_soup) == False:
 
             if invalid_count < 10:
                 self.generate_datetime()
@@ -119,8 +119,14 @@ class Data_Collector():
 
         self.percent_complete = round(100 * self.data_points_counter / self.max_data_points, 2)
 
-    def sleep(self, max_sleep_time = self.max_sleep_time):
-        self.scraper.sleep(max_sleep_time)
+    def sleep(self, max_sleep_time = None):
+
+        if max_sleep_time:
+            sleeptime = max_sleep_time
+        else:
+            sleeptime = self.max_sleep_time
+
+        self.scraper.sleep(sleeptime)
 
     def generate_datetime(self):
 
@@ -290,8 +296,6 @@ class Book_Data_Collector(Data_Collector):
 
         self.current_id = self.book_ids_to_be_scraped[self.data_points_counter]
         self.current_url = self.base_url + self.current_id
-
-        print(self.current_url)
 
     def parse(self):
 
