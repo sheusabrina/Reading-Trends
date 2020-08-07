@@ -78,7 +78,7 @@ class Merged_Database():
 
         self.df = pd.merge(review_df, book_df, how = "left", on = "book_id")
 
-        self.df.rename(columns = {"ID": "review_id"}, inplace = True)
+        self.df.rename(columns = {"ID": "review_id", "publication_date": "book_publication_date", "first_publication_date": "book_first_publication_date"}, inplace = True)
         self.df.drop(columns = ["log_time"], inplace = True)
 
     def select_language(self, language):
@@ -113,7 +113,7 @@ merged_database = Merged_Database(review_database, book_database)
 merged_database.select_language("English")
 merged_database.select_book("Harry Potter and the Sorcerer's Stone (Harry Potter #1)")
 
-print(merged_database.columns)
+print(merged_database.df.columns)
 #print(book_list)
 
 #test_date = "October 30 1811"
