@@ -266,16 +266,16 @@ test_parser = Book_Parser()
 
 #html_hp1_regular = open("html_files/test_book_hp1_regular.html")
 #html_angels_demons = open("html_files/test_book_angels_demons.html")
-html_meditations = open("html_files/test_book_meditations.html")
+#html_meditations = open("html_files/test_book_meditations.html")
 #html_deep_fathom = open("html_files/test_book_deep_fathom.html")
 
 #book_soup_angels_demons = test_parser.html_to_soup(html_angels_demons)
-book_soup_meditations = test_parser.html_to_soup(html_meditations)
+#book_soup_meditations = test_parser.html_to_soup(html_meditations)
 #book_soup_deep_fathom = test_parser.html_to_soup(html_deep_fathom)
 
 #book_soup_hp1_regular = test_parser.html_to_soup(html_hp1_regular)
 
-print("Test soups ready...")
+#print("Test soups ready...")
 
 #author_angels_demons = test_parser.book_soup_to_author(book_soup_angels_demons)
 #author_meditations = test_parser.book_soup_to_author(book_soup_meditations)

@@ -331,14 +331,14 @@ max_2020_ID = 3455207761 #I'm not sure if i should use this, since reviews are g
 #review_id_collector.data_collection_loop()
 
 #Uncomment to run the Review Detail collector
-#review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
-#review_collector.data_collection_loop()
+review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
+review_collector.data_collection_loop()
 
 ## BOOK DATA COLLECTION
 
 #book_list = book_list[:10]
-num_wait_seconds = 5
+num_wait_seconds = 5 ##BOOK PAGES HAVE ISSUES WHEN SCRAPED TOO QUICKLY, SO KEEP THIS LONG IF POSSIBLE
 
 #uncomment to run Book Collector
-book_collector = Book_Data_Collector(book_list, num_wait_seconds, "book_data")
-book_collector.data_collection_loop()
+#book_collector = Book_Data_Collector(book_list, num_wait_seconds, "book_data")
+#book_collector.data_collection_loop()
