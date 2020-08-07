@@ -61,10 +61,8 @@ class Book_Database(Database):
     def __init__(self, file_name):
         super().__init__(file_name)
 
-        ##THESE DATES HAVE SUFFIXES: ST, RD,ND & THESE KEEP DATETIME FROM WORKING
-
-        self.df.publication_date = pd.to_datetime(self.df.publication_date, errors = "ignore")
-        self.df.first_publication_date = pd.to_datetime(self.df.first_publication_date, errors = "ignore")
+        self.df.publication_date = pd.to_datetime(self.df.publication_date, errors = "ignore") #YOU WORK
+        self.df.first_publication_date = pd.to_datetime(self.df.first_publication_date, errors = "ignore") ## WHY DON'T YOU ALSO WORK?
 
         self.df.sort_values(by = "book_id", inplace = True)
         self.df.reset_index(inplace = True, drop = True)
@@ -119,3 +117,8 @@ merged_database = merged_database.select_language("English")
 merged_database = merged_database.select_book("Harry Potter and the Sorcerer's Stone (Harry Potter #1)")
 
 #print(book_list)
+
+#test_date = "October 30 1811"
+#test_date = pd.to_datetime(test_date)
+
+#print(test_date)
