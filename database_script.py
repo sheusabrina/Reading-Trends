@@ -97,6 +97,13 @@ class Merged_Database():
 
         return subset_df
 
+    def select_series(self, title):
+
+        subset_df = self.df[self.df.series == title]
+        subset_df.reset_index(inplace = True, drop = True)
+
+        return subset_df 
+
 ## TESTING
 
 review_database = Review_Database("review_data_sample")
