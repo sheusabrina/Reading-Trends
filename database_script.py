@@ -110,7 +110,6 @@ class Merged_Database():
         count_df = count_df.fillna(0)
 
         #ADD MISSING COLUMNS
-
         all_rating_values = list(range(1,6)) ##ALL POTENTIAL VALUES
         all_rating_values = [str(x) for x in all_rating_values]
 
@@ -138,8 +137,8 @@ merged_database = Merged_Database(review_database, book_database)
 merged_database.select_language("English")
 merged_database.select_book("Harry Potter and the Sorcerer's Stone (Harry Potter #1)")
 
-review_count = merged_database.generate_review_count_by_day()
-print(review_count)
+#review_count = merged_database.generate_review_count_by_day()
+#print(review_count)
 
 #print(book_list)
 
