@@ -26,18 +26,6 @@ class Visualizer():
 
         rating_df = self.database.generate_review_count_by_day()
 
-        ## FILL IN MISSING DATES: this isn't needed...
-
-        #min_date = min(rating_df.review_publication_date)
-        #max_date = max(rating_df.review_publication_date)
-        #new_dates = pd.date_range(min_date, max_date)
-
-        #rating_df = rating_df.set_index("review_publication_date").reindex(new_dates)
-        #rating_df = rating_df.rename_axis("review_publication_date").reset_index()
-        #rating_df = rating_df.fillna(0.0)
-
-        #TURN DF INTO LISTS
-
         dates = rating_df.review_publication_date.dt.date.values.tolist()
 
         rating_1_counts = rating_df["1"].values.tolist()
@@ -64,6 +52,12 @@ class Visualizer():
 
         #Labels
 
+        if chart_title:
+            plt.title(chart_title)
+
+        plt.ylabel("Ratings")
+        plt.xlabel("Days")
+
         plt.xticks(rotation = 45)
         plt.legend()
 
@@ -72,4 +66,4 @@ class Visualizer():
 
 
 test_visualizer = Visualizer(merged_database)
-test_visualizer.show_ratings_by_day()
+test_visualizer.show_ratings_by_day("Harry Potter & The Sorcerers' Stone Daily Ratings")
