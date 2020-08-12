@@ -33,7 +33,7 @@ class Data_Collector():
     def is_csv(self):
 
         try:
-            df = pd.read_csv(self.log_file_name)
+            df = pd.read_csv(self.log_file_name, low_memory=False)
             is_csv = True
 
         except (FileNotFoundError, pd.errors.EmptyDataError):
