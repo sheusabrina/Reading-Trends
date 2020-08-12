@@ -26,16 +26,15 @@ class Visualizer():
 
         rating_df = self.database.generate_review_count_by_day()
 
-        ## ADD MORE DATES (DO THIS LATER)
+        ## FILL IN MISSING DATES: this isn't needed...
 
         #min_date = min(rating_df.review_publication_date)
         #max_date = max(rating_df.review_publication_date)
         #new_dates = pd.date_range(min_date, max_date)
 
-        #rating_df.set_index("review_publication_date", inplace = True)
-        #rating_df.reindex(new_dates)
-
-        print(rating_df)
+        #rating_df = rating_df.set_index("review_publication_date").reindex(new_dates)
+        #rating_df = rating_df.rename_axis("review_publication_date").reset_index()
+        #rating_df = rating_df.fillna(0.0)
 
         #TURN DF INTO LISTS
 
