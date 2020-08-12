@@ -83,21 +83,21 @@ class Merged_Database():
 
     def select_language(self, language):
 
-        self.subset_df = self.df[self.df.language == language]
-        self.subset_df.reset_index(inplace = True, drop = True)
+        self.df = self.df[self.df.language == language]
+        self.df.reset_index(inplace = True, drop = True)
 
     def select_book(self, title):
 
-        self.subset_df = self.df[self.df.book_title == title]
-        self.subset_df.reset_index(inplace = True, drop = True)
+        self.df = self.df[self.df.book_title == title]
+        self.df.reset_index(inplace = True, drop = True)
 
     def select_series(self, title):
 
-        self.subset_df = self.df[self.df.series == title]
-        self.subset_df.reset_index(inplace = True, drop = True)
+        self.df = self.df[self.df.series == title]
+        self.df.reset_index(inplace = True, drop = True)
 
 
-        return subset_df 
+
 
 ## TESTING
 
@@ -113,7 +113,6 @@ merged_database = Merged_Database(review_database, book_database)
 merged_database.select_language("English")
 merged_database.select_book("Harry Potter and the Sorcerer's Stone (Harry Potter #1)")
 
-print(merged_database.df.columns)
 #print(book_list)
 
 #test_date = "October 30 1811"
