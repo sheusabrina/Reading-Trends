@@ -96,7 +96,16 @@ class Merged_Database():
         self.df = self.df[self.df.series == title]
         self.df.reset_index(inplace = True, drop = True)
 
+    def get_dataframe(self):
 
+        return self.df
+
+    def generate_review_count_by_day(self):
+
+        count_df = self.df.groupby(["review_publication_date"]).ID.count().reset_index()
+        count_df.rename(columns = {"ID": "review_count"}, inplace = True)
+
+        return count_df
 
 
 ## TESTING
