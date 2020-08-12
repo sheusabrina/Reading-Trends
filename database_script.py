@@ -106,8 +106,21 @@ class Merged_Database():
         count_df.rename(columns = {"review_id": "review_count"}, inplace = True)
         count_df = count_df.pivot(index = "review_publication_date", columns = "rating", values = "review_count")
         count_df.reset_index(inplace = True)
-        count_df.rename_axis(None, inplace = True)
+        count_df.rename_axis(None, inplace = True) #WHY DOESN'T THIS WORK?
         count_df = count_df.fillna(0)
+
+        #ADD MISSING COLUMNS
+
+        all_rating_values = list(range(1,6)) ##ALL POTENTIAL VALUES
+        all_rating_values = [str(x) for x in all_rating_values]
+
+        for rating_val in all_rating_values: ## ADD MISSING VALUES
+            if rating_val not in count_df.columns:
+                count_df[rating_val] = 0.0
+
+        #REORDER COLUMNS
+        column_order = ["review_publication_date"] + all_rating_values
+        count_df = count_df[column_order]
 
         return count_df
 
