@@ -79,7 +79,9 @@ class Merged_Database():
         self.df = pd.merge(review_df, book_df, how = "left", on = "book_id")
 
         self.df.rename(columns = {"ID": "review_id", "publication_date": "book_publication_date", "first_publication_date": "book_first_publication_date"}, inplace = True)
-        self.df.drop(columns = ["log_time"], inplace = True)
+
+        if "log_time" in self.df:
+            self.df.drop(columns = ["log_time"], inplace = True)
 
     def select_language(self, language):
 
