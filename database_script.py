@@ -102,11 +102,14 @@ class Merged_Database():
 
     def generate_review_count_by_day(self):
 
-        count_df = self.df.groupby(["review_publication_date"]).ID.count().reset_index()
-        count_df.rename(columns = {"ID": "review_count"}, inplace = True)
+        count_df = self.df.groupby(["review_publication_date", "rating"]).review_id.count().reset_index()
+        count_df.rename(columns = {"review_id": "review_count"}, inplace = True)
+        count_df = count_df.pivot(index = "review_publication_date", columns = "rating", values = "review_count")
+        count_df.reset_index(inplace = True)
+        count_df.rename_axis(None, inplace = True)
+        count_df = count_df.fillna(0)
 
         return count_df
-
 
 ## TESTING
 
@@ -121,6 +124,9 @@ book_database = Book_Database("book_data")
 merged_database = Merged_Database(review_database, book_database)
 merged_database.select_language("English")
 merged_database.select_book("Harry Potter and the Sorcerer's Stone (Harry Potter #1)")
+
+review_count = merged_database.generate_review_count_by_day()
+print(review_count)
 
 #print(book_list)
 
