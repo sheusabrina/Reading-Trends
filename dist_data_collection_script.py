@@ -47,7 +47,15 @@ class Boss():
         self.log_file_name = "databases/"+ file_name + ".csv"
 
     def is_csv(self):
-        pass
+
+        try:
+            df = pd.read_csv(self.log_file_name, low_memory=False)
+            is_csv = True
+
+        except (FileNotFoundError, pd.errors.EmptyDataError):
+            is_csv = False
+
+        return is_csv
 
     def input_scrape_request(self):
         "This method will be overwritten"
@@ -79,7 +87,7 @@ class Boss():
 
         for assignment in self.assignment_list:
             assignment_ids = self.assignment_list[assignment: assignment + assignment_size]
-            self.assignment_dict[assignment] = assignment_ids  
+            self.assignment_dict[assignment] = assignment_ids
 
     def give_assignment(self):
 
