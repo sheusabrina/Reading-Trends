@@ -26,27 +26,45 @@ class Review():
         self.finished_date = finished_date
         self.shelved_date = shelved_date
 
-class Boss(Review_Detail_Data_Collector):
+class Book():
+    pass
 
-    def __init__(self, min_id, max_id, assignment_size, file_name):
-        self.requested_review_id_list = range(min_id, max_id)
+class Boss():
+
+    def __init__(self, boss_type, assignment_size, file_name):
+
+        if boss_type == "book":
+            id_column_name = "book_id"
+
+        elif boss_type == "review":
+            id_column_name = "ID"
+
+        else:
+            return "Error: Invalid Boss Type"
+
         self.assignment_size = assignment_size
         self.log_file_name = "databases/"+ file_name + ".csv"
+
+    def is_csv(self):
+        pass
+
+    def input_scrape_request(self):
+        "This method will be overwritten"
 
     def prepare_scope(self):
 
         if self.is_csv():
 
-            self.data_logged_at_start = pd.read_csv(self.log_file_name)
-            self.review_ids_already_scraped_list = self.data_logged_at_start.ID.unique()
-            self.review_ids_already_scraped_list = [str(id) for id in self.review_ids_already_scraped_list]
+            data_logged_at_start = pd.read_csv(self.log_file_name)
+            already_scraped = self.data_logged_at_start[id_column_name].unique()
+            already_scraped = [str(id) for id in self.already_scraped]
 
-            self.review_ids_to_be_scraped = []
+            to_be_scraped = []
 
-            for item in self.requested_review_id_list:
+            for id in self.requested:
 
-                if item not in self.review_ids_already_scraped_list:
-                    self.review_ids_to_be_scraped.append(item)
+                if id not in already_scraped:
+                    to_be_scraped.append(id)
 
     def generate_assignments(self):
 
@@ -75,7 +93,17 @@ class Boss(Review_Detail_Data_Collector):
     def log_data(self):
         pass
 
-class Minion(Review_Detail_Data_Collector):
+class Review_Boss(Boss):
+
+    def input_scrape_request(self, min_id, max_id):
+        self.requested = range(min_id, max_id)
+
+class Book_Boss(Boss):
+
+    def input_scrape_request(self, book_list):
+        self.requested = book_id_list
+
+class Minion():
 
     def request_assignment(self):
         pass
