@@ -49,6 +49,14 @@ class Boss(Review_Detail_Data_Collector):
 
         return assignment
 
+    def complete_assignment(self, assignment):
+
+        try:
+            self.assignment_list.remove(assignment)
+
+        except ValueError:
+            pass
+
     def log_data(self):
         pass
 
