@@ -32,4 +32,32 @@ class Review():
 
     pass 
 class Boss(Review_Detail_Data_Collector):
+
+    def __init__(self):
+        pass
+
+    def prepare_scope(self):
+        pass
+
+    def generate_assignments(self):
+        self.assignment_list = []
+
+    def give_assignment(self):
+
+        if self.assignment_list:
+            assignment = assignment_list[0]
+            self.assignment_list = assignment_list[1:]
+            self.assignment_list.append(assignment)
+
+        else:
+            assignment = None
+
+        return assignment
+
+    def log_data(self):
+        pass
+
 class Minion(Review_Detail_Data_Collector):
+
+    def request_assignment(self):
+        pass
