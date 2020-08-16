@@ -74,8 +74,12 @@ class Boss():
 
                 if id not in already_scraped:
                     self.to_be_scraped.append(id)
+                    
+        else:
 
-            random.shuffle(self.to_be_scraped)
+            self.to_be_scraped = self.requested
+
+        random.shuffle(self.to_be_scraped)
 
     def generate_assignments(self):
 
