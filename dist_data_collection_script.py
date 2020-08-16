@@ -5,18 +5,14 @@ import re
 import requests
 import random
 import pandas as pd
-import sys
 
 #import classes
 
-from parser_script import Parser
 from parser_script import Review_Parser
-from parser_script import Book_Parser
 
 from scraper_script import Scraper
 from data_collection_script import Review_Detail_Data_Collector
 
-    pass
 class Review():
 
     def __init__(id, date, book_title, book_id, rating, reviewer_href, start_date, finished_date, shelved_date):
@@ -30,7 +26,6 @@ class Review():
         self.finished_date = finished_date
         self.shelved_date = shelved_date
 
-    pass 
 class Boss(Review_Detail_Data_Collector):
 
     def __init__(self):
