@@ -14,8 +14,8 @@ from parser_script import Review_Parser
 from parser_script import Book_Parser
 
 from scraper_script import Scraper
+from data_collection_script import Review_Detail_Data_Collector
 
-class Boss():
     pass
 class Review():
 
@@ -30,5 +30,6 @@ class Review():
         self.finished_date = finished_date
         self.shelved_date = shelved_date
 
-class Minion():
     pass 
+class Boss(Review_Detail_Data_Collector):
+class Minion(Review_Detail_Data_Collector):
