@@ -28,13 +28,28 @@ class Review():
 
 class Boss(Review_Detail_Data_Collector):
 
-    def __init__(self):
-        pass
+    def __init__(self, min_id, max_id, assignment_size, file_name):
+        self.requested_review_id_list = range(min_id, max_id)
+        self.assignment_size = assignment_size
+        self.log_file_name = "databases/"+ file_name + ".csv"
 
     def prepare_scope(self):
-        pass
+
+        if self.is_csv():
+
+            self.data_logged_at_start = pd.read_csv(self.log_file_name)
+            self.review_ids_already_scraped_list = self.data_logged_at_start.ID.unique()
+            self.review_ids_already_scraped_list = [str(id) for id in self.review_ids_already_scraped_list]
+
+            self.review_ids_to_be_scraped = []
+
+            for item in self.requested_review_id_list:
+
+                if item not in self.review_ids_already_scraped_list:
+                    self.review_ids_to_be_scraped.append(item)
 
     def generate_assignments(self):
+
         self.assignment_list = []
 
     def give_assignment(self):
