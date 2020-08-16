@@ -5,6 +5,7 @@ import re
 import requests
 import random
 import pandas as pd
+import math
 
 #import classes
 
@@ -59,16 +60,26 @@ class Boss():
             already_scraped = self.data_logged_at_start[id_column_name].unique()
             already_scraped = [str(id) for id in self.already_scraped]
 
-            to_be_scraped = []
+            self.to_be_scraped = []
 
             for id in self.requested:
 
                 if id not in already_scraped:
-                    to_be_scraped.append(id)
+                    self.to_be_scraped.append(id)
+
+            random.shuffle(self.to_be_scraped)
 
     def generate_assignments(self):
 
-        self.assignment_list = []
+        num_to_be_scraped = len(self.to_be_scraped)
+        num_assignments = math.ceil(num_to_be_scraped/assignment_size)
+
+        self.assignment_list = [num for num in range(0, num_assignments - 1)]
+        self.assignment_dict = {}
+
+        for assignment in self.assignment_list:
+            assignment_ids = self.assignment_list[assignment: assignment + assignment_size]
+            self.assignment_dict[assignment] = assignment_ids  
 
     def give_assignment(self):
 
@@ -80,7 +91,12 @@ class Boss():
         else:
             assignment = None
 
-        return assignment
+        if assignment:
+            assignment_ids = assignment_dict.get(assignment)
+        else:
+            assignment_ids = None
+
+        return assignment, assignment_ids
 
     def complete_assignment(self, assignment):
 
