@@ -115,6 +115,26 @@ class Boss():
         except ValueError:
             pass
 
+    def open_log_file(self):
+
+        self.datafile = open(self.log_file_name, "a")
+
+    def add_headers_to_log_file(self):
+
+        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
+
+    def prepare_log_file(self):
+
+        if self.is_csv():
+            self.open_log_file()
+
+        else:
+
+            self.open_log_file()
+            self.add_headers_to_log_file()
+
+        print("Log File Ready")
+
     def input_data(self, assignment_key, data_nodes):
 
         for node in data_nodes:
@@ -137,6 +157,10 @@ class Review_Boss(Boss):
     def log_data_point(self, data_node):
         pass
 
+def add_headers_to_log_file(self):
+
+    self.datafile.write("ID,is_URL_valid,review_publication_date,book_title,book_id,rating,reviewer_href,started_reading_date,finished_reading_date,shelved_date,log_time")
+
 class Book_Boss(Boss):
 
     def __init__(self, assignment_size, file_name):
@@ -147,6 +171,10 @@ class Book_Boss(Boss):
 
     def log_data_point(self, data_node):
         pass
+
+    def add_headers_to_log_file(self):
+
+        self.datafile.write("book_id,author,language,num_reviews,num_ratings,avg_rating,isbn13,editions_url,publication_date,first_publication_date,series,log_time")
 
 class Minion():
 
