@@ -10,7 +10,6 @@ import math
 #import classes
 
 from parser_script import Review_Parser
-
 from scraper_script import Scraper
 from data_collection_script import Review_Detail_Data_Collector
 
@@ -29,15 +28,27 @@ class Review():
         self.shelved_date = shelved_date
 
     def get_data(self):
-        review_data = "{},{},{},{},{},{},{},{},{},{}".format(str(self.id), self.is_valid, self.current_date, self.book_title, self.book_id, self.rating, self.reviewer_href, self.start_date, self.finished_date, self.shelved_date)
+        data = "{},{},{},{},{},{},{},{},{},{}".format(str(self.id), self.is_valid, self.current_date, self.book_title, self.book_id, self.rating, self.reviewer_href, self.start_date, self.finished_date, self.shelved_date)
+        return data
 
 class Book():
 
-    def __init__(self):
-        pass
+    def __init__(self, book_id, author, language, num_reviews, num_ratings, avg_rating, isbn13, editions_url,publication_date,first_publication_date,series,log_time):
+        self.id = book_id
+        self.author = author
+        self.language = language
+        self.num_reviews = num_reviews
+        self.num_ratings = num_ratings
+        self.avg_rating = avg_rating
+        self.isbn13 = isbn13
+        self.editions_url = editions_url
+        self.publication_date = publication_date
+        self.first_publication_date = first_publication_date
+        self.series = series
 
     def get_data(self):
-        pass
+        data = "{},{},{},{},{},{},{},{},{},{},{}".format(self.id, self.author, self.language, self.num_reviews, self.num_ratings, self.avg_rating, self.isbn13, self.editions_url, self.publication_date, self.first_publication_date, self.series)
+        return data 
 
 class Boss():
 
