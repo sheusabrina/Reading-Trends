@@ -110,21 +110,23 @@ class Boss():
 
         return assignment_key, assignment_ids
 
-    def input_data(self, assignment_key, data_nodes):
-
-        assignment_key = assignment_key
-        data_nodes = data_nodes
-
     def complete_assignment(self, assignment_key):
 
         try:
-            self.assignment_key_list.remove(assignment)
+            self.assignment_key_list.remove(assignment_key)
 
         except ValueError:
             pass
 
-    def log_data(self):
-        pass
+    def input_data(self, assignment_key, data_nodes):
+
+        for node in data_nodes:
+            log_data_point(data_node)
+
+        self.complete_assignment(assignment_key)
+
+    def log_data_point(self, data_node):
+
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
 class Review_Boss(Boss):
@@ -132,10 +134,16 @@ class Review_Boss(Boss):
     def input_scrape_request(self, min_id, max_id):
         self.requested = range(min_id, max_id)
 
+    def log_data_point(self, data_node):
+        pass 
+
 class Book_Boss(Boss):
 
     def input_scrape_request(self, book_list):
         self.requested = book_id_list
+
+    def log_data_point(self, data_node):
+        pass
 
 class Minion():
 
