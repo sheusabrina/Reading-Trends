@@ -44,9 +44,11 @@ class Boss():
     def __init__(self, assignment_size, file_name, boss_type):
 
         if boss_type == "book":
+            self.data_type = "Books"
             id_column_name = "book_id"
 
         elif boss_type == "review":
+            self.data_type = "Reviews"
             id_column_name = "ID"
 
         self.assignment_size = assignment_size
@@ -92,6 +94,9 @@ class Boss():
             return
 
         random.shuffle(self.to_be_scraped)
+
+        self.num_points_to_be_scraped = len(self.to_be_scraped)
+        self.num_points_scraped = 0
 
     def generate_assignments(self):
 
@@ -155,7 +160,10 @@ class Boss():
         for node in data_nodes:
             log_data_point(data_node)
 
+        self.datafile.close()
         self.complete_assignment(assignment_key)
+
+        self.num_points_scraped += len(data_nodes)
 
     def log_data_point(self, data_node):
         data = data_node.get_data()
@@ -168,6 +176,19 @@ class Boss():
 
         except ValueError:
             pass
+
+## PROGRESS METHODS
+
+    def generate_datetime(self):
+
+        now = datetime.now()
+        self.now_string = now.strftime("%m/%d/%Y %H:%M:%S")
+
+    def print_progress(self):
+        percent_complete = round(100 * self.num_points_scraped / self.num_points_to_be_scraped, 2)
+        percent_complete_string = str(self.percent_complete)
+
+        print("{} / {} {} Collected ({}% Complete) at {}". format(str(self.num_points_scraped), str(self.num_points_to_be_scraped), self.data_type, percent_complete_string, self.now_string))
 
 class Review_Boss(Boss):
 
