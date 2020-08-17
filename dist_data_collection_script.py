@@ -165,6 +165,7 @@ class Boss():
         self.complete_assignment(assignment_key)
 
         self.num_points_scraped += len(data_nodes)
+        self.print_progress()
 
     def log_data_point(self, data_node):
         data = data_node.get_data()
