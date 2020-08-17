@@ -145,14 +145,14 @@ class Boss():
     def prepare_log_file(self):
 
         if self.is_csv():
-            self.open_log_file()
+            pass
 
         else:
 
             self.open_log_file()
             self.add_headers_to_log_file()
+            self.datafile.close()
 
-        self.datafile.close()
         print("Log File Ready")
 
     def open_log_file(self):
