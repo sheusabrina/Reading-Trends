@@ -40,9 +40,6 @@ class Boss():
         elif boss_type == "review":
             id_column_name = "ID"
 
-        else:
-            return "Error: Invalid Boss Type"
-
         self.assignment_size = assignment_size
         self.log_file_name = "databases/"+ file_name + ".csv"
 
@@ -131,6 +128,9 @@ class Boss():
 
 class Review_Boss(Boss):
 
+    def __init__(self, assignment_size, file_name):
+        super().__init__(assignment_size, file_name, "review")
+
     def input_scrape_request(self, min_id, max_id):
         self.requested = range(min_id, max_id)
 
@@ -138,6 +138,9 @@ class Review_Boss(Boss):
         pass
 
 class Book_Boss(Boss):
+
+    def __init__(self, assignment_size, file_name):
+        super().__init__(assignment_size, file_name, "book")
 
     def input_scrape_request(self, book_list):
         self.requested = book_id_list
@@ -245,6 +248,9 @@ class Minion():
 
 class Review_Minion(Minion):
 
+    def __init__(self, boss, max_sleep_time):
+        super().__init__(boss, max_sleep_time, "review")
+
     def parse(self):
 
         self.is_current_valid = self.parser.review_soup_is_valid(self.current_soup)
@@ -277,4 +283,5 @@ class Review_Minion(Minion):
 
 class Book_Minion(Minion):
 
-    pass
+    def __init__(self, boss, max_sleep_time):
+        super().__init__(boss, max_sleep_time, "book")
