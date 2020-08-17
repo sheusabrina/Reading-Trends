@@ -151,9 +151,11 @@ class Minion():
 
         if minion_type == "book":
             self.base_url = "https://www.goodreads.com/book/show/"
+            self.parser = Book_Parser()
 
         if minion_type == "review":
             self.base_url = "https://www.goodreads.com/review/show/"
+            self.parser = Review_Parser()
 
         else:
             return "Error: Invalid Minion Type"
@@ -202,7 +204,6 @@ class Minion():
 
                 print("Too Many Invalid Requests Recieved. Terminating Data Collection.")
                 sys.exit()
-
 
     def log_data(self):
         self.collected_data.append(self.current_data_node)
