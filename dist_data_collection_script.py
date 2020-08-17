@@ -387,3 +387,9 @@ class Book_Minion(Minion):
 
     def __init__(self, boss, max_sleep_time):
         super().__init__(boss, max_sleep_time, "book")
+
+    def parse(self):
+        pass
+
+    def generate_data_node(self):
+        pass
