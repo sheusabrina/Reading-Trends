@@ -16,7 +16,7 @@ from data_collection_script import Review_Detail_Data_Collector
 
 class Review():
 
-    def __init__(id, is_valid, date, book_title, book_id, rating, reviewer_href, start_date, finished_date, shelved_date):
+    def __init__(self, id, is_valid, date, book_title, book_id, rating, reviewer_href, start_date, finished_date, shelved_date):
         self.id = review_id
         self.is_valid = is_valid
         self.date = date
@@ -32,7 +32,12 @@ class Review():
         review_data = "{},{},{},{},{},{},{},{},{},{}".format(str(self.id), self.is_valid, self.current_date, self.book_title, self.book_id, self.rating, self.reviewer_href, self.start_date, self.finished_date, self.shelved_date)
 
 class Book():
-    pass
+
+    def __init__(self):
+        pass
+
+    def get_data(self):
+        pass
 
 class Boss():
 
@@ -153,8 +158,8 @@ class Boss():
         self.complete_assignment(assignment_key)
 
     def log_data_point(self, data_node):
-
-        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
+        data = data_node.get_data()
+        self.datafile.write("\n{}".format(data))
 
 class Review_Boss(Boss):
 
@@ -163,9 +168,6 @@ class Review_Boss(Boss):
 
     def input_scrape_request(self, min_id, max_id):
         self.requested = range(min_id, max_id)
-
-    def log_data_point(self, data_node):
-        pass
 
 def add_headers_to_log_file(self):
 
@@ -178,9 +180,6 @@ class Book_Boss(Boss):
 
     def input_scrape_request(self, book_list):
         self.requested = book_id_list
-
-    def log_data_point(self, data_node):
-        pass
 
     def add_headers_to_log_file(self):
 
