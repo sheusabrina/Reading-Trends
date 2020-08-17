@@ -114,8 +114,8 @@ class Boss():
 
     def generate_assignments(self):
 
-        num_to_be_scraped = len(self.to_be_scraped)
-        num_assignments = math.ceil(num_to_be_scraped/assignment_size)
+        num_assignments = math.ceil(self.num_points_to_be_scraped/assignment_size)
+
 
         self.outstanding_assignment_key_list = [num for num in range(0, num_assignments - 1)]
         self.assignment_dict = {}
