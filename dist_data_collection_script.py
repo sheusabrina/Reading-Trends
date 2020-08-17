@@ -14,6 +14,14 @@ from parser_script import Review_Parser
 from parser_script import Book_Parser
 from scraper_script import Scraper
 
+##HOW TO USE IN DISTRIBUTED SYSTEM:
+    #HAVE ONE SCRIPT WITH BOSS (INIT, INPUT DATA, PREPARE)
+    #ALL OTHER SCRIPTS HAVE ONE MINION WHICH REFERENCES BOSS
+
+#REVIEW & BOOK ARE DATA STORAGE NODES:
+    #GLORIFIED DICTIONARY
+    #MAKE STRING STATEMENTS THAT ALIGN WITH CSV NEEDS
+
 class Review():
 
     def __init__(self, id, is_valid, date, book_title, book_id, rating, reviewer_href, start_date, finished_date, shelved_date):
@@ -51,9 +59,18 @@ class Book():
         data = "{},{},{},{},{},{},{},{},{},{},{}".format(self.id, self.author, self.language, self.num_reviews, self.num_ratings, self.avg_rating, self.isbn13, self.editions_url, self.publication_date, self.first_publication_date, self.series)
         return data
 
+#BOSS WITH REVIEW_BOSS AND BOOK_BOSS INHERITING
+#BOSS HANDLES:
+    #SETING SCOPE OF SCRAPE & SPLITTING IT INTO ASSIGNMENTS
+    #LOGGING DATA INTO CSV
+    #PRINTING PROGRESS
+    #NEED TO BUILD FUNCTIONALITY ERRORS TO BE PASSED FROM MINION TO BOSS FOR PRINTING
+
 class Boss():
 
-    def __init__(self, assignment_size, file_name, boss_type):
+    def __init__(self, assignment_size, file_name, boss_type): #INHERITED CLASSES WILL SET BOSS_TYPE
+
+        #DIFFERENTIATED NAMES
 
         if boss_type == "book":
             self.data_type = "Books"
@@ -63,7 +80,9 @@ class Boss():
             self.data_type = "Reviews"
             id_column_name = "ID"
 
-        self.assignment_size = assignment_size
+        #SHARED FIELDS
+
+        self.assignment_size = assignment_size #THIS IS ITEMS PER ASSIGNMENT
         self.log_file_name = "databases/"+ file_name + ".csv"
 
         print("Boss Initiated & Awaiting Input Data Request")
@@ -86,7 +105,7 @@ class Boss():
 
     def prepare_scope(self):
 
-        if self.is_csv():
+        if self.is_csv(): #IF WE HAVE A CSV, COMPARE REQUESTED DATA TO CSV DATA
 
             data_logged_at_start = pd.read_csv(self.log_file_name)
             already_scraped = self.data_logged_at_start[id_column_name].unique()
@@ -94,28 +113,31 @@ class Boss():
 
             self.to_be_scraped = []
 
-            for id in self.requested:
+            for id in self.requested: #IDS NOT IN CSV DATA ADDED TO TO_BE_SCRAPED LIST
 
                 if id not in already_scraped:
                     self.to_be_scraped.append(id)
 
-        else:
+        else: #IF WE DON'T HAVE A CSV, ALL REQUESTED DATA MUST BE SCRAPED
 
             self.to_be_scraped = self.requested
 
-        if not self.to_be_scraped:
-            print("All Requested Data Already In Log")
+        if not self.to_be_scraped: #IF WE ALREADY HAVE ALL THE DATA IN THE CSV
+            print("All Requested Data Has Already Been Collected ")
             return
 
-        random.shuffle(self.to_be_scraped)
+        random.shuffle(self.to_be_scraped) #RANDOMIZE ORDER OF TO_BE_SCRAPED SO THAT REQUESTS TO WEBSITE ARE NOT SEQUENTIAL
 
+        #COUNTERS
         self.num_points_to_be_scraped = len(self.to_be_scraped)
         self.num_points_scraped = 0
 
-    def generate_assignments(self):
+    def generate_assignments(self): #SPLITS DATA NEEDED INTO ASSIGNMENTS THAT CAN BE GIVEN TO MINIONS
 
         num_assignments = math.ceil(self.num_points_to_be_scraped/assignment_size)
 
+        #OUTSTANDING ASSIGNMENT KEY LIST WILL HOLD THE NAMES OF ASSIGNMENTS (THESE ARE JUST SEQUENTIAL NUMBERS)
+        #ASSIGNMENT DICT WILL HOLD THE LIST OF IDS ASSOCIATED WITH EACH ASSIGNMENT
 
         self.outstanding_assignment_key_list = [num for num in range(0, num_assignments - 1)]
         self.assignment_dict = {}
@@ -163,24 +185,30 @@ class Boss():
 
     def give_assignment(self):
 
+        #IF THERE ARE OUTSTANDING ASSIGNMENTS, SELECT THE FIRST ONE & MOVE IT TO THE END OF THE LIST
+
         if self.outstanding_assignment_key_list:
             assignment_key = assignment_key_list[0]
             self.outstanding_assignment_key_list = assignment_key_list[1:]
             self.outstanding_assignment_key_list.append(assignment)
 
-        else:
+        else: #IF THERE ARE NO OUTSTANDING ASSIGNMENTS, SELECT NONE (NONE TRIGGERS A SHUTDOWN FOR MINION)
             assignment_key = None
 
+        #GET ID LIST FOR RELEVANT ASSIGNMENT
         if assignment_key:
             assignment_ids = assignment_dict.get(assignment)
         else:
             assignment_ids = None
 
+        #GIVE KEY AND ASSIGNMENT ID TO MINION
         return assignment_key, assignment_ids
 
 #LOG DATA METHODS
 
     def input_data(self, assignment_key, data_nodes):
+
+        #LOG THE DATA
 
         self.open_log_file()
         self.generate_datetime()
@@ -189,7 +217,11 @@ class Boss():
             log_data_point(data_node)
 
         self.datafile.close()
+
+        #MARK ASSIGNMENTS AS COMPLETE
         self.complete_assignment(assignment_key)
+
+        #UPDATE COUNTERS & PRINT PROGRESS
 
         self.num_points_scraped += len(data_nodes)
         self.print_progress()
@@ -199,12 +231,12 @@ class Boss():
 
         self.datafile.write("\n{},{}".format(data, self.now_string))
 
-    def complete_assignment(self, assignment_key):
+    def complete_assignment(self, assignment_key): #REMOVE ASSIGNMENT FROM OUTSTANDING LIST
 
         try:
             self.outstanding_assignment_key_list.remove(assignment_key)
 
-        except ValueError:
+        except ValueError: #AT THE END OF THE PROCESS, MULTIPLE MINIONS MAY HAVE BEEN GIVEN THE SAME ASSIGNMENT
             pass
 
 ## PROGRESS METHODS
@@ -248,9 +280,17 @@ class Book_Boss(Boss):
 
         self.datafile.write("book_id,author,language,num_reviews,num_ratings,avg_rating,isbn13,editions_url,publication_date,first_publication_date,series,log_time")
 
+#MINION WITH REVIEW_MINION AND BOOK_MINION INHERITING
+#MINION HANDLES:
+    #SCRAPING & PARSING
+    #CREATING BOOK & REVIEW NODES
+    #SLEEP BETWEEN REQUESTS & AFTER RECIEVING UNPOPULATED DATA
+
 class Minion():
 
-    def __init__(self, boss, max_sleep_time, minion_type):
+    def __init__(self, boss, max_sleep_time, minion_type): #INHERITED CLASSES WILL SET MINION TYPE
+
+        #DIFFERENTIATED NAMES & PARSERS
 
         if minion_type == "book":
             self.base_url = "https://www.goodreads.com/book/show/"
@@ -260,8 +300,7 @@ class Minion():
             self.base_url = "https://www.goodreads.com/review/show/"
             self.parser = Review_Parser()
 
-        else:
-            return "Error: Invalid Minion Type"
+        #SHARED FIELDS
 
         self.boss = boss
         self.scraper = Scraper()
@@ -288,6 +327,11 @@ class Minion():
 
         self.current_soup = self.parser.html_to_soup(self.current_webpage_as_string)
 
+        if self.parser.is_soup_populated(self.current_soup): #IF THE SOUP IS POPULATED, WE'RE ALL SET
+            return
+
+        #IF THE SOUP ISN'T POPULATED, WAIT INCREASING PERIODS BETWEEN RETRIES
+
         invalid_count = 0
 
         while self.parser.is_soup_populated(self.current_soup) == False:
@@ -305,12 +349,12 @@ class Minion():
 
                 invalid_count += 1
 
-            else:
+            else: #AT THE POINT WHERE IT'S TEN MINUTES BETWEEN REQUESTS, JUST TERMINATE
 
                 #print("Too Many Invalid Requests Recieved. Terminating Data Collection.")
                 sys.exit()
 
-    def log_data(self):
+    def log_data(self): #MINION KEEPS DATA AS A LIST OF NODES
         self.collected_data.append(self.current_data_node)
 
     def sleep(self, max_sleep_time = None):
@@ -325,9 +369,9 @@ class Minion():
     def transmit_data_to_boss(self):
 
         self.boss.input_data(self.assignment_key, self.collected_data)
-        self.collected_data = []
+        self.collected_data = [] #ONCE DATA IS TRANSMITTED, CLEAR OUT LIST
 
-    def collect_assigned_data(self):
+    def collect_assigned_data(self): #COLLECTING DATA FOR A SINGLE ASSIGNMENT
 
         for id in self.assignment_ids:
             self.current_id = id
@@ -338,7 +382,7 @@ class Minion():
             self.log_data()
             self.sleep()
 
-    def data_collection_loop(self):
+    def data_collection_loop(self): #REQUESTING NEW ASSIGNMENTS & TRANSMITTING DATA
         self.request_assigment()
 
         while self.assignment_key():
@@ -346,7 +390,7 @@ class Minion():
             self.transmit_data_to_boss()
             self.request_assignment()
 
-        sys.exit()
+        sys.exit() #TERMINATE SCRIPT AFTER NEW ASSIGNMENTS STOP COMING IN
 
 class Review_Minion(Minion):
 
