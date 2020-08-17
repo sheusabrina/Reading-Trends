@@ -16,8 +16,9 @@ from data_collection_script import Review_Detail_Data_Collector
 
 class Review():
 
-    def __init__(id, date, book_title, book_id, rating, reviewer_href, start_date, finished_date, shelved_date):
+    def __init__(id, is_valid, date, book_title, book_id, rating, reviewer_href, start_date, finished_date, shelved_date):
         self.id = review_id
+        self.is_valid = is_valid
         self.date = date
         self.book_title = book_title
         self.book_id = book_id
@@ -26,6 +27,9 @@ class Review():
         self.start_date = start_date
         self.finished_date = finished_date
         self.shelved_date = shelved_date
+
+    def get_data(self):
+        review_data = "{},{},{},{},{},{},{},{},{},{}".format(str(self.id), self.is_valid, self.current_date, self.book_title, self.book_id, self.rating, self.reviewer_href, self.start_date, self.finished_date, self.shelved_date)
 
 class Book():
     pass
@@ -75,6 +79,10 @@ class Boss():
         else:
 
             self.to_be_scraped = self.requested
+
+        if not self.to_be_scraped:
+            print("All Requested Data Already In Log")
+            return
 
         random.shuffle(self.to_be_scraped)
 
@@ -136,6 +144,8 @@ class Boss():
         print("Log File Ready")
 
     def input_data(self, assignment_key, data_nodes):
+
+        self.open_log_file()
 
         for node in data_nodes:
             log_data_point(data_node)
@@ -307,7 +317,7 @@ class Review_Minion(Minion):
 
     def generate_data_node(self):
 
-        self.current_data_node = Review(self.current_id, self.current_date, self.current_book_title, self.current_book_id, self.current_rating, self.current_reviewer_href, self.current_start_date, self.current_finished_date, self.current_shelved_date)
+        self.current_data_node = Review(self.current_id, self.is_current_valid, self.current_date, self.current_book_title, self.current_book_id, self.current_rating, self.current_reviewer_href, self.current_start_date, self.current_finished_date, self.current_shelved_date)
 
 class Book_Minion(Minion):
 
