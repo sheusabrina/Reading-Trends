@@ -58,7 +58,7 @@ class Boss():
         return is_csv
 
     def input_scrape_request(self):
-        "This method will be overwritten"
+        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
     def prepare_scope(self):
 
@@ -125,6 +125,7 @@ class Boss():
 
     def log_data(self):
         pass
+        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
 class Review_Boss(Boss):
 
@@ -159,10 +160,10 @@ class Minion():
         self.current_url = self.base_url + str(self.current_id)
 
     def parse(self):
-        "This method should be overwritten "
+        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
     def generate_data_node(self):
-        "This method should be overwritten"
+        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
     def log_data(self):
         self.collected_data.append(self.current_data_node)
