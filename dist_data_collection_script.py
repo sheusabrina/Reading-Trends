@@ -48,7 +48,7 @@ class Book():
 
     def get_data(self):
         data = "{},{},{},{},{},{},{},{},{},{},{}".format(self.id, self.author, self.language, self.num_reviews, self.num_ratings, self.avg_rating, self.isbn13, self.editions_url, self.publication_date, self.first_publication_date, self.series)
-        return data 
+        return data
 
 class Boss():
 
@@ -65,6 +65,8 @@ class Boss():
         self.assignment_size = assignment_size
         self.log_file_name = "databases/"+ file_name + ".csv"
 
+        print("Boss Initiated & Awaiting Input Data Request")
+
 #PREPARATION METHODS
 
     def is_csv(self):
@@ -78,7 +80,7 @@ class Boss():
 
         return is_csv
 
-    def input_scrape_request(self):
+    def input_data_request(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
     def prepare_scope(self):
@@ -121,6 +123,18 @@ class Boss():
             assignment_ids = self.outstanding_assignment_key_list[assignment: assignment + assignment_size]
             self.assignment_dict[assignment] = assignment_ids
 
+    def prepare_for_minions(self):
+
+        if not self.requested:
+            print("Boss Requires Data Request Prior to Preparing for Minions")
+            return
+
+        self.prepare_scope()
+        self.prepare_log_file()
+        self.generate_assignments()
+
+        print("Boss is Ready to Recieve Requests from Minions")
+
 #PREPARING LOG FILE METHODS
 
     def add_headers_to_log_file(self):
@@ -137,6 +151,7 @@ class Boss():
             self.open_log_file()
             self.add_headers_to_log_file()
 
+        self.datafile.close()
         print("Log File Ready")
 
     def open_log_file(self):
@@ -209,8 +224,10 @@ class Review_Boss(Boss):
     def __init__(self, assignment_size, file_name):
         super().__init__(assignment_size, file_name, "review")
 
-    def input_scrape_request(self, min_id, max_id):
+    def input_data_request(self, min_id, max_id):
         self.requested = range(min_id, max_id)
+
+        print("Boss Recieved Data Request & Ready to Prepare for Minions")
 
     def add_headers_to_log_file(self):
 
@@ -221,8 +238,10 @@ class Book_Boss(Boss):
     def __init__(self, assignment_size, file_name):
         super().__init__(assignment_size, file_name, "book")
 
-    def input_scrape_request(self, book_list):
+    def input_data_request(self, book_list):
         self.requested = book_id_list
+
+        print("Boss Recieved Data Request & Ready to Prepare for Minions")
 
     def add_headers_to_log_file(self):
 
@@ -325,6 +344,8 @@ class Minion():
             self.collect_assigned_data()
             self.transmit_data_to_boss()
             self.request_assignment()
+
+        sys.exit()
 
 class Review_Minion(Minion):
 
