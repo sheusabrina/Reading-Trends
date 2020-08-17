@@ -133,5 +133,87 @@ class Book_Boss(Boss):
 
 class Minion():
 
+    def __init__(self, boss, minion_type):
+
+        if minion_type == "book":
+            self.base_url = "https://www.goodreads.com/book/show/"
+
+        if minion_type == "review":
+            self.base_url = "https://www.goodreads.com/review/show/"
+
+        else:
+            return "Error: Invalid Minion Type"
+
+        self.boss = boss
+        self.collected_data = []
+
     def request_assignment(self):
-        pass
+        self.assignment_key, self.assignment_ids = self.boss.give_assignment()
+
+    def generate_current_url(self):
+        self.current_url = self.base_url + str(self.current_id)
+
+    def parse(self):
+        "This method should be overwritten "
+
+    def generate_data_node(self):
+        "This method should be overwritten"
+
+    def log_data(self):
+        self.collected_data.append(self.current_data_node)
+
+    def transmit_data_to_boss(self):
+
+        self.collected_data = []
+
+    def collect_assigned_data(self):
+
+        for id in self.assignment_ids:
+            self.current_id = id
+            self.generate_current_url()
+            self.parse()
+            self.log_data()
+
+    def data_collection_loop(self):
+        self.request_assigment()
+
+        while self.assignment_key():
+            self.collect_assigned_data()
+            self.transmit_data_to_boss()
+            self.request_assignment()
+
+class Review_Minion(Minion):
+
+    def parse(self):
+
+        self.is_current_valid = self.parser.review_soup_is_valid(self.current_soup)
+
+        if self.is_current_valid:
+            self.current_date = self.parser.review_soup_to_date(self.current_soup)
+            self.current_book_title = self.parser.review_soup_to_book_title(self.current_soup)
+            self.current_book_id = self.parser.review_soup_to_book_id(self.current_soup)
+            self.current_rating = self.parser.review_soup_to_rating(self.current_soup)
+            self.current_reviewer_href = self.parser.review_soup_to_reviewer_href(self.current_soup)
+
+            self.current_progress_dict = self.parser.review_soup_to_progress_dict(self.current_soup)
+            self.current_start_date = self.parser.progress_dict_to_start_date(self.current_progress_dict)
+            self.current_finished_date = self.parser.progress_dict_to_finish_date(self.current_progress_dict)
+            self.current_shelved_date = self.parser.progress_dict_to_shelved_date(self.current_progress_dict)
+
+        else:
+            self.current_date = None
+            self.current_book_title = None
+            self.current_book_id = None
+            self.current_rating = None
+            self.current_reviewer_href = None
+            self.current_start_date = None
+            self.current_finished_date = None
+            self.current_shelved_date = None
+
+    def generate_data_node(self):
+
+        self.current_data_node = Review(self.current_id, self.current_date, self.current_book_title, self.current_book_id, self.current_rating, self.current_reviewer_href, self.current_start_date, self.current_finished_date, self.current_shelved_date)
+
+class Book_Minion(Minion):
+
+    pass
