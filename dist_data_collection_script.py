@@ -103,11 +103,11 @@ class Boss():
         num_to_be_scraped = len(self.to_be_scraped)
         num_assignments = math.ceil(num_to_be_scraped/assignment_size)
 
-        self.assignment_key_list = [num for num in range(0, num_assignments - 1)]
+        self.outstanding_assignment_key_list = [num for num in range(0, num_assignments - 1)]
         self.assignment_dict = {}
 
-        for assignment in self.assignment_key_list:
-            assignment_ids = self.assignment_key_list[assignment: assignment + assignment_size]
+        for assignment in self.outstanding_assignment_key_list:
+            assignment_ids = self.outstanding_assignment_key_list[assignment: assignment + assignment_size]
             self.assignment_dict[assignment] = assignment_ids
 
 #PREPARING LOG FILE METHODS
@@ -136,10 +136,10 @@ class Boss():
 
     def give_assignment(self):
 
-        if self.assignment_key_list:
+        if self.outstanding_assignment_key_list:
             assignment_key = assignment_key_list[0]
-            self.assignment_key_list = assignment_key_list[1:]
-            self.assignment_key_list.append(assignment)
+            self.outstanding_assignment_key_list = assignment_key_list[1:]
+            self.outstanding_assignment_key_list.append(assignment)
 
         else:
             assignment_key = None
@@ -174,7 +174,7 @@ class Boss():
     def complete_assignment(self, assignment_key):
 
         try:
-            self.assignment_key_list.remove(assignment_key)
+            self.outstanding_assignment_key_list.remove(assignment_key)
 
         except ValueError:
             pass
