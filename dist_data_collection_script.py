@@ -147,7 +147,7 @@ class Book_Boss(Boss):
 
 class Minion():
 
-    def __init__(self, boss, minion_type):
+    def __init__(self, boss, max_sleep_time, minion_type):
 
         if minion_type == "book":
             self.base_url = "https://www.goodreads.com/book/show/"
@@ -161,6 +161,8 @@ class Minion():
             return "Error: Invalid Minion Type"
 
         self.boss = boss
+        self.scraper = Scraper()
+        self.max_sleep_time = max_sleep_time
         self.collected_data = []
 
     def request_assignment(self):
@@ -208,6 +210,15 @@ class Minion():
     def log_data(self):
         self.collected_data.append(self.current_data_node)
 
+    def sleep(self, max_sleep_time = None):
+
+        if max_sleep_time:
+            sleeptime = max_sleep_time
+        else:
+            sleeptime = self.max_sleep_time
+
+        self.scraper.sleep(sleeptime)
+
     def transmit_data_to_boss(self):
 
         self.boss.input_data(self.assignment_key, self.collected_data)
@@ -222,6 +233,7 @@ class Minion():
             self.generate_soup()
             self.parse()
             self.log_data()
+            self.sleep()
 
     def data_collection_loop(self):
         self.request_assigment()
