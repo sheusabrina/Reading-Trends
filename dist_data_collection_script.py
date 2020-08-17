@@ -32,7 +32,7 @@ class Book():
 
 class Boss():
 
-    def __init__(self, boss_type, assignment_size, file_name):
+    def __init__(self, assignment_size, file_name, boss_type):
 
         if boss_type == "book":
             id_column_name = "book_id"
@@ -74,7 +74,7 @@ class Boss():
 
                 if id not in already_scraped:
                     self.to_be_scraped.append(id)
-                    
+
         else:
 
             self.to_be_scraped = self.requested
@@ -86,34 +86,39 @@ class Boss():
         num_to_be_scraped = len(self.to_be_scraped)
         num_assignments = math.ceil(num_to_be_scraped/assignment_size)
 
-        self.assignment_list = [num for num in range(0, num_assignments - 1)]
+        self.assignment_key_list = [num for num in range(0, num_assignments - 1)]
         self.assignment_dict = {}
 
-        for assignment in self.assignment_list:
-            assignment_ids = self.assignment_list[assignment: assignment + assignment_size]
+        for assignment in self.assignment_key_list:
+            assignment_ids = self.assignment_key_list[assignment: assignment + assignment_size]
             self.assignment_dict[assignment] = assignment_ids
 
     def give_assignment(self):
 
-        if self.assignment_list:
-            assignment = assignment_list[0]
-            self.assignment_list = assignment_list[1:]
-            self.assignment_list.append(assignment)
+        if self.assignment_key_list:
+            assignment_key = assignment_key_list[0]
+            self.assignment_key_list = assignment_key_list[1:]
+            self.assignment_key_list.append(assignment)
 
         else:
-            assignment = None
+            assignment_key = None
 
-        if assignment:
+        if assignment_key:
             assignment_ids = assignment_dict.get(assignment)
         else:
             assignment_ids = None
 
-        return assignment, assignment_ids
+        return assignment_key, assignment_ids
 
-    def complete_assignment(self, assignment):
+    def input_data(self, assignment_key, data_nodes):
+
+        assignment_key = assignment_key
+        data_nodes = data_nodes 
+
+    def complete_assignment(self, assignment_key):
 
         try:
-            self.assignment_list.remove(assignment)
+            self.assignment_key_list.remove(assignment)
 
         except ValueError:
             pass
