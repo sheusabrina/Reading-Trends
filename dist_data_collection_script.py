@@ -156,6 +156,7 @@ class Boss():
     def input_data(self, assignment_key, data_nodes):
 
         self.open_log_file()
+        self.generate_datetime()
 
         for node in data_nodes:
             log_data_point(data_node)
@@ -167,7 +168,8 @@ class Boss():
 
     def log_data_point(self, data_node):
         data = data_node.get_data()
-        self.datafile.write("\n{}".format(data))
+
+        self.datafile.write("\n{},{}".format(data, self.now_string))
 
     def complete_assignment(self, assignment_key):
 
