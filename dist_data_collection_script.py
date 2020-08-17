@@ -433,7 +433,17 @@ class Book_Minion(Minion):
         super().__init__(boss, max_sleep_time, "book")
 
     def parse(self):
-        pass
+        self.current_author = self.parser.book_soup_to_author(self.current_soup)
+        self.current_language = self.parser.book_soup_to_language(self.current_soup)
+        self.current_num_reviews = self.parser.book_soup_to_num_reviews(self.current_soup)
+        self.current_num_ratings = self.parser.book_soup_to_num_ratings(self.current_soup)
+        self.current_avg_rating = self.parser.book_soup_to_avg_rating(self.current_soup)
+        self.current_isbn13 = self.parser.book_soup_to_isbn13(self.current_soup)
+        self.current_editions_href = self.parser.book_soup_to_editions_href(self.current_soup)
+        self.current_publication_date = self.parser.book_soup_to_publication_date(self.current_soup)
+        self.current_first_publication_date = self.parser.book_soup_to_first_publication_date(self.current_soup)
+        self.current_series = self.parser.book_soup_to_series(self.current_soup)
 
     def generate_data_node(self):
-        pass
+
+        self.current_data_node = Book(self.current_id, self.current_author, self.current_language, self.current_num_reviews, self.current_num_ratings, self.current_avg_rating, self.current_isbn13, self.current_editions_href, self.current_publication_date, self.current_first_publication_date, self.current_series)
