@@ -113,7 +113,7 @@ class Boss():
     def input_data(self, assignment_key, data_nodes):
 
         assignment_key = assignment_key
-        data_nodes = data_nodes 
+        data_nodes = data_nodes
 
     def complete_assignment(self, assignment_key):
 
@@ -169,6 +169,7 @@ class Minion():
 
     def transmit_data_to_boss(self):
 
+        self.boss.input_data(self.assignment_key, self.collected_data)
         self.collected_data = []
 
     def collect_assigned_data(self):
