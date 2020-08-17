@@ -52,6 +52,8 @@ class Boss():
         self.assignment_size = assignment_size
         self.log_file_name = "databases/"+ file_name + ".csv"
 
+#PREPARATION METHODS
+
     def is_csv(self):
 
         try:
@@ -103,34 +105,7 @@ class Boss():
             assignment_ids = self.assignment_key_list[assignment: assignment + assignment_size]
             self.assignment_dict[assignment] = assignment_ids
 
-    def give_assignment(self):
-
-        if self.assignment_key_list:
-            assignment_key = assignment_key_list[0]
-            self.assignment_key_list = assignment_key_list[1:]
-            self.assignment_key_list.append(assignment)
-
-        else:
-            assignment_key = None
-
-        if assignment_key:
-            assignment_ids = assignment_dict.get(assignment)
-        else:
-            assignment_ids = None
-
-        return assignment_key, assignment_ids
-
-    def complete_assignment(self, assignment_key):
-
-        try:
-            self.assignment_key_list.remove(assignment_key)
-
-        except ValueError:
-            pass
-
-    def open_log_file(self):
-
-        self.datafile = open(self.log_file_name, "a")
+#PREPARING LOG FILE METHODS
 
     def add_headers_to_log_file(self):
 
@@ -148,6 +123,31 @@ class Boss():
 
         print("Log File Ready")
 
+    def open_log_file(self):
+
+        self.datafile = open(self.log_file_name, "a")
+
+#COMMUNICATE WITH MINIONS METHODS
+
+    def give_assignment(self):
+
+        if self.assignment_key_list:
+            assignment_key = assignment_key_list[0]
+            self.assignment_key_list = assignment_key_list[1:]
+            self.assignment_key_list.append(assignment)
+
+        else:
+            assignment_key = None
+
+        if assignment_key:
+            assignment_ids = assignment_dict.get(assignment)
+        else:
+            assignment_ids = None
+
+        return assignment_key, assignment_ids
+
+#LOG DATA METHODS
+
     def input_data(self, assignment_key, data_nodes):
 
         self.open_log_file()
@@ -161,6 +161,14 @@ class Boss():
         data = data_node.get_data()
         self.datafile.write("\n{}".format(data))
 
+    def complete_assignment(self, assignment_key):
+
+        try:
+            self.assignment_key_list.remove(assignment_key)
+
+        except ValueError:
+            pass
+
 class Review_Boss(Boss):
 
     def __init__(self, assignment_size, file_name):
@@ -169,9 +177,9 @@ class Review_Boss(Boss):
     def input_scrape_request(self, min_id, max_id):
         self.requested = range(min_id, max_id)
 
-def add_headers_to_log_file(self):
+    def add_headers_to_log_file(self):
 
-    self.datafile.write("ID,is_URL_valid,review_publication_date,book_title,book_id,rating,reviewer_href,started_reading_date,finished_reading_date,shelved_date,log_time")
+        self.datafile.write("ID,is_URL_valid,review_publication_date,book_title,book_id,rating,reviewer_href,started_reading_date,finished_reading_date,shelved_date,log_time")
 
 class Book_Boss(Boss):
 
