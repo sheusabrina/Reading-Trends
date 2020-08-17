@@ -6,13 +6,13 @@ import requests
 import random
 import pandas as pd
 import math
-import sys 
+import sys
 
 #import classes
 
 from parser_script import Review_Parser
+from parser_script import Book_Parser
 from scraper_script import Scraper
-from data_collection_script import Review_Detail_Data_Collector
 
 class Review():
 
