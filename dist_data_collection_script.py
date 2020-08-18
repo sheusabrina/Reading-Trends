@@ -134,7 +134,7 @@ class Boss():
 
     def generate_assignments(self): #SPLITS DATA NEEDED INTO ASSIGNMENTS THAT CAN BE GIVEN TO MINIONS
 
-        num_assignments = math.ceil(self.num_points_to_be_scraped/assignment_size)
+        num_assignments = math.ceil(self.num_points_to_be_scraped/self.assignment_size)
 
         #OUTSTANDING ASSIGNMENT KEY LIST WILL HOLD THE NAMES OF ASSIGNMENTS (THESE ARE JUST SEQUENTIAL NUMBERS)
         #ASSIGNMENT DICT WILL HOLD THE LIST OF IDS ASSOCIATED WITH EACH ASSIGNMENT
@@ -142,9 +142,9 @@ class Boss():
         self.outstanding_assignment_key_list = [num for num in range(0, num_assignments - 1)]
         self.assignment_dict = {}
 
-        for assignment in self.outstanding_assignment_key_list:
-            assignment_ids = self.outstanding_assignment_key_list[assignment: assignment + assignment_size]
-            self.assignment_dict[assignment] = assignment_ids
+        for assignment_key in self.outstanding_assignment_key_list:
+            assignment_ids = self.to_be_scraped[self.assignment_size * assignment_key : min(self.assignment_size * assignment_key + assignment_key, len(self.to_be_scraped))]
+            self.assignment_dict[assignment_key] = assignment_ids
 
     def prepare_for_minions(self):
 
