@@ -108,33 +108,33 @@ class Boss():
         if self.is_csv(): #IF WE HAVE A CSV, COMPARE REQUESTED DATA TO CSV DATA
 
             data_logged_at_start = pd.read_csv(self.log_file_name)
-            already_scraped = self.data_logged_at_start[id_column_name].unique()
-            already_scraped = [str(id) for id in self.already_scraped]
+            ids_in_data_log = self.data_logged_at_start[id_column_name].unique()
+            ids_in_data_log = [str(id) for id in ids_in_data_log]
 
-            self.to_be_scraped = []
+            self.ids_to_be_scraped = []
 
-            for id in self.requested: #IDS NOT IN CSV DATA ADDED TO TO_BE_SCRAPED LIST
+            for id in self.ids_requested: #IDS NOT IN CSV DATA ADDED TO TO_BE_SCRAPED LIST
 
-                if id not in already_scraped:
-                    self.to_be_scraped.append(id)
+                if id not in ids_in_data_log:
+                    self.ids_to_be_scraped.append(id)
 
         else: #IF WE DON'T HAVE A CSV, ALL REQUESTED DATA MUST BE SCRAPED
 
-            self.to_be_scraped = self.requested
+            self.ids_to_be_scraped = self.ids_requested
 
-        if not self.to_be_scraped: #IF WE ALREADY HAVE ALL THE DATA IN THE CSV
+        if not self.ids_to_be_scraped: #IF WE ALREADY HAVE ALL THE DATA IN THE CSV
             print("All Requested Data Has Already Been Collected ")
             return
 
-        random.shuffle(self.to_be_scraped) #RANDOMIZE ORDER OF TO_BE_SCRAPED SO THAT REQUESTS TO WEBSITE ARE NOT SEQUENTIAL
+        random.shuffle(self.ids_to_be_scraped) #RANDOMIZE ORDER OF TO_BE_SCRAPED SO THAT REQUESTS TO WEBSITE ARE NOT SEQUENTIAL
 
         #COUNTERS
-        self.num_points_to_be_scraped = len(self.to_be_scraped)
-        self.num_points_scraped = 0
+        self.num_ids_to_be_scraped = len(self.ids_to_be_scraped)
+        self.num_ids_scraped = 0
 
     def generate_assignments(self): #SPLITS DATA NEEDED INTO ASSIGNMENTS THAT CAN BE GIVEN TO MINIONS
 
-        num_assignments = math.ceil(self.num_points_to_be_scraped/self.assignment_size)
+        num_assignments = math.ceil(self.num_ids_to_be_scraped/self.assignment_size)
 
         #OUTSTANDING ASSIGNMENT KEY LIST WILL HOLD THE NAMES OF ASSIGNMENTS (THESE ARE JUST SEQUENTIAL NUMBERS)
         #ASSIGNMENT DICT WILL HOLD THE LIST OF IDS ASSOCIATED WITH EACH ASSIGNMENT
@@ -143,12 +143,12 @@ class Boss():
         self.assignment_dict = {}
 
         for assignment_key in self.outstanding_assignment_key_list:
-            assignment_ids = self.to_be_scraped[self.assignment_size * assignment_key : min(self.assignment_size * assignment_key + assignment_key, len(self.to_be_scraped))]
+            assignment_ids = self.ids_to_be_scraped[self.assignment_size * assignment_key : min(self.assignment_size * assignment_key + assignment_key, len(self.ids_to_be_scraped))]
             self.assignment_dict[assignment_key] = assignment_ids
 
     def prepare_for_minions(self):
 
-        if not self.requested:
+        if not self.ids_requested:
             print("Boss Requires Data Request Prior to Preparing for Minions")
             return
 
@@ -223,7 +223,7 @@ class Boss():
 
         #UPDATE COUNTERS & PRINT PROGRESS
 
-        self.num_points_scraped += len(data_nodes)
+        self.num_ids_scraped += len(data_nodes)
         self.print_progress()
 
     def log_data_point(self, data_node):
@@ -247,10 +247,10 @@ class Boss():
         self.now_string = now.strftime("%m/%d/%Y %H:%M:%S")
 
     def print_progress(self):
-        percent_complete = round(100 * self.num_points_scraped / self.num_points_to_be_scraped, 2)
+        percent_complete = round(100 * self.num_ids_scraped / self.num_ids_to_be_scraped, 2)
         percent_complete_string = str(self.percent_complete)
 
-        print("{} / {} {} Collected ({}% Complete) at {}". format(str(self.num_points_scraped), str(self.num_points_to_be_scraped), self.data_type, percent_complete_string, self.now_string))
+        print("{} / {} {} Collected ({}% Complete) at {}". format(str(self.num_ids_scraped), str(self.num_ids_to_be_scraped), self.data_type, percent_complete_string, self.now_string))
 
 class Review_Boss(Boss):
 
@@ -258,7 +258,7 @@ class Review_Boss(Boss):
         super().__init__(assignment_size, file_name, "review")
 
     def input_data_request(self, min_id, max_id):
-        self.requested = range(min_id, max_id)
+        self.ids_requested = range(min_id, max_id)
 
         print("Boss Recieved Data Request & Ready to Prepare for Minions")
 
@@ -272,7 +272,7 @@ class Book_Boss(Boss):
         super().__init__(assignment_size, file_name, "book")
 
     def input_data_request(self, book_list):
-        self.requested = book_id_list
+        self.ids_requested = book_id_list
 
         print("Boss Recieved Data Request & Ready to Prepare for Minions")
 
