@@ -254,6 +254,8 @@ class Boss():
         self.now_string = now.strftime("%m/%d/%Y %H:%M:%S")
 
     def print_progress(self):
+        self.generate_datetime()
+        
         percent_complete = round(100 * self.num_ids_scraped / self.num_ids_to_be_scraped, 2)
         percent_complete_string = str(self.percent_complete)
 
