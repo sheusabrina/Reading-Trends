@@ -121,6 +121,7 @@ class Boss():
         else: #IF WE DON'T HAVE A CSV, ALL REQUESTED DATA MUST BE SCRAPED
 
             self.ids_to_be_scraped = self.ids_requested
+            requested_ids_found = 0
 
         if not self.ids_to_be_scraped: #IF WE ALREADY HAVE ALL THE DATA IN THE CSV
             print("All Requested Data Has Already Been Collected ")
@@ -131,6 +132,12 @@ class Boss():
         #COUNTERS
         self.num_ids_to_be_scraped = len(self.ids_to_be_scraped)
         self.num_ids_scraped = 0
+
+        #COUNTS FOR PRINT STATEMENT
+        num_ids_requested = len(self.ids_requested)
+        requested_ids_found = num_ids_requested - self.num_ids_to_be_scraped
+
+        print("{found} of {requested} Requested {type} Found In Log. {outstanding} {type} Remaining".format(found = requested_ids_found, requested = num_ids_requested, type = self.data_type, outstanding = self.num_ids_to_be_scraped))
 
     def generate_assignments(self): #SPLITS DATA NEEDED INTO ASSIGNMENTS THAT CAN BE GIVEN TO MINIONS
 
@@ -250,7 +257,7 @@ class Boss():
         percent_complete = round(100 * self.num_ids_scraped / self.num_ids_to_be_scraped, 2)
         percent_complete_string = str(self.percent_complete)
 
-        print("{} / {} {} Collected ({}% Complete) at {}". format(str(self.num_ids_scraped), str(self.num_ids_to_be_scraped), self.data_type, percent_complete_string, self.now_string))
+        print("{} / {} {} Collected ({}% Complete) at {}".format(str(self.num_ids_scraped), str(self.num_ids_to_be_scraped), self.data_type, percent_complete_string, self.now_string))
 
 class Review_Boss(Boss):
 
