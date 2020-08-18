@@ -197,7 +197,7 @@ class Boss():
         if self.outstanding_assignment_key_list:
             assignment_key = assignment_key_list[0]
             self.outstanding_assignment_key_list = assignment_key_list[1:]
-            self.outstanding_assignment_key_list.append(assignment)
+            self.outstanding_assignment_key_list.append(assignment_key)
 
         else: #IF THERE ARE NO OUTSTANDING ASSIGNMENTS, SELECT NONE (NONE TRIGGERS A SHUTDOWN FOR MINION)
             assignment_key = None
@@ -255,7 +255,6 @@ class Boss():
 
     def print_progress(self):
         self.generate_datetime()
-        
         percent_complete = round(100 * self.num_ids_scraped / self.num_ids_to_be_scraped, 2)
         percent_complete_string = str(self.percent_complete)
 
