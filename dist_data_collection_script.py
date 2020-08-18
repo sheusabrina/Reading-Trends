@@ -68,21 +68,21 @@ class Book():
 
 class Boss():
 
-    def __init__(self, assignment_size, file_name, boss_type): #INHERITED CLASSES WILL SET BOSS_TYPE
+    def __init__(self, num_ids_per_assignment, file_name, boss_type): #INHERITED CLASSES WILL SET BOSS_TYPE
 
         #DIFFERENTIATED NAMES
 
         if boss_type == "book":
-            self.data_type = "Books"
-            id_column_name = "book_id"
+            self.data_type_name = "Books"
+            data_log_id_column_name = "book_id"
 
         elif boss_type == "review":
-            self.data_type = "Reviews"
-            id_column_name = "ID"
+            self.data_type_name = "Reviews"
+            data_log_id_column_name = "ID"
 
         #SHARED FIELDS
 
-        self.assignment_size = assignment_size #THIS IS ITEMS PER ASSIGNMENT
+        self.num_ids_per_assignment = num_ids_per_assignment
         self.log_file_name = "databases/"+ file_name + ".csv"
 
         print("Boss Initiated & Awaiting Input Data Request")
@@ -107,8 +107,8 @@ class Boss():
 
         if self.is_csv(): #IF WE HAVE A CSV, COMPARE REQUESTED DATA TO CSV DATA
 
-            data_logged_at_start = pd.read_csv(self.log_file_name)
-            ids_in_data_log = self.data_logged_at_start[id_column_name].unique()
+            log_file_data = pd.read_csv(self.log_file_name)
+            ids_in_data_log = log_file_data[data_log_id_column_name].unique()
             ids_in_data_log = [str(id) for id in ids_in_data_log]
 
             self.ids_to_be_scraped = []
@@ -133,15 +133,15 @@ class Boss():
         self.num_ids_to_be_scraped = len(self.ids_to_be_scraped)
         self.num_ids_scraped = 0
 
-        #COUNTS FOR PRINT STATEMENT
+        #VALUES FOR PRINT STATEMENT
         num_ids_requested = len(self.ids_requested)
         requested_ids_found = num_ids_requested - self.num_ids_to_be_scraped
 
-        print("{found} of {requested} Requested {type} Found In Log. {outstanding} {type} Remaining".format(found = requested_ids_found, requested = num_ids_requested, type = self.data_type, outstanding = self.num_ids_to_be_scraped))
+        print("{found} of {requested} Requested {type} Found In Log. {outstanding} {type} Remaining".format(found = requested_ids_found, requested = num_ids_requested, type = self.data_type_name, outstanding = self.num_ids_to_be_scraped))
 
     def generate_assignments(self): #SPLITS DATA NEEDED INTO ASSIGNMENTS THAT CAN BE GIVEN TO MINIONS
 
-        num_assignments = math.ceil(self.num_ids_to_be_scraped/self.assignment_size)
+        num_assignments = math.ceil(self.num_ids_to_be_scraped/self.num_ids_per_assignment)
 
         #OUTSTANDING ASSIGNMENT KEY LIST WILL HOLD THE NAMES OF ASSIGNMENTS (THESE ARE JUST SEQUENTIAL NUMBERS)
         #ASSIGNMENT DICT WILL HOLD THE LIST OF IDS ASSOCIATED WITH EACH ASSIGNMENT
@@ -150,7 +150,7 @@ class Boss():
         self.assignment_dict = {}
 
         for assignment_key in self.outstanding_assignment_key_list:
-            assignment_ids = self.ids_to_be_scraped[self.assignment_size * assignment_key : min(self.assignment_size * assignment_key + assignment_key, len(self.ids_to_be_scraped))]
+            assignment_ids = self.ids_to_be_scraped[self.num_ids_per_assignment * assignment_key : min(self.num_ids_per_assignment * assignment_key + assignment_key, len(self.ids_to_be_scraped))]
             self.assignment_dict[assignment_key] = assignment_ids
 
     def prepare_for_minions(self):
@@ -221,24 +221,24 @@ class Boss():
         self.generate_datetime()
 
         for node in data_nodes:
-            log_data_point(data_node)
+            write_data_point_to_csv(data_node)
 
         self.datafile.close()
 
         #MARK ASSIGNMENTS AS COMPLETE
-        self.complete_assignment(assignment_key)
+        self.remove_assignment_from_list_of_outstanding(assignment_key)
 
         #UPDATE COUNTERS & PRINT PROGRESS
 
         self.num_ids_scraped += len(data_nodes)
         self.print_progress()
 
-    def log_data_point(self, data_node):
+    def write_data_point_to_csv(self, data_node):
         data = data_node.get_data()
 
         self.datafile.write("\n{},{}".format(data, self.now_string))
 
-    def complete_assignment(self, assignment_key): #REMOVE ASSIGNMENT FROM OUTSTANDING LIST
+    def remove_assignment_from_list_of_outstanding(self, assignment_key):
 
         try:
             self.outstanding_assignment_key_list.remove(assignment_key)
@@ -259,12 +259,12 @@ class Boss():
         percent_complete = round(100 * self.num_ids_scraped / self.num_ids_to_be_scraped, 2)
         percent_complete_string = str(self.percent_complete)
 
-        print("{} / {} {} Collected ({}% Complete) at {}".format(str(self.num_ids_scraped), str(self.num_ids_to_be_scraped), self.data_type, percent_complete_string, self.now_string))
+        print("{} / {} {} Collected ({}% Complete) at {}".format(str(self.num_ids_scraped), str(self.num_ids_to_be_scraped), self.data_type_name, percent_complete_string, self.now_string))
 
 class Review_Boss(Boss):
 
-    def __init__(self, assignment_size, file_name):
-        super().__init__(assignment_size, file_name, "review")
+    def __init__(self, num_ids_per_assignment, file_name):
+        super().__init__(num_ids_per_assignment, file_name, "review")
 
     def input_data_request(self, min_id, max_id):
         self.ids_requested = range(min_id, max_id)
@@ -277,8 +277,8 @@ class Review_Boss(Boss):
 
 class Book_Boss(Boss):
 
-    def __init__(self, assignment_size, file_name):
-        super().__init__(assignment_size, file_name, "book")
+    def __init__(self, num_ids_per_assignment, file_name):
+        super().__init__(num_ids_per_assignment, file_name, "book")
 
     def input_data_request(self, book_list):
         self.ids_requested = book_id_list
@@ -314,7 +314,7 @@ class Minion():
         self.boss = boss
         self.scraper = Scraper()
         self.max_sleep_time = max_sleep_time
-        self.collected_data = []
+        self.collected_data_nodes_list = []
 
     def request_assignment(self):
         self.assignment_key, self.assignment_ids = self.boss.give_assignment()
@@ -341,22 +341,22 @@ class Minion():
 
         #IF THE SOUP ISN'T POPULATED, WAIT INCREASING PERIODS BETWEEN RETRIES
 
-        invalid_count = 0
+        num_invalid_responses_recieved = 0
 
         while self.parser.is_soup_populated(self.current_soup) == False:
 
-            if invalid_count < 10:
+            if num_invalid_responses_recieved < 10:
                 #self.generate_datetime()
                 #print("Recieved Invalid Response from Website. Pausing Data Collection at {}...".format(self.self.now_string))
 
-                pause_time = max(self.max_sleep_time, invalid_count*60) #IF IT'S THE FIRST ERROR, REGULAR SLEEPTIME. FOR SUBSEQUENT ERRORS, INCREASINGLY LARGE WAIT TIMES.
+                pause_time = max(self.max_sleep_time, num_invalid_responses_recieved*60) #IF IT'S THE FIRST ERROR, REGULAR SLEEPTIME. FOR SUBSEQUENT ERRORS, INCREASINGLY LARGE WAIT TIMES.
                 self.sleep(pause_time)
 
                 #self.generate_datetime()
                 #print("Restarting Data Collection at {}...".format(self.now_string))
                 self.current_soup = self.parser.html_to_soup(self.current_webpage_as_string)
 
-                invalid_count += 1
+                num_invalid_responses_recieved += 1
 
             else: #AT THE POINT WHERE IT'S TEN MINUTES BETWEEN REQUESTS, JUST TERMINATE
 
@@ -364,12 +364,12 @@ class Minion():
                 sys.exit()
 
     def log_data(self): #MINION KEEPS DATA AS A LIST OF NODES
-        self.collected_data.append(self.current_data_node)
+        self.collected_data_nodes_list.append(self.current_data_node)
 
-    def sleep(self, max_sleep_time = None):
+    def sleep(self, max_sleep_time_overwrite = None): #SYNTAX IS A LITTLE AWKWARD: IT USES THE MAX_SLEEP_TIME OF THE CLASS BY DEFAULT, BUT THAT CAN BE OVERWRITTEN
 
-        if max_sleep_time:
-            sleeptime = max_sleep_time
+        if max_sleep_time_overwrite:
+            sleeptime = max_sleep_time_overwrite
         else:
             sleeptime = self.max_sleep_time
 
@@ -377,8 +377,8 @@ class Minion():
 
     def transmit_data_to_boss(self):
 
-        self.boss.input_data(self.assignment_key, self.collected_data)
-        self.collected_data = [] #ONCE DATA IS TRANSMITTED, CLEAR OUT LIST
+        self.boss.input_data(self.assignment_key, self.collected_data_nodes_list)
+        self.collected_data_nodes_list = [] #ONCE DATA IS TRANSMITTED, CLEAR OUT LIST
 
     def collect_assigned_data(self): #COLLECTING DATA FOR A SINGLE ASSIGNMENT
 
