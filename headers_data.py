@@ -1,3 +1,6 @@
+#THESE ARE THE HEADERS USED BY THE SCRAPER, AND I FOUND THEM ON THE INTERNET
+#WE SHOULD PROBABLY ADD SOME MORE 
+
 from collections import OrderedDict
 
 headers_list = [

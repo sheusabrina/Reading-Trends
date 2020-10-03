@@ -1,3 +1,5 @@
+#WE PROBABLY DON'T NEED THIS SCRIPT. I WAS BORED WHILE THE DATA SCRAPED... 
+
 #import libraries
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -63,7 +65,6 @@ class Visualizer():
 
         plt.show()
         plt.close("all")
-
 
 test_visualizer = Visualizer(merged_database)
 test_visualizer.show_ratings_by_day("Harry Potter & The Sorcerers' Stone Daily Ratings")

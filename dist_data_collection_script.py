@@ -1,3 +1,6 @@
+#THIS SCRIPT IS AN ATTEMPT TO BUILD A DISTRIBUTED SYSTEM, BUT IT NEEDS TO BE REWORKED TO USE AN HTTP SYSTEM
+#I HAVEN'T DEBUGGED IT
+
 #import libraries
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -13,8 +16,6 @@ import sys
 from parser_script import Review_Parser
 from parser_script import Book_Parser
 from scraper_script import Scraper
-
-#TEST COMMENT
 
 ##HOW TO USE IN DISTRIBUTED SYSTEM:
     #HAVE ONE SCRIPT WITH BOSS (INIT, INPUT DATA, PREPARE)
