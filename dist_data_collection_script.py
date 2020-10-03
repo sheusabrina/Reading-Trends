@@ -14,6 +14,8 @@ from parser_script import Review_Parser
 from parser_script import Book_Parser
 from scraper_script import Scraper
 
+#TEST COMMENT
+
 ##HOW TO USE IN DISTRIBUTED SYSTEM:
     #HAVE ONE SCRIPT WITH BOSS (INIT, INPUT DATA, PREPARE)
     #ALL OTHER SCRIPTS HAVE ONE MINION WHICH REFERENCES BOSS
