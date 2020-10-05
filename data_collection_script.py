@@ -203,25 +203,6 @@ class Review_Data_Collector(Data_Collector):
     def log_data(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
-class Review_URL_ID_Data_Collector(Review_Data_Collector):
-
-    def add_headers_to_log_file(self):
-        self.datafile.write("ID,is_URL_valid,review_publication_date,log_time")
-
-    def parse(self):
-
-        self.is_current_valid = self.parser.review_soup_is_valid(self.current_soup)
-
-        if self.is_current_valid:
-            self.current_date = self.parser.review_soup_to_date(self.current_soup)
-        else:
-            self.current_date = None
-
-    def log_data(self):
-        self.datafile.write("\n{},{},{}".format(str(self.current_id), self.is_current_valid, self.current_date))
-
-        self.data_points_counter += 1
-
 class Review_Detail_Data_Collector(Review_Data_Collector):
 
     def add_headers_to_log_file(self):
