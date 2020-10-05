@@ -189,21 +189,9 @@ class Review_Data_Collector(Data_Collector):
         #Review Parser
         self.parser = Review_Parser()
 
-    def add_headers_to_log_file(self):
-
-        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
-
     def generate_current_url(self):
         self.current_id = random.choice(self.id_list)
         self.current_url = self.base_url + str(self.current_id)
-
-    def parse(self):
-        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
-
-    def log_data(self):
-        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
-
-class Review_Detail_Data_Collector(Review_Data_Collector):
 
     def add_headers_to_log_file(self):
 
@@ -310,12 +298,8 @@ num_wait_seconds = 1
 min_2017_ID = 1484362322 #I want to actually analyze data from 2018-2020, but I'm pulling 2017 data too just because the ID generation isn't quite linear.
 max_2020_ID = 3455207761 #I'm not sure if i should use this, since reviews are going to continue to roll in...
 
-#Uncomment to run the URL generation data collector
-#review_id_collector = Review_URL_ID_Data_Collector(0, estimated_num_reviews, num_reviews_to_collect, num_wait_seconds, "test_scrape")
-#review_id_collector.data_collection_loop()
-
 #Uncomment to run the Review Detail collector
-review_collector = Review_Detail_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
+review_collector = Review_Data_Collector(min_2017_ID, max_2020_ID, num_reviews_to_collect, num_wait_seconds, "review_data")
 review_collector.data_collection_loop()
 
 ## BOOK DATA COLLECTION
