@@ -60,7 +60,10 @@ class Book():
 #DISTRIBUTED SYSTEM
 
 class DistComponent:
-    pass
+
+    def __init__(self, host, port):
+        work_queue = queue.LifoQueue(maxsize=0)
+        results_queue = queue.LifoQueue(maxsize=0)
 
 class Master(DistComponent):
     pass
