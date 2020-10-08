@@ -26,7 +26,7 @@ from data_classes import Book, Review
 
 class Boss():
 
-    def __init__(self, file_name, boss_type): #INHERITED CLASSES WILL SET BOSS_TYPE
+    def __init__(self, file_name, boss_type, host, port): #INHERITED CLASSES WILL SET BOSS_TYPE
 
         #DIFFERENTIATED NAMES
 
@@ -42,6 +42,8 @@ class Boss():
 
         self.num_items_per_chunk = 200
         self.log_file_name = "databases/"+ file_name + ".csv"
+        self.host = host
+        self.port = port
 
     def is_csv(self):
 
@@ -87,4 +89,18 @@ class Boss():
             chunk_items = [self.items_to_scrape_list[i] for i in range(chunk_key), len(self.chunks_oustanding_list), chunk_key]
             self.chunk_dict[chunk_key] = chunk_items
 
-    def
+    @get('/assignment_request')
+    def assignment_request():
+
+        if self.chunks_oustanding_list:
+            chunk_key = self.chunks_outstanding_list[0] #SELECT FIRST CHUNK KEY IN QUEUE
+            self.chunks_oustanding_list = self.chunks_outstanding_list[1:0] #REMOVE CHUNK KEY FROM FRONT OF QUEUE
+            self.chunks_outstanding_list.append(chunk_key) #RE-ADD IT TO END OF QUEUE
+
+            chunk_items = self.chunk_dict.get(chunk_key)
+
+        else:
+
+            chunk_key, chunk_items = None, None
+
+        return assignment_key, assignment_ids
