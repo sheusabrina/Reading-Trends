@@ -8,15 +8,17 @@ import pandas as pd
 import math
 import sys
 
+from bottle import route, run, template
+import threading
+import queue
+
 #import classes
 
 from parser_script import Review_Parser
 from parser_script import Book_Parser
 from scraper_script import Scraper
 
-#REVIEW & BOOK ARE DATA STORAGE NODES:
-    #GLORIFIED DICTIONARY
-    #MAKE STRING STATEMENTS THAT ALIGN WITH CSV NEEDS
+#DATA STORAGE NODES
 
 class Review():
 
@@ -55,12 +57,7 @@ class Book():
         data = "{},{},{},{},{},{},{},{},{},{},{}".format(self.id, self.author, self.language, self.num_reviews, self.num_ratings, self.avg_rating, self.isbn13, self.editions_url, self.publication_date, self.first_publication_date, self.series)
         return data
 
-#BOSS WITH REVIEW_BOSS AND BOOK_BOSS INHERITING
-#BOSS HANDLES:
-    #SETING SCOPE OF SCRAPE & SPLITTING IT INTO ASSIGNMENTS
-    #LOGGING DATA INTO CSV
-    #PRINTING PROGRESS
-    #NEED TO BUILD FUNCTIONALITY ERRORS TO BE PASSED FROM MINION TO BOSS FOR PRINTING
+#DISTRIBUTED SYSTEM
 
 class DistComponent:
     pass
@@ -81,4 +78,4 @@ class Review_Slave(Slave):
     pass
 
 class Book_Slave(Slave):
-    pass 
+    pass
