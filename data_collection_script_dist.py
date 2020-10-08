@@ -88,6 +88,7 @@ class Master_Methods():
 
         num_chunks = math.ceil(self.num_items_total/self.num_items_per_chunk)
         self.chunks_outstanding_list = [num for num in range(0, num_chunks - 1)]
+        self.chunks_completed_list = []
         self.items_recieved_list = []
 
         #EACH CHUNK HAS A KEY, WHICH CORRESPONDS TO A LIST OF ITEMS
@@ -117,10 +118,15 @@ class Master_Methods():
     @post('/input_data')
     def input_data(self, chunk_key, data_node_list):
 
-        self.chunks_outstanding_list.remove(chunk_key)
+        if chunk_key in self.chunks_completed_list:
+            return
 
-        for data_node in data_node_list:
-            self.collected_data_nodes_list.append(data_node)
+        else:
+            self.chunks_outstanding_list.remove(chunk_key)
+            self.chunks_completed_list.append(chunk_key)
+
+            for data_node in data_node_list:
+                self.collected_data_nodes_list.append(data_node)
 
     def input_scraping_scope(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
