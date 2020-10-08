@@ -8,7 +8,7 @@ import pandas as pd
 import math
 import sys
 
-from bottle import route, run, template
+from bottle import route, run, template, post, get
 import threading
 import queue
 
@@ -23,3 +23,68 @@ from data_classes import Book, Review
     #@route('/hello')
     #def hello():
         #return "Hello World!"
+
+class Boss():
+
+    def __init__(self, file_name, boss_type): #INHERITED CLASSES WILL SET BOSS_TYPE
+
+        #DIFFERENTIATED NAMES
+
+        if boss_type == "book":
+            self.data_type_name = "Books"
+            data_log_id_column_name = "book_id"
+
+        elif boss_type == "review":
+            self.data_type_name = "Reviews"
+            data_log_id_column_name = "ID"
+
+        #SHARED FIELDS
+
+        self.num_items_per_chunk = 200
+        self.log_file_name = "databases/"+ file_name + ".csv"
+
+    def is_csv(self):
+
+        try:
+            df = pd.read_csv(self.log_file_name, low_memory=False)
+            is_csv = True
+
+        except (FileNotFoundError, pd.errors.EmptyDataError):
+            is_csv = False
+
+        return is_csv
+
+    def prepare_scope(self):
+
+        if not self.is_csv():
+            self.items_to_scrape_list = [x for x in self.items_requested_list]
+
+        else:
+
+            log_file_data = pd.read_csv(self.log_file_name)
+            ids_in_data_log = log_file_data[data_log_id_column_name].unique()
+            ids_in_data_log = [str(id) for id in ids_in_data_log]
+
+            for id in self.items_requested_list: #IDS NOT IN CSV DATA ADDED TO TO_BE_SCRAPED LIST
+
+                if id not in ids_in_data_log:
+                    self.items_to_scrape_list.append(id)
+
+        self.num_items_total = len(self.items_to_scrape_list)
+        random.shuffle(self.items_to_scrape_list)
+
+    def generate_chunks(self):
+
+        num_chunks = math.ceil(self.num_items_total/self.num_items_per_chunk)
+        self.chunks_outstanding_list = [num for num in range(0, num_chunks - 1)]
+        self.chunks_recieved_list = []
+
+        #EACH CHUNK HAS A KEY, WHICH CORRESPONDS TO A LIST OF ITEMS
+
+        self.chunk_dict = {}
+
+        for chunk_key in self.chunks_outstanding_list:
+            chunk_items = [self.items_to_scrape_list[i] for i in range(chunk_key), len(self.chunks_oustanding_list), chunk_key]
+            self.chunk_dict[chunk_key] = chunk_items
+
+    def
