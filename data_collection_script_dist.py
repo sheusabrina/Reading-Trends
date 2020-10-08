@@ -79,7 +79,7 @@ class Boss():
 
         num_chunks = math.ceil(self.num_items_total/self.num_items_per_chunk)
         self.chunks_outstanding_list = [num for num in range(0, num_chunks - 1)]
-        self.chunks_recieved_list = []
+        self.items_recieved_list = []
 
         #EACH CHUNK HAS A KEY, WHICH CORRESPONDS TO A LIST OF ITEMS
 
@@ -90,7 +90,7 @@ class Boss():
             self.chunk_dict[chunk_key] = chunk_items
 
     @get('/assignment_request')
-    def assignment_request():
+    def assignment_request(self):
 
         if self.chunks_oustanding_list:
             chunk_key = self.chunks_outstanding_list[0] #SELECT FIRST CHUNK KEY IN QUEUE
@@ -104,3 +104,11 @@ class Boss():
             chunk_key, chunk_items = None, None
 
         return assignment_key, assignment_ids
+
+    @post('/input_data')
+    def input_data(self, chunk_key, data_node_list):
+
+        self.chunks_outstanding_list.remove(chunk_key)
+        
+        for data_node in data_node_list:
+            self.collected_data_nodes_list.append(data_node)
