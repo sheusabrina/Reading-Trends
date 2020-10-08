@@ -18,19 +18,7 @@ from parser_script import Review_Parser, Book_Parser
 from scraper_script import Scraper
 from data_classes import Book, Review
 
-#SYNTAX EXAMPLE
-
-    #@route('/hello')
-    #def hello():
-        #return "Hello World!"
-
-class Master():
-    #STEP 1: INIT MASTER
-    #STEP 2: INPUT SCRAPING REQUEST
-    #STEP 3: Master PREPERATION (ie, log file, chunking, start-up rest API, etc)
-        #THREAD 1: HANDLE ASSIGNMENT REQUESTS
-        #THREAD 2: HANDLE INCOMING DATA
-        #THREAD 3: ADD RECIEVED DATA TO LOG
+class Master_Methods():
 
     def __init__(self, file_name, master_type, host, port): #INHERITED CLASSES WILL SET Master_TYPE
 
@@ -118,6 +106,38 @@ class Master():
 
         for data_node in data_node_list:
             self.collected_data_nodes_list.append(data_node)
+
+    #STEP 1: INIT MASTER
+    #STEP 2: INPUT SCRAPING REQUEST & CALL KICKOFF
+
+    #STEP 3: Master PREPERATION (ie, log file, chunking, start-up rest API, etc)
+        #THREAD 1: HANDLE ASSIGNMENT REQUESTS
+        #THREAD 2: HANDLE INCOMING DATA
+        #THREAD 3: ADD RECIEVED DATA TO LOG
+
+class Master(Master_Methods):
+
+    def kickoff(self):
+        self.prepare()
+        thread_assignment_requests = threading.Thread(target = self.assignment_requests())
+        thread_incoming_data_requests = threading.Thread(target = self.incoming_data())
+        thread_log_recieved_data = threading.Thread(target = self.log_data())
+
+        thread_assignment_requests.start()
+        thread_incoming_data_requests.start()
+        thread_log_recieved_data.start()
+
+    def prepare(self):
+        pass
+
+    def assignment_requests(self):
+        pass
+
+    def incoming_data(self):
+        pass
+
+    def log_data(self):
+        pass
 
 class Review_Master(Master):
 
