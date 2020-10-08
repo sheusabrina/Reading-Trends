@@ -148,12 +148,12 @@ class Master(Master_Methods):
         self.prepare()
 
         thread_assignment_requests = threading.Thread(target = self.assignment_requests())
-        thread_incoming_data_requests = threading.Thread(target = self.incoming_data())
-        thread_log_recieved_data = threading.Thread(target = self.log_data())
+        thread_data_delivery = threading.Thread(target = self.incoming_data())
+        thread_log_data = threading.Thread(target = self.log_data())
 
         thread_assignment_requests.start()
-        thread_incoming_data_requests.start()
-        thread_log_recieved_data.start()
+        thread_data_delivery.start()
+        thread_log_data.start()
 
     def prepare(self):
         self.prepare_scope()
