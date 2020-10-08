@@ -24,23 +24,23 @@ from data_classes import Book, Review
     #def hello():
         #return "Hello World!"
 
-class Boss():
-    #STEP 1: INIT BOSS
+class Master():
+    #STEP 1: INIT MASTER
     #STEP 2: INPUT SCRAPING REQUEST
-    #STEP 3: BOSS PREPERATION (ie, log file, chunking, etc)
+    #STEP 3: Master PREPERATION (ie, log file, chunking, etc)
         #THREAD 1: HANDLE ASSIGNMENT REQUESTS
         #THREAD 2: HANDLE INCOMING DATA
-        #THREAD 3: ADD RECIEVED DATA TO LOG 
+        #THREAD 3: ADD RECIEVED DATA TO LOG
 
-    def __init__(self, file_name, boss_type, host, port): #INHERITED CLASSES WILL SET BOSS_TYPE
+    def __init__(self, file_name, master_type, host, port): #INHERITED CLASSES WILL SET Master_TYPE
 
         #DIFFERENTIATED NAMES
 
-        if boss_type == "book":
+        if Master_type == "book":
             self.data_type_name = "Books"
             data_log_id_column_name = "book_id"
 
-        elif boss_type == "review":
+        elif Master_type == "review":
             self.data_type_name = "Reviews"
             data_log_id_column_name = "ID"
 
