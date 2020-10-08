@@ -27,7 +27,7 @@ from data_classes import Book, Review
 class Master():
     #STEP 1: INIT MASTER
     #STEP 2: INPUT SCRAPING REQUEST
-    #STEP 3: Master PREPERATION (ie, log file, chunking, etc)
+    #STEP 3: Master PREPERATION (ie, log file, chunking, start-up rest API, etc)
         #THREAD 1: HANDLE ASSIGNMENT REQUESTS
         #THREAD 2: HANDLE INCOMING DATA
         #THREAD 3: ADD RECIEVED DATA TO LOG
@@ -118,3 +118,8 @@ class Master():
 
         for data_node in data_node_list:
             self.collected_data_nodes_list.append(data_node)
+
+class Review_Master(Master):
+
+    def input_scraping_scope(self, min_id, max_id):
+        self.items_requested_list = range(min_id, max_id)
