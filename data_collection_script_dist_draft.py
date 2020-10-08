@@ -27,6 +27,7 @@ from data_classes import Book, Review
 #REVIEW & BOOK ARE DATA STORAGE NODES:
     #GLORIFIED DICTIONARY
     #MAKE STRING STATEMENTS THAT ALIGN WITH CSV NEEDS
+
 class Boss():
 
     def __init__(self, num_ids_per_assignment, file_name, boss_type): #INHERITED CLASSES WILL SET BOSS_TYPE
