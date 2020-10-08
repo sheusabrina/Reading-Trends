@@ -99,6 +99,11 @@ class Master_Methods():
             chunk_items = [self.items_to_scrape_list[i] for i in range(chunk_key), len(self.chunks_oustanding_list), chunk_key]
             self.chunk_dict[chunk_key] = chunk_items
 
+    def write_data_point_to_csv(self, data_node):
+        data = data_node.get_data()
+        self.datafile.write("\n{},{}".format(data, self.now_string))
+        self.num_items_logged += 1
+
     @get('/assignment_request')
     def assignment_request(self):
 
@@ -167,7 +172,21 @@ class Master(Master_Methods):
         pass
 
     def log_data(self):
-        pass
+
+        is_complete = False
+        num_unsaved_items = 0
+
+        while not is_complete:
+            if self.items_recieved_list:
+                while num_unsaved_items < 100:
+
+                    for data_node in self.items_recieved_list:
+                        self.write_data_point_to_csv(datanode)
+                        num_unsaved_items += 1
+
+        self.datafile.close()
+
+        i
 
 class Review_Master(Master):
 
