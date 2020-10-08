@@ -116,9 +116,5 @@ class Master():
 
         self.chunks_outstanding_list.remove(chunk_key)
 
-
-
-
-
         for data_node in data_node_list:
             self.collected_data_nodes_list.append(data_node)
