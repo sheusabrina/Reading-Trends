@@ -50,6 +50,21 @@ class Master_Methods():
 
         return is_csv
 
+    def prepare_log_file(self):
+
+        if self.is_csv():
+            pass
+
+        else:
+
+            self.open_log_file()
+            self.add_headers_to_log_file()
+            self.datafile.close()
+
+    def open_log_file(self):
+
+        self.datafile = open(self.log_file_name, "a")
+
     def prepare_scope(self):
 
         if not self.is_csv():
@@ -107,6 +122,12 @@ class Master_Methods():
         for data_node in data_node_list:
             self.collected_data_nodes_list.append(data_node)
 
+    def input_scraping_scope(self):
+        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
+
+    def add_headers_to_log_file(self):
+        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
+
     #STEP 1: INIT MASTER
     #STEP 2: INPUT SCRAPING REQUEST & CALL KICKOFF
 
@@ -119,6 +140,7 @@ class Master(Master_Methods):
 
     def kickoff(self):
         self.prepare()
+
         thread_assignment_requests = threading.Thread(target = self.assignment_requests())
         thread_incoming_data_requests = threading.Thread(target = self.incoming_data())
         thread_log_recieved_data = threading.Thread(target = self.log_data())
@@ -128,7 +150,9 @@ class Master(Master_Methods):
         thread_log_recieved_data.start()
 
     def prepare(self):
-        pass
+        self.prepare_scope()
+        self.generate_chunks()
+        self.prepare_log_file()
 
     def assignment_requests(self):
         pass
