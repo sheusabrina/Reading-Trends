@@ -25,6 +25,12 @@ from data_classes import Book, Review
         #return "Hello World!"
 
 class Boss():
+    #STEP 1: INIT BOSS
+    #STEP 2: INPUT SCRAPING REQUEST
+    #STEP 3: BOSS PREPERATION (ie, log file, chunking, etc)
+        #THREAD 1: HANDLE ASSIGNMENT REQUESTS
+        #THREAD 2: HANDLE INCOMING DATA
+        #THREAD 3: ADD RECIEVED DATA TO LOG 
 
     def __init__(self, file_name, boss_type, host, port): #INHERITED CLASSES WILL SET BOSS_TYPE
 
@@ -109,6 +115,10 @@ class Boss():
     def input_data(self, chunk_key, data_node_list):
 
         self.chunks_outstanding_list.remove(chunk_key)
-        
+
+
+
+
+
         for data_node in data_node_list:
             self.collected_data_nodes_list.append(data_node)
