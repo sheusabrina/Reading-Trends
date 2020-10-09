@@ -10,6 +10,8 @@ from datetime import datetime
 import math
 import queue
 import random
+import system
+import time
 import threading
 
 #import classes
@@ -64,10 +66,12 @@ class Master_Methods():
 
     def prepare_scope(self):
 
-        if not self.is_csv():
+        #IDENTIFYING ITEMS TO SCRAPE
+
+        if not self.is_csv(): #IF NO CSV, ALL DATA NEEDS TO BE SCRAPED
             self.items_to_scrape_list = [x for x in self.items_requested_list]
 
-        else:
+        else: #IF CSV, SCRAPE ITEMS NOT ALREADY IN CSV
 
             log_file_data = pd.read_csv(self.log_file_name)
             ids_in_data_log = log_file_data[data_log_id_column_name].unique()
@@ -77,6 +81,11 @@ class Master_Methods():
 
                 if id not in ids_in_data_log:
                     self.items_to_scrape_list.append(id)
+
+        #TERMINATE IF NO ITEMS TO SCRAPE
+        if not self.items_to_scrape_list:
+            print("Data request contains no unknown data. Terminating.")
+            sys.exit()
 
         self.num_items_total = len(self.items_to_scrape_list)
         random.shuffle(self.items_to_scrape_list)
@@ -110,6 +119,10 @@ class Master_Methods():
 
         now = datetime.now()
         self.now_string = now.strftime("%m/%d/%Y %H:%M:%S")
+
+    def print_progress(self):
+        self.generate_datetime()
+        print("{:,} / {:,} data chunks collected ({:.2%} complete) at {}".format(self.num_chunks_recieved, self.num_chunks_total, self.num_chunks_recieved/self.num_chunks_total, self.now_string)
 
     @get('/assignment_request')
     def assignment_request(self):
@@ -148,6 +161,7 @@ class Master(Master_Methods):
         thread_assignment_requests = threading.Thread(target = self.assignment_requests()).start()
         thread_data_delivery = threading.Thread(target = self.incoming_data()).start()
         thread_log_data = threading.Thread(target = self.log_data()).start()
+        thread_print_progress_inter = threading.Thread(target = self.print_progress_inter()).start
 
     def prepare(self):
         self.prepare_scope()
@@ -168,6 +182,10 @@ class Master(Master_Methods):
             self.items_recieved_queue.task_done()
 
         self.log_data()
+
+    def print_progress_inter(self):
+        self.print_progress()
+        time.sleep(5*60)
 
 class Review_Master(Master):
 
