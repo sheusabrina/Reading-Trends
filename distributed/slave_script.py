@@ -38,11 +38,11 @@ class Slave_Methods():
 
     def request_chunk(self):
 
-        self.chunk_id_list = list(requests.get("http://{}:{}/get_assignment_request".format(self.host, self.port)))
+        self.chunk_id_list = list(requests.get("http://{}:{}/api".format(self.host, self.port)))
 
     def transmit_data(self):
 
-        requests.post("http://{}/{}", data = {"chunk_data_nodes": self.chunk_data_nodes_list}).format(self.host, self.port)
+        requests.post("http://{}/{}/api", data = {"chunk_data_nodes": self.chunk_data_nodes_list}).format(self.host, self.port)
 
     def generate_current_url(self):
         self.current_url = self.base_url + str(self.current_id)

@@ -145,8 +145,8 @@ class Master_Methods():
         return "Data Recieved"
 
     def run_rest_api(self):
-        bottle.route("/get_assignment_request")(self.assignment_request)
-        bottle.route("/recieve_data", method = "POST")(self.recieve_data)
+        bottle.route("/api")(self.assignment_request)
+        bottle.route("/api", method = "POST")(self.recieve_data)
 
         run(host=self.host, port=self.port, debug=True) #
 
