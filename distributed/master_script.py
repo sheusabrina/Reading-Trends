@@ -5,6 +5,7 @@
     #MASTER IS READY FOR SLAVES
 
 #import libraries
+import bottle
 from bottle import route, run, template, post, get
 from datetime import datetime
 import math
@@ -124,7 +125,6 @@ class Master_Methods():
         self.generate_datetime()
         print("{:,} / {:,} data chunks collected ({:.2%} complete) at {}".format(self.num_chunks_recieved, self.num_chunks_total, self.num_chunks_recieved/self.num_chunks_total, self.now_string)
 
-    @get('/assignment_request')
     def assignment_request(self):
 
         if not self.chunks_outstanding_queue.empty():
@@ -139,7 +139,6 @@ class Master_Methods():
 
         return assignment_key, assignment_ids
 
-    @post('/input_data')
     def input_data(self, chunk_key, data_node_list):
 
         for data_node in data_node_list:
@@ -148,7 +147,10 @@ class Master_Methods():
         self.num_chunks_recieved += 1
 
     def run_rest_api(self):
-        pass
+        bottle.route("/get_assignment_request")(self.assignment_request)
+        bottle.route("/input_data", method = "POST")(self.input_data)
+
+        run(host=self.host, port=self.port, debug=True) #
 
     def input_scraping_scope(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
