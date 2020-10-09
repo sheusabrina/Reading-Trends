@@ -119,7 +119,7 @@ class Master_Methods():
 
     def print_progress(self):
         self.generate_datetime()
-        print("{:,} / {:,} data chunks collected ({:.2%} complete) at {}".format(self.num_chunks_recieved, self.num_chunks_total, self.num_chunks_recieved/self.num_chunks_total, self.now_string)
+        print("{:,} / {:,} data chunks collected ({:.2%} complete) at {}".format(self.num_chunks_recieved, self.num_chunks_total, self.num_chunks_recieved/self.num_chunks_total, self.now_string))
 
     def assignment_request(self):
 
@@ -161,8 +161,7 @@ class Master(Master_Methods):
     def kickoff(self):
         self.prepare()
 
-        thread_assignment_requests = threading.Thread(target = self.assignment_requests()).start()
-        thread_data_delivery = threading.Thread(target = self.incoming_data()).start()
+        thread_api = threading.Thread(target = self.run_rest_api()).start()
         thread_log_data = threading.Thread(target = self.log_data()).start()
         thread_print_progress_inter = threading.Thread(target = self.print_progress_inter()).start
 
@@ -170,13 +169,6 @@ class Master(Master_Methods):
         self.prepare_scope()
         self.generate_chunks()
         self.prepare_log_file()
-        self.run_rest_api()
-
-    def assignment_requests(self):
-        pass
-
-    def incoming_data(self):
-        pass
 
     def log_data(self):
 
