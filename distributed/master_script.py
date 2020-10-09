@@ -1,21 +1,18 @@
-#import libraries
-from bs4 import BeautifulSoup
-from datetime import datetime
-import re
-import requests
-import random
-import pandas as pd
-import math
-import sys
+#HOW TO USE MASTER:
+    #INIT WITH HOST AND PORT OF OWN COMPUTER
+    #INPUT SCRAPING SCOPE
+    #CALL KICKOFF METHOD
+    #MASTER IS READY FOR SLAVES
 
+#import libraries
 from bottle import route, run, template, post, get
-import threading
+from datetime import datetime
+import math
 import queue
+import random
+import threading
 
 #import classes
-
-from parser_script import Review_Parser, Book_Parser
-from scraper_script import Scraper
 from data_classes import Book, Review
 
 class Master_Methods():
@@ -153,13 +150,9 @@ class Master(Master_Methods):
     def kickoff(self):
         self.prepare()
 
-        thread_assignment_requests = threading.Thread(target = self.assignment_requests())
-        thread_data_delivery = threading.Thread(target = self.incoming_data())
-        thread_log_data = threading.Thread(target = self.log_data())
-
-        thread_assignment_requests.start()
-        thread_data_delivery.start()
-        thread_log_data.start()
+        thread_assignment_requests = threading.Thread(target = self.assignment_requests()).start()
+        thread_data_delivery = threading.Thread(target = self.incoming_data()).start()
+        thread_log_data = threading.Thread(target = self.log_data()).start()
 
     def prepare(self):
         self.prepare_scope()
