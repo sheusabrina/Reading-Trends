@@ -84,10 +84,12 @@ class Master_Methods():
     def generate_chunks(self):
 
         #EACH CHUNK HAS A KEY, WHICH CORRESPONDS TO A LIST OF ITEMS
-        num_chunks = math.ceil(self.num_items_total/self.num_items_per_chunk)
-        chunks_key_list = [num for num in range(0, num_chunks - 1)]
+        self.num_chunks_total = math.ceil(self.num_items_total/self.num_items_per_chunk)
+        chunks_key_list = [num for num in range(0, self.num_chunks_total - 1)]
         self.chunks_outstanding_queue = queue.Queue(maxsize=0)
         self.items_recieved_queue = queue.Queue(maxsize=0)
+
+        self.num_chunks_recieved = 0
 
         #EACH CHUNK HAS A KEY, WHICH CORRESPONDS TO A LIST OF ITEMS
 
@@ -130,20 +132,13 @@ class Master_Methods():
         for data_node in data_node_list:
             self.items_recieved_queue.put(data_node)
 
+        self.num_chunks_recieved += 1
+
     def input_scraping_scope(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
     def add_headers_to_log_file(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
-
-    #STEP 1: INIT MASTER
-    #STEP 2: INPUT SCRAPING REQUEST & CALL KICKOFF
-
-    #STEP 3: Master PREPERATION (ie, log file, chunking, start-up rest API, etc)
-        #THREAD 1: HANDLE ASSIGNMENT REQUESTS
-        #THREAD 2: HANDLE INCOMING DATA
-        #THREAD 3: ADD RECIEVED DATA TO LOG
-        #THREAD 4: IS DONE? DOUBLE CHECK FOR MISSED DATA?
 
 class Master(Master_Methods):
 
