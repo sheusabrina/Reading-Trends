@@ -1,5 +1,6 @@
 import bottle
-from bottle import route, run, template, post, get
+#import requests
+from bottle import route, run, template, post, get, request
 
 class Rest_API:
 
@@ -9,8 +10,8 @@ class Rest_API:
     def returns_string(self): #MIMICS GET REQUEST
         return "Hello World!"
 
-    def returns_dynamic_string(self, name): #MIMICS POST REQUEST
-        self.name = name
+    def returns_dynamic_string(self): #MIMICS POST REQUEST
+        self.name = request.forms.get("name")
         return "Hello World! {}".format(self.name)
 
 my_api = Rest_API()
