@@ -95,7 +95,7 @@ class Master_Methods():
 
         #QUEUES & COUNTERS
         self.chunks_outstanding_queue = queue.Queue(maxsize=0)
-        self.data_nodes_recieved_queue = queue.Queue(maxsize=0)
+        self.data_strings_recieved_queue = queue.Queue(maxsize=0)
         self.num_chunks_recieved = 0
 
         self.num_chunks_total = math.ceil(self.num_ids_total/self.num_ids_per_chunk)
@@ -103,14 +103,7 @@ class Master_Methods():
         #EACH CHUNK IS A LIST OF ITEMS
         for chunk_index in range(self.num_chunks_total -1):
             chunk_ids = [self.ids_to_scrape_list[i] for i in range(chunk_index, self.num_ids_total, chunk_index)]
-            self.chunks_outstanding_queue.put(chunk_ids )
-
-    def write_data_point_to_csv(self, data_node):
-        data = data_node.get_data()
-        self.generate_datetime()
-        self.datafile.write("\n{},{}".format(data, self.now_string))
-
-        self.datafile.close()
+            self.chunks_outstanding_queue.put(chunk_ids)
 
     def generate_datetime(self):
 
@@ -135,10 +128,10 @@ class Master_Methods():
 
     def recieve_data(self):
 
-        data_node_list = list(request.forms.get("chunk_data_nodes"))
+        data_string_list = list(request.forms.get("chunk_data_strings"))
 
-        for data_node in data_node_list:
-            self.data_nodes_recieved_queue.put(data_node)
+        for data_string in data_string_list:
+            self.data_strings_recieved_queue.put(data_string)
 
         self.num_chunks_recieved += 1
 
@@ -172,10 +165,14 @@ class Master(Master_Methods):
 
     def log_data(self):
 
-        if not self.data_nodes_recieved_queue.empty():
-            data_node = self.data_nodes_recieved_queue.get()
-            self.write_data_point_to_csv(data_node)
-            self.data_nodes_recieved_queue.task_done()
+        if not self.data_strings_recieved_queue.empty():
+            data_string = self.data_strings_recieved_queue.get()
+
+            self.generate_datetime()
+            self.datafile.write("\n{},{}".format(data_string, self.now_string))
+            self.datafile.close()
+
+            self.data_strings_recieved_queue.task_done()
 
         self.log_data()
 

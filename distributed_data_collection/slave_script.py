@@ -42,7 +42,7 @@ class Slave_Methods():
 
     def transmit_data(self):
 
-        requests.post("http://{}/{}/api", data = {"chunk_data_nodes": self.chunk_data_nodes_list}).format(self.host, self.port)
+        requests.post("http://{}/{}/api", data = {"chunk_data_strings": self.chunk_data_strings_list}).format(self.host, self.port)
 
     def generate_current_url(self):
         self.current_url = self.base_url + str(self.current_id)
@@ -69,8 +69,8 @@ class Slave_Methods():
 
             self.current_soup = self.parser.html_to_soup(self.current_webpage_as_string)
 
-    def log_data(self): #MINION KEEPS DATA AS A LIST OF NODES
-        self.chunk_data_nodes_list.append(self.current_data_node)
+    def log_data(self): #MINION KEEPS DATA AS A LIST OF STRINGS
+        self.chunk_data_strings_list.append(self.current_data_string)
 
     def sleep(self):
 
@@ -79,7 +79,7 @@ class Slave_Methods():
     def parse(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
-    def generate_data_node(self):
+    def generate_data_string(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
 class Slave(Slave_Methods):
@@ -133,6 +133,6 @@ class Review_Slave(Slave):
             self.current_finished_date = None
             self.current_shelved_date = None
 
-    def generate_data_node(self):
+    def generate_data_string(self):
 
-        self.current_data_node = Review(self.current_id, self.is_current_valid, self.current_date, self.current_book_title, self.current_book_id, self.current_rating, self.current_reviewer_href, self.current_start_date, self.current_finished_date, self.current_shelved_date)
+        self.current_data_string = data = "{},{},{},{},{},{},{},{},{},{}".format(self.current_id, self.is_currnet_valid, self.current_date, self.current_book_title, self.current_book_id, self.current_rating, self.current_reviewer_href, self.current_start_date, self.current_finished_date, self.current_shelved_date)
