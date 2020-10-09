@@ -88,16 +88,16 @@ class Master_Methods():
 
         #EACH CHUNK HAS A KEY, WHICH CORRESPONDS TO A LIST OF ITEMS
         num_chunks = math.ceil(self.num_items_total/self.num_items_per_chunk)
-        self.chunks_outstanding_list = [num for num in range(0, num_chunks - 1)]
-        self.chunks_completed_list = []
+        chunks_key_list = [num for num in range(0, num_chunks - 1)]
+        self.chunks_outstanding_queue = queue.Queue(maxsize=0)
         self.items_recieved_queue = queue.Queue(maxsize=0)
 
         #EACH CHUNK HAS A KEY, WHICH CORRESPONDS TO A LIST OF ITEMS
 
         self.chunk_dict = {}
 
-        for chunk_key in self.chunks_outstanding_list:
-            chunk_items = [self.items_to_scrape_list[i] for i in range(chunk_key), len(self.chunks_oustanding_list), chunk_key]
+        for chunk_key in chunks_key_list:
+            chunk_items = [self.items_to_scrape_list[i] for i in range(chunk_key), len(chunks_key_list), chunk_key]
             self.chunk_dict[chunk_key] = chunk_items
 
     def write_data_point_to_csv(self, data_node):
@@ -115,10 +115,9 @@ class Master_Methods():
     @get('/assignment_request')
     def assignment_request(self):
 
-        if self.chunks_oustanding_list:
-            chunk_key = self.chunks_outstanding_list[0] #SELECT FIRST CHUNK KEY IN QUEUE
-            self.chunks_oustanding_list = self.chunks_outstanding_list[1:0] #REMOVE CHUNK KEY FROM FRONT OF QUEUE
-            self.chunks_outstanding_list.append(chunk_key) #RE-ADD IT TO END OF QUEUE
+        if not self.chunks_outstanding_queue.empty():
+            chunk_key = self.chunks_outstanding_queue.get()
+            self.chunks_outstanding_queue.task_done()
 
             chunk_items = self.chunk_dict.get(chunk_key)
 
@@ -131,15 +130,8 @@ class Master_Methods():
     @post('/input_data')
     def input_data(self, chunk_key, data_node_list):
 
-        if chunk_key in self.chunks_completed_list:
-            return
-
-        else:
-            self.chunks_outstanding_list.remove(chunk_key)
-            self.chunks_completed_list.append(chunk_key)
-
-            for data_node in data_node_list:
-                self.items_recieved_queue.put(data_node)
+        for data_node in data_node_list:
+            self.items_recieved_queue.put(data_node)
 
     def input_scraping_scope(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
