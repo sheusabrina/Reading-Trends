@@ -41,7 +41,6 @@ class Slave_Methods():
         self.response = requests.get("http://{}:{}/get_assignment_request")
 
         #NEED TO FIGURE OUT HOW TO UNPACK RESPONSE INTO LIST
-        #self.chunk_key
         #self.chunk_items
 
     def transmit_data(self):

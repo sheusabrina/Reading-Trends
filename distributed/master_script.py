@@ -93,21 +93,17 @@ class Master_Methods():
 
     def generate_chunks(self):
 
-        #EACH CHUNK HAS A KEY, WHICH CORRESPONDS TO A LIST OF ITEMS
-        self.num_chunks_total = math.ceil(self.num_items_total/self.num_items_per_chunk)
-        chunks_key_list = [num for num in range(0, self.num_chunks_total - 1)]
+        #QUEUES & COUNTERS
         self.chunks_outstanding_queue = queue.Queue(maxsize=0)
         self.items_recieved_queue = queue.Queue(maxsize=0)
-
         self.num_chunks_recieved = 0
 
-        #EACH CHUNK HAS A KEY, WHICH CORRESPONDS TO A LIST OF ITEMS
+        self.num_chunks_total = math.ceil(self.num_items_total/self.num_items_per_chunk)
 
-        self.chunk_dict = {}
-
-        for chunk_key in chunks_key_list:
-            chunk_items = [self.items_to_scrape_list[i] for i in range(chunk_key), len(chunks_key_list), chunk_key]
-            self.chunk_dict[chunk_key] = chunk_items
+        #EACH CHUNK IS A LIST OF ITEMS
+        for chunk_index in range(self.num_chunks_total -1):
+            chunk_items = [self.items_to_scrape_list[i] for i in range(chunk_index, self.num_items_total, chunk_index)]
+            self.chunks_outstanding_queue.put(chunk_items )
 
     def write_data_point_to_csv(self, data_node):
         data = data_node.get_data()
@@ -128,18 +124,16 @@ class Master_Methods():
     def assignment_request(self):
 
         if not self.chunks_outstanding_queue.empty():
-            chunk_key = self.chunks_outstanding_queue.get()
+            chunk = self.chunks_outstanding_queue.get()
             self.chunks_outstanding_queue.task_done()
-
-            chunk_items = self.chunk_dict.get(chunk_key)
 
         else:
 
-            chunk_key, chunk_items = None, None
+            chunk = None
 
-        return assignment_key, assignment_ids
+        return chunk
 
-    def input_data(self, chunk_key, data_node_list):
+    def input_data(self, data_node_list):
 
         for data_node in data_node_list:
             self.items_recieved_queue.put(data_node)
