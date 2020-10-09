@@ -91,4 +91,23 @@ class Slave_Methods():
 
 class Slave(Slave_Methods):
 
-    pass
+    def collect_data_chunk(self):
+
+        for id in self.chunk_items:
+            self.current_id = id
+            self.generate_current_url()
+            self.scrape_url()
+            self.generate_soup()
+            self.parse()
+            self.log_data()
+            self.sleep()
+
+    def data_collection_loop(self):
+        self.request_chunk()
+
+        while self.chunk_key_list():
+            self.collect_data_chunk()
+            self.transmit_data()
+            self.request_chunk()
+
+        sys.exit() #WHEN MASTER STOPS DISTRIBUTING CHUNKS, TERMINATE
