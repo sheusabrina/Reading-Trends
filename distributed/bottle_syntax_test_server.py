@@ -1,5 +1,4 @@
 import bottle
-#import requests
 from bottle import route, run, template, post, get, request
 
 class Rest_API:
