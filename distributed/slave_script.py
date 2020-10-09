@@ -38,14 +38,11 @@ class Slave_Methods():
 
     def request_chunk(self):
 
-        self.response = requests.get("http://{}:{}/get_assignment_request")
-
-        #NEED TO FIGURE OUT HOW TO UNPACK RESPONSE INTO LIST
-        #self.chunk_items
+        self.chunk_id_list = list(requests.get("http://{}:{}/get_assignment_request".format(self.host, self.port)))
 
     def transmit_data(self):
 
-        pass
+        requests.post("http://{}/{}", data = {"chunk_data_nodes": self.chunk_data_nodes_list}).format(self.host, self.port)
 
     def generate_current_url(self):
         self.current_url = self.base_url + str(self.current_id)
@@ -73,7 +70,7 @@ class Slave_Methods():
             self.current_soup = self.parser.html_to_soup(self.current_webpage_as_string)
 
     def log_data(self): #MINION KEEPS DATA AS A LIST OF NODES
-        self.collected_data_nodes_list.append(self.current_data_node)
+        self.chunk_data_nodes_list.append(self.current_data_node)
 
     def sleep(self):
 
@@ -89,7 +86,7 @@ class Slave(Slave_Methods):
 
     def collect_data_chunk(self):
 
-        for id in self.chunk_items:
+        for id in self.chunk_id_list:
             self.current_id = id
             self.generate_current_url()
             self.scrape_url()

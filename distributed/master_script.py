@@ -1,4 +1,4 @@
-#HOW TO USE MASTER:
+num_ids#HOW TO USE MASTER:
     #INIT WITH HOST AND PORT OF OWN COMPUTER
     #INPUT SCRAPING SCOPE
     #CALL KICKOFF METHOD
@@ -6,7 +6,7 @@
 
 #import libraries
 import bottle
-from bottle import route, run, template, post, get
+from bottle import route, run, template, post, get, request
 from datetime import datetime
 import math
 import queue
@@ -34,7 +34,7 @@ class Master_Methods():
 
         #SHARED FIELDS
 
-        self.num_items_per_chunk = 200
+        self.num_ids_per_chunk = 200
         self.log_file_name = "databases/"+ file_name + ".csv"
         self.host = host
         self.port = port
@@ -70,7 +70,7 @@ class Master_Methods():
         #IDENTIFYING ITEMS TO SCRAPE
 
         if not self.is_csv(): #IF NO CSV, ALL DATA NEEDS TO BE SCRAPED
-            self.items_to_scrape_list = [x for x in self.items_requested_list]
+            self.ids_to_scrape_list = [x for x in self.ids_requested_list]
 
         else: #IF CSV, SCRAPE ITEMS NOT ALREADY IN CSV
 
@@ -78,32 +78,32 @@ class Master_Methods():
             ids_in_data_log = log_file_data[data_log_id_column_name].unique()
             ids_in_data_log = [str(id) for id in ids_in_data_log]
 
-            for id in self.items_requested_list: #IDS NOT IN CSV DATA ADDED TO TO_BE_SCRAPED LIST
+            for id in self.ids_requested_list: #IDS NOT IN CSV DATA ADDED TO TO_BE_SCRAPED LIST
 
                 if id not in ids_in_data_log:
-                    self.items_to_scrape_list.append(id)
+                    self.ids_to_scrape_list.append(id)
 
         #TERMINATE IF NO ITEMS TO SCRAPE
-        if not self.items_to_scrape_list:
+        if not self.ids_to_scrape_list:
             print("Data request contains no unknown data. Terminating.")
             sys.exit()
 
-        self.num_items_total = len(self.items_to_scrape_list)
-        random.shuffle(self.items_to_scrape_list)
+        self.num_ids_total = len(self.ids_to_scrape_list)
+        random.shuffle(self.ids_to_scrape_list)
 
     def generate_chunks(self):
 
         #QUEUES & COUNTERS
         self.chunks_outstanding_queue = queue.Queue(maxsize=0)
-        self.items_recieved_queue = queue.Queue(maxsize=0)
+        self.data_nodes_recieved_queue = queue.Queue(maxsize=0)
         self.num_chunks_recieved = 0
 
-        self.num_chunks_total = math.ceil(self.num_items_total/self.num_items_per_chunk)
+        self.num_chunks_total = math.ceil(self.num_ids_total/self.num_ids_per_chunk)
 
         #EACH CHUNK IS A LIST OF ITEMS
         for chunk_index in range(self.num_chunks_total -1):
-            chunk_items = [self.items_to_scrape_list[i] for i in range(chunk_index, self.num_items_total, chunk_index)]
-            self.chunks_outstanding_queue.put(chunk_items )
+            chunk_ids = [self.ids_to_scrape_list[i] for i in range(chunk_index, self.num_ids_total, chunk_index)]
+            self.chunks_outstanding_queue.put(chunk_ids )
 
     def write_data_point_to_csv(self, data_node):
         data = data_node.get_data()
@@ -133,16 +133,20 @@ class Master_Methods():
 
         return chunk
 
-    def input_data(self, data_node_list):
+    def recieve_data(self):
+
+        data_node_list = list(request.forms.get("chunk_data_nodes"))
 
         for data_node in data_node_list:
-            self.items_recieved_queue.put(data_node)
+            self.data_nodes_recieved_queue.put(data_node)
 
         self.num_chunks_recieved += 1
 
+        return "Data Recieved"
+
     def run_rest_api(self):
         bottle.route("/get_assignment_request")(self.assignment_request)
-        bottle.route("/input_data", method = "POST")(self.input_data)
+        bottle.route("/recieve_data", method = "POST")(self.recieve_data)
 
         run(host=self.host, port=self.port, debug=True) #
 
@@ -176,10 +180,10 @@ class Master(Master_Methods):
 
     def log_data(self):
 
-        if not self.items_recieved_queue.empty():
-            data_node = self.items_recieved_queue.get()
+        if not self.data_nodes_recieved_queue.empty():
+            data_node = self.data_nodes_recieved_queue.get()
             self.write_data_point_to_csv(data_node)
-            self.items_recieved_queue.task_done()
+            self.data_nodes_recieved_queue.task_done()
 
         self.log_data()
 
@@ -190,4 +194,4 @@ class Master(Master_Methods):
 class Review_Master(Master):
 
     def input_scraping_scope(self, min_id, max_id):
-        self.items_requested_list = range(min_id, max_id)
+        self.ids_requested_list = range(min_id, max_id)
