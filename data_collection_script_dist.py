@@ -186,7 +186,7 @@ class Review_Master(Master):
     def input_scraping_scope(self, min_id, max_id):
         self.items_requested_list = range(min_id, max_id)
 
-class Slave():
+class Slave_Methods():
 
     def __init__(self, max_sleep_time, minion_type, host, port):
 
@@ -206,4 +206,14 @@ class Slave():
         self.max_sleep_time = max_sleep_time
 
         self.host = host
-        self.port = port 
+        self.port = port
+
+    def request_chunk(self):
+
+        pass
+
+        #self.chunk_key
+        #self.chunk_items
+
+class Slave(Slave_Methods):
+    pass
