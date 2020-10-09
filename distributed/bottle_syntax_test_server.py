@@ -1,16 +1,6 @@
 import bottle
 from bottle import route, run, template, post, get
 
-#BOTTLE QUICKSTART
-
-#@route('/hello')
-#def hello():
-    #return "Hello World!"
-
-#run(host='localhost', port=8080, debug=True)
-
-#VALIDATION visit http://localhost:8080/hello
-
 class Rest_API:
 
     def __init__(self):
@@ -26,4 +16,5 @@ class Rest_API:
 my_api = Rest_API()
 
 bottle.route("/hello")(my_api.returns_string) #ASSOCIATES PATH WITH FUNCTION
+bottle.route("/hello_dynamic")(my_api.returns_dynamic_string) #ASSOCIATES PATH WITH FUNCTION
 run(host='localhost', port=8080, debug=True) #CREATES LISTENING SERVER
