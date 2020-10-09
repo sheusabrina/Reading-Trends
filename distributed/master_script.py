@@ -147,6 +147,9 @@ class Master_Methods():
 
         self.num_chunks_recieved += 1
 
+    def run_rest_api(self):
+        pass
+
     def input_scraping_scope(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
@@ -167,6 +170,7 @@ class Master(Master_Methods):
         self.prepare_scope()
         self.generate_chunks()
         self.prepare_log_file()
+        self.run_rest_api()
 
     def assignment_requests(self):
         pass
