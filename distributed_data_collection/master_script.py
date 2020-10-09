@@ -1,4 +1,4 @@
-num_ids#HOW TO USE MASTER:
+#HOW TO USE MASTER:
     #INIT WITH HOST AND PORT OF OWN COMPUTER
     #INPUT SCRAPING SCOPE
     #CALL KICKOFF METHOD
@@ -11,12 +11,8 @@ from datetime import datetime
 import math
 import queue
 import random
-import system
 import time
 import threading
-
-#import classes
-from data_classes import Book, Review
 
 class Master_Methods():
 

@@ -12,7 +12,6 @@ import time
 #import classes
 from parser_script import Review_Parser, Book_Parser
 from scraper_script import Scraper
-from data_classes import Book, Review
 
 class Slave_Methods():
 
