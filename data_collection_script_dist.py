@@ -102,8 +102,15 @@ class Master_Methods():
 
     def write_data_point_to_csv(self, data_node):
         data = data_node.get_data()
+        self.generate_datetime()
         self.datafile.write("\n{},{}".format(data, self.now_string))
-        self.num_items_logged += 1
+
+        self.datafile.close()
+
+    def generate_datetime(self):
+
+        now = datetime.now()
+        self.now_string = now.strftime("%m/%d/%Y %H:%M:%S")
 
     @get('/assignment_request')
     def assignment_request(self):
@@ -174,20 +181,12 @@ class Master(Master_Methods):
 
     def log_data(self):
 
-        is_complete = False
-        num_unsaved_items = 0
+        if not self.items_recieved_queue.empty():
+            data_node = self.items_recieved_queue.get()
+            self.write_data_point_to_csv(data_node)
+            self.items_recieved_queue.task_done()
 
-        while not is_complete:
-            if self.items_recieved_list:
-                while num_unsaved_items < 100:
-
-                    for data_node in self.items_recieved_list:
-                        self.write_data_point_to_csv(datanode)
-                        num_unsaved_items += 1
-
-        self.datafile.close()
-
-        i
+        self.log_data()
 
 class Review_Master(Master):
 
