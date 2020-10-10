@@ -110,6 +110,10 @@ class Master_Methods():
         self.generate_datetime()
         print("{:,} / {:,} data chunks collected ({:.2%} complete) at {}".format(self.num_chunks_recieved, self.num_chunks_total, self.num_chunks_recieved/self.num_chunks_total, self.now_string))
 
+    def print_progress_inter(self):
+        self.print_progress()
+        time.sleep(5*60)
+
     def assignment_request(self):
 
         if not self.chunks_outstanding_queue.empty():
@@ -138,27 +142,7 @@ class Master_Methods():
         bottle.route("/api")(self.assignment_request)
         bottle.route("/api", method = "POST")(self.recieve_data)
 
-        run(host=self.host, port=self.port, debug=True) #
-
-    def input_scraping_scope(self):
-        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
-
-    def add_headers_to_log_file(self):
-        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
-
-class Master(Master_Methods):
-
-    def kickoff(self):
-        self.prepare()
-
-        thread_api = threading.Thread(target = self.run_rest_api()).start()
-        thread_log_data = threading.Thread(target = self.log_data()).start()
-        thread_print_progress_inter = threading.Thread(target = self.print_progress_inter()).start
-
-    def prepare(self):
-        self.prepare_scope()
-        self.generate_chunks()
-        self.prepare_log_file()
+        run(host=self.host, port=self.port, debug=True)
 
     def log_data(self):
 
@@ -173,9 +157,25 @@ class Master(Master_Methods):
 
         self.log_data()
 
-    def print_progress_inter(self):
-        self.print_progress()
-        time.sleep(5*60)
+    def input_scraping_scope(self):
+        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
+
+    def add_headers_to_log_file(self):
+        print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
+
+class Master(Master_Methods):
+
+    def prepare(self):
+        self.prepare_scope()
+        self.generate_chunks()
+        self.prepare_log_file()
+
+    def kickoff(self):
+        self.prepare()
+
+        thread_api = threading.Thread(target = self.run_rest_api()).start()
+        thread_log_data = threading.Thread(target = self.log_data()).start()
+        thread_print_progress_inter = threading.Thread(target = self.print_progress_inter()).start()
 
 class Review_Master(Master):
 
