@@ -15,6 +15,7 @@ class Rest_API:
 
     def returns_list(self):
         numbers_list = [1, 2, 3, 4, 5]
+        numbers_list = str(numbers_list)
         return numbers_list
 
 my_api = Rest_API()
