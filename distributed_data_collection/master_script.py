@@ -16,21 +16,9 @@ import threading
 
 class Master_Methods():
 
-    def __init__(self, file_name, master_type, host, port): #INHERITED CLASSES WILL SET Master_TYPE
+    def __init__(self, file_name, host, port, num_ids_per_chunk):
 
-        #DIFFERENTIATED NAMES
-
-        if Master_type == "book":
-            self.data_type_name = "Books"
-            data_log_id_column_name = "book_id"
-
-        elif Master_type == "review":
-            self.data_type_name = "Reviews"
-            data_log_id_column_name = "ID"
-
-        #SHARED FIELDS
-
-        self.num_ids_per_chunk = 200
+        self.num_ids_per_chunk = num_ids_per_chunk
         self.log_file_name = "databases/"+ file_name + ".csv"
         self.host = host
         self.port = port
@@ -71,7 +59,7 @@ class Master_Methods():
         else: #IF CSV, SCRAPE ITEMS NOT ALREADY IN CSV
 
             log_file_data = pd.read_csv(self.log_file_name)
-            ids_in_data_log = log_file_data[data_log_id_column_name].unique()
+            ids_in_data_log = log_file_data[self.data_log_id_column_name].unique()
             ids_in_data_log = [str(id) for id in ids_in_data_log]
 
             for id in self.ids_requested_list: #IDS NOT IN CSV DATA ADDED TO TO_BE_SCRAPED LIST
@@ -179,6 +167,10 @@ class Master(Master_Methods):
 
 class Review_Master(Master):
 
+    def __init__(self, file_name, host, port, num_ids_per_chunk):
+        super().__init__(file_name, host, port, num_ids_per_chunk)
+        self.data_log_id_column_name = "review_id"
+
     def input_scraping_scope(self, min_id, max_id):
         self.ids_requested_list = range(min_id, max_id)
 
@@ -186,6 +178,10 @@ class Review_Master(Master):
         self.datafile.write("review_id,is_URL_valid,review_publication_date,book_title,book_id,rating,reviewer_href,reviewer_started_reading_date,reviewer_finished_reading_date,reviwer_shelved_date,data_log_time")
 
 class Book_Master(Master):
+
+        def __init__(self, file_name, host, port, num_ids_per_chunk):
+            super().__init__(file_name, host, port, num_ids_per_chunk)
+            self.data_log_id_column_name = "book_id"
 
     def add_headers_to_log_file(self):
         self.datafile.write("book_id,book_author,book_language,num_reviews,num_ratings,avg_rating,isbn13,editions_url,book_publication_date,book_first_publication_date,series,data_log_time")
