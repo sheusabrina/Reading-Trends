@@ -37,7 +37,23 @@ class Slave_Methods():
 
     def request_chunk(self):
 
-        self.chunk_id_list = list(requests.get("http://{}:{}/api".format(self.host, self.port)))
+        chunk_response = requests.get("http://{}:{}/api".format(self.host, self.port))
+        self.chunk_id_list = self.convert_chunk(chunk_response)
+
+    def convert_chunk(self, chunk_response):
+
+        chunk = recieved_chunk.content.decode()
+        chunk = chunk.split(",")
+
+        chars_to_remove = [",", "[", "]", " "]
+        new_chunk = []
+
+        for item in old_chunk:
+            for char in chars_to_remove:
+                item = item.replace(char,"")
+
+            item = int(item) #DOUBLE CHECK THAT IDS SHOULD BE INTEGERS?
+            new_chunk.append(item)
 
     def transmit_data(self):
 

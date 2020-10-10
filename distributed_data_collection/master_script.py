@@ -114,6 +114,7 @@ class Master_Methods():
 
         if not self.chunks_outstanding_queue.empty():
             chunk = self.chunks_outstanding_queue.get()
+            chunk = str(chunk)
             self.chunks_outstanding_queue.task_done()
 
         else:
