@@ -9,6 +9,7 @@ import bottle
 from bottle import route, run, template, post, get, request
 from datetime import datetime
 import math
+import pandas as pd
 import queue
 import random
 import time
@@ -85,8 +86,9 @@ class Master_Methods():
         self.num_chunks_total = math.ceil(self.num_ids_total/self.num_ids_per_chunk)
 
         #EACH CHUNK IS A LIST OF ITEMS
-        for chunk_index in range(self.num_chunks_total -1):
-            chunk_ids = [self.ids_to_scrape_list[i] for i in range(chunk_index, self.num_ids_total, chunk_index)]
+        #for chunk_index in range(self.num_chunks_total -1):
+        for chunk_number in range(1, self.num_chunks_total +1):
+            chunk_ids = [self.ids_to_scrape_list[i] for i in range(chunk_number, len(self.ids_to_scrape_list), self.num_chunks_total)]
             self.chunks_outstanding_queue.put(chunk_ids)
 
     def generate_datetime(self):
@@ -179,9 +181,16 @@ class Review_Master(Master):
 
 class Book_Master(Master):
 
-        def __init__(self, file_name, host, port, num_ids_per_chunk):
-            super().__init__(file_name, host, port, num_ids_per_chunk)
-            self.data_log_id_column_name = "book_id"
+    def __init__(self, file_name, host, port, num_ids_per_chunk):
+        super().__init__(file_name, host, port, num_ids_per_chunk)
+        self.data_log_id_column_name = "book_id"
 
     def add_headers_to_log_file(self):
         self.datafile.write("book_id,book_author,book_language,num_reviews,num_ratings,avg_rating,isbn13,editions_url,book_publication_date,book_first_publication_date,series,data_log_time")
+
+#TESTING
+host, port = "localhost", 8080
+
+test_review_master = Review_Master("test_database", host, port, 10)
+test_review_master.input_scraping_scope(10, 50)
+test_review_master.kickoff()
