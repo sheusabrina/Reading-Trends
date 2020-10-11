@@ -119,7 +119,7 @@ class Master_Methods():
 
     def recieve_data(self):
 
-        data_string = request.forms.get("data_string")        
+        data_string = request.forms.get("data_string")
         self.data_strings_queue.put(data_string)
 
         self.num_ids_recieved += 1
@@ -181,9 +181,9 @@ class Master(Master_Methods):
     def kickoff(self):
         self.prepare()
 
-        thread_api = threading.Thread(target = self.run_rest_api).start()
-        thread_log_data = threading.Thread(target = self.log_data_loop).start()
-        thread_print_progress_inter = threading.Thread(target = self.print_progress_inter).start()
+        thread_api = threading.Thread(target = self.run_rest_api, daemon = True).start()
+        thread_log_data = threading.Thread(target = self.log_data_loop, daemon = True).start()
+        thread_print_progress_inter = threading.Thread(target = self.print_progress_inter, daemon = True).start()
 
 class Review_Master(Master):
 
