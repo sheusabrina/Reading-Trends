@@ -25,12 +25,13 @@ class Slave_Methods():
 
         self.host = host
         self.port = port
+        self.api_url = "http://{}:{}/api".format(self.host, self.port)
 
         self.is_data_needed = True
 
     def request_chunk(self):
 
-        chunk_response = requests.get("http://{}:{}/api".format(self.host, self.port))
+        chunk_response = requests.get(self.api_url)
         self.chunk_id_list = self.convert_chunk(chunk_response)
 
     def convert_chunk(self, chunk_response):
@@ -50,13 +51,13 @@ class Slave_Methods():
 
         return new_chunk
 
-    def data_transmission(self):
+    def data_transmission_loop(self):
 
         while True: #INFINITE LOOP, BUT IT ENDS WHEN THE PROGRAM DOES
 
             if not self.data_strings_queue.empty():
                 data_string = self.data_strings_queue.get()
-                requests.post("http://{}/{}/api", data = {"data_string": data_string}).format(self.host, self.port)
+                requests.post(self.api_url, data = {"data_string": data_string})
                 self.data_strings_queue.task_done()
 
     def generate_url(self):
@@ -85,7 +86,6 @@ class Slave_Methods():
             self.soup = self.parser.html_to_soup(self.webpage_as_string)
 
     def log_data(self):
-        print("logging data")
         self.data_strings_queue.put(self.data_string)
 
     def sleep(self):
@@ -113,9 +113,6 @@ class Slave_Methods():
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
 class Slave(Slave_Methods):
-
-    def data_transmission_loop(self):
-        pass
 
     def data_collection_loop(self):
         self.request_chunk()
@@ -177,7 +174,6 @@ class Review_Slave(Slave):
             self.shelved_date = None
 
     def generate_data_string(self):
-        print("Generating data string")
 
         self.data_string = "{},{},{},{},{},{},{},{},{},{}".format(self.id, self.is_review_valid, self.date, self.book_title, self.book_id, self.rating, self.reviewer_href, self.start_date, self.finished_date, self.shelved_date)
 

@@ -21,6 +21,7 @@ class Master_Methods():
     def __init__(self, file_name, host, port, num_ids_per_chunk):
 
         self.num_ids_per_chunk = num_ids_per_chunk
+        self.num_ids_recieved = 0
         self.log_file_name = "databases/"+ file_name + ".csv"
         self.host = host
         self.port = port
