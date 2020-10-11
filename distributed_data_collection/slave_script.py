@@ -153,3 +153,9 @@ class Book_Slave(Slave):
 
         self.base_url = "https://www.goodreads.com/review/show/"
         self.parser = Review_Parser()
+
+#TESTING
+host, port = "localhost", 8080
+
+test_slave = Review_Slave(1, host, port)
+test_slave.kickoff()
