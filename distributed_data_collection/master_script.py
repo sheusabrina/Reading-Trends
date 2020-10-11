@@ -139,6 +139,7 @@ class Master_Methods():
             if not self.data_strings_queue.empty():
                 data_string = self.data_strings_queue.get()
 
+                self.open_log_file()
                 self.generate_datetime()
                 self.datafile.write("\n{},{}".format(data_string, self.now_string))
                 self.datafile.close()
