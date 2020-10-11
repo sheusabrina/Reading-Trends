@@ -57,33 +57,33 @@ class Slave_Methods():
 
         self.data_transmission_loop()
 
-    def generate_current_url(self):
-        self.current_url = self.base_url + str(self.current_id)
+    def generate_url(self):
+        self.url = self.base_url + str(self.id)
 
     def scrape_url(self):
 
-        self.current_webpage_as_string = self.scraper.url_to_string_content(self.current_url)
+        self.webpage_as_string = self.scraper.url_to_string_content(self.url)
 
     def generate_soup(self):
 
-        self.current_soup = self.parser.html_to_soup(self.current_webpage_as_string)
+        self.soup = self.parser.html_to_soup(self.webpage_as_string)
 
-        if self.parser.is_soup_populated(self.current_soup): #IF THE SOUP IS POPULATED, WE'RE ALL SET
+        if self.parser.is_soup_populated(self.soup): #IF THE SOUP IS POPULATED, WE'RE ALL SET
             return
 
         #IF THE SOUP ISN'T POPULATED, RETRY WITH INCREASING WAITTIMES
         num_invalid_responses_recieved = 0
 
-        while self.parser.is_soup_populated(self.current_soup) == False:
+        while self.parser.is_soup_populated(self.soup) == False:
 
             pausetime = max(self.max_sleep_time, num_invalid_responses_recieved*60) #IF IT'S THE FIRST ERROR, REGULAR SLEEPTIME. FOR SUBSEQUENT ERRORS, INCREASINGLY LARGE WAIT TIMES.
             time.sleep(pausetime)
             num_invalid_responses_recieved += 1
 
-            self.current_soup = self.parser.html_to_soup(self.current_webpage_as_string)
+            self.soup = self.parser.html_to_soup(self.webpage_as_string)
 
     def log_data(self):
-        self.data_strings_queue.put(self.current_data_string)
+        self.data_strings_queue.put(self.data_string)
 
     def sleep(self):
 
@@ -108,8 +108,8 @@ class Slave(Slave_Methods):
         while self.chunk_id_list is not None:
 
             for id in self.chunk_id_list:
-                self.current_id = id
-                self.generate_current_url()
+                self.id = id
+                self.generate_url()
                 self.scrape_url()
                 self.generate_soup()
                 self.parse()
@@ -137,33 +137,33 @@ class Review_Slave(Slave):
 
     def parse(self):
 
-        self.is_current_valid = self.parser.review_soup_is_valid(self.current_soup)
+        self.is_review_valid = self.parser.review_soup_is_review_valid(self.soup)
 
-        if self.is_current_valid:
-            self.current_date = self.parser.review_soup_to_date(self.current_soup)
-            self.current_book_title = self.parser.review_soup_to_book_title(self.current_soup)
-            self.current_book_id = self.parser.review_soup_to_book_id(self.current_soup)
-            self.current_rating = self.parser.review_soup_to_rating(self.current_soup)
-            self.current_reviewer_href = self.parser.review_soup_to_reviewer_href(self.current_soup)
+        if self.is_review_valid:
+            self.date = self.parser.review_soup_to_date(self.soup)
+            self.book_title = self.parser.review_soup_to_book_title(self.soup)
+            self.book_id = self.parser.review_soup_to_book_id(self.soup)
+            self.rating = self.parser.review_soup_to_rating(self.soup)
+            self.reviewer_href = self.parser.review_soup_to_reviewer_href(self.soup)
 
-            self.current_progress_dict = self.parser.review_soup_to_progress_dict(self.current_soup)
-            self.current_start_date = self.parser.progress_dict_to_start_date(self.current_progress_dict)
-            self.current_finished_date = self.parser.progress_dict_to_finish_date(self.current_progress_dict)
-            self.current_shelved_date = self.parser.progress_dict_to_shelved_date(self.current_progress_dict)
+            self.progress_dict = self.parser.review_soup_to_progress_dict(self.soup)
+            self.start_date = self.parser.progress_dict_to_start_date(self.progress_dict)
+            self.finished_date = self.parser.progress_dict_to_finish_date(self.progress_dict)
+            self.shelved_date = self.parser.progress_dict_to_shelved_date(self.progress_dict)
 
         else:
-            self.current_date = None
-            self.current_book_title = None
-            self.current_book_id = None
-            self.current_rating = None
-            self.current_reviewer_href = None
-            self.current_start_date = None
-            self.current_finished_date = None
-            self.current_shelved_date = None
+            self.date = None
+            self.book_title = None
+            self.book_id = None
+            self.rating = None
+            self.reviewer_href = None
+            self.start_date = None
+            self.finished_date = None
+            self.shelved_date = None
 
     def generate_data_string(self):
 
-        self.current_data_string = "{},{},{},{},{},{},{},{},{},{}".format(self.current_id, self.is_current_valid, self.current_date, self.current_book_title, self.current_book_id, self.current_rating, self.current_reviewer_href, self.current_start_date, self.current_finished_date, self.current_shelved_date)
+        self.data_string = "{},{},{},{},{},{},{},{},{},{}".format(self.id, self.is_review_valid, self.date, self.book_title, self.book_id, self.rating, self.reviewer_href, self.start_date, self.finished_date, self.shelved_date)
 
 class Book_Slave(Slave):
 
