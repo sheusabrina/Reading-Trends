@@ -40,8 +40,10 @@ class Slave_Methods():
             for char in chars_to_remove:
                 item = item.replace(char,"")
 
-            item = int(item) #DOUBLE CHECK THAT IDS SHOULD BE INTEGERS?
+            item = int(item)
             new_chunk.append(item)
+
+        return new_chunk
 
     def transmit_data(self):
 

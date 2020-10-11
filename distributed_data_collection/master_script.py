@@ -86,7 +86,6 @@ class Master_Methods():
         self.num_chunks_total = math.ceil(self.num_ids_total/self.num_ids_per_chunk)
 
         #EACH CHUNK IS A LIST OF ITEMS
-        #for chunk_index in range(self.num_chunks_total -1):
         for chunk_number in range(1, self.num_chunks_total +1):
             chunk_ids = [self.ids_to_scrape_list[i] for i in range(chunk_number, len(self.ids_to_scrape_list), self.num_chunks_total)]
             self.chunks_outstanding_queue.put(chunk_ids)
