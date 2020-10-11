@@ -119,7 +119,7 @@ class Master_Methods():
 
     def recieve_data(self):
 
-        data_string = list(request.forms.get("data_string"))
+        data_string = request.forms.get("data_string")        
         self.data_strings_queue.put(data_string)
 
         self.num_ids_recieved += 1
