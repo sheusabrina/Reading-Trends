@@ -1,4 +1,4 @@
-#HOW TO USE SLAVE:
+data_transmission_loop#HOW TO USE SLAVE:
     #MAKE SURE THAT MASTER SCRIPT IS ALREADY RUNNING
     #INIT SLAVE WITH REST API HOST & PORT (MASTER'S COMPUTER)
     #CALL KICKOFF
@@ -19,9 +19,12 @@ class Slave_Methods():
 
         self.scraper = Scraper()
         self.max_sleep_time = max_sleep_time
+        self.data_strings_queue = queue.Queue(maxsize=0)
 
         self.host = host
         self.port = port
+
+        self.is_data_needed = True
 
     def request_chunk(self):
 
@@ -45,9 +48,14 @@ class Slave_Methods():
 
         return new_chunk
 
-    def transmit_data(self):
+    def data_transmission_loop(self):
 
-        requests.post("http://{}/{}/api", data = {"chunk_data_strings": self.chunk_data_strings_list}).format(self.host, self.port)
+        if not self.data_strings_queue.empty():
+            data_string = self.data_strings_queue.get()
+            requests.post("http://{}/{}/api", data = {"data_string": data_string}).format(self.host, self.port)
+            self.data_strings_queue.task_done()
+
+        self.data_transmission_loop()
 
     def generate_current_url(self):
         self.current_url = self.base_url + str(self.current_id)
@@ -74,12 +82,17 @@ class Slave_Methods():
 
             self.current_soup = self.parser.html_to_soup(self.current_webpage_as_string)
 
-    def log_data(self): #MINION KEEPS DATA AS A LIST OF STRINGS
-        self.chunk_data_strings_list.append(self.current_data_string)
+    def log_data(self):
+        self.data_strings_queue.put(self.current_data_string)
 
     def sleep(self):
 
         self.scraper.sleep(self.max_sleep_time)
+
+    def termination_monitoring_loop(self):
+
+        if (not self.is_data_needed) and self.data_strings_queue.empty():
+            sys.exit()
 
     def parse(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
@@ -89,30 +102,30 @@ class Slave_Methods():
 
 class Slave(Slave_Methods):
 
-    def collect_data_chunk(self):
-
-        self.chunk_data_strings_list = []
-        for id in self.chunk_id_list:
-            self.current_id = id
-            self.generate_current_url()
-            self.scrape_url()
-            self.generate_soup()
-            self.parse()
-            self.generate_data_string()
-            self.log_data()
-            self.sleep()
-
-    def kickoff(self): #DATA COLLECTION LOOP
+    def data_collection_loop(self):
         self.request_chunk()
 
-        if self.chunk_id_list is None:
-            sys.exit()
+        while self.chunk_id_list is not None:
 
-        else:
-            self.collect_data_chunk()
-            self.transmit_data()
+            for id in self.chunk_id_list:
+                self.current_id = id
+                self.generate_current_url()
+                self.scrape_url()
+                self.generate_soup()
+                self.parse()
+                self.generate_data_string()
+                self.log_data()
+                self.sleep()
 
-        self.kickoff()
+            self.request_chunk()
+
+        self.is_data_needed = False
+
+    def kickoff(self):
+
+        thread_data_collection = threading.Thread(target = self.data_collection_loop()).start()
+        thread_data_transmission = threading.Thread(target = self.transmit_data()).start()
+        thread_termination_monitoring = threading.Thread(target = self.transmit_data()).start()
 
 class Review_Slave(Slave):
 

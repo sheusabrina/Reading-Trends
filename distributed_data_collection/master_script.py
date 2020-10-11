@@ -80,7 +80,7 @@ class Master_Methods():
 
         #QUEUES & COUNTERS
         self.chunks_outstanding_queue = queue.Queue(maxsize=0)
-        self.data_strings_recieved_queue = queue.Queue(maxsize=0)
+        self.data_strings_queue = queue.Queue(maxsize=0)
         self.num_chunks_recieved = 0
 
         self.num_chunks_total = math.ceil(self.num_ids_total/self.num_ids_per_chunk)
@@ -103,7 +103,7 @@ class Master_Methods():
         self.print_progress()
         time.sleep(5*60)
 
-    def assignment_request(self):
+    def transmit_chunk_ids(self):
 
         if not self.chunks_outstanding_queue.empty():
             chunk = self.chunks_outstanding_queue.get()
@@ -118,33 +118,31 @@ class Master_Methods():
 
     def recieve_data(self):
 
-        data_string_list = list(request.forms.get("chunk_data_strings"))
-
-        for data_string in data_string_list:
-            self.data_strings_recieved_queue.put(data_string)
+        data_string = list(request.forms.get("data_string"))
+        self.data_strings_queue.put(data_string)
 
         self.num_chunks_recieved += 1
 
         return "Data Recieved"
 
     def run_rest_api(self):
-        bottle.route("/api")(self.assignment_request)
+        bottle.route("/api")(self.transmit_chunk_ids)
         bottle.route("/api", method = "POST")(self.recieve_data)
 
         run(host=self.host, port=self.port, debug=True)
 
-    def log_data(self):
+    def log_data_loop(self):
 
-        if not self.data_strings_recieved_queue.empty():
-            data_string = self.data_strings_recieved_queue.get()
+        if not self.data_strings_queue.empty():
+            data_string = self.data_strings_queue.get()
 
             self.generate_datetime()
             self.datafile.write("\n{},{}".format(data_string, self.now_string))
             self.datafile.close()
 
-            self.data_strings_recieved_queue.task_done()
+            self.data_strings_queue.task_done()
 
-        self.log_data()
+        self.log_data_loop()
 
     def input_scraping_scope(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
@@ -163,7 +161,7 @@ class Master(Master_Methods):
         self.prepare()
 
         thread_api = threading.Thread(target = self.run_rest_api()).start()
-        thread_log_data = threading.Thread(target = self.log_data()).start()
+        thread_log_data = threading.Thread(target = self.log_data_loop()).start()
         thread_print_progress_inter = threading.Thread(target = self.print_progress_inter()).start()
 
 class Review_Master(Master):
