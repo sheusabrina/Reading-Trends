@@ -94,6 +94,11 @@ class Slave_Methods():
         if (not self.is_data_needed) and self.data_strings_queue.empty():
             sys.exit()
 
+        else:
+            time.sleep(10*60) #I DON'T WANT TO BE RUNNING THIS CONSTANTLY
+
+        self.termination_monitoring_loop()
+
     def parse(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
