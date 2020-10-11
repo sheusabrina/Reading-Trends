@@ -12,6 +12,7 @@ import math
 import pandas as pd
 import queue
 import random
+import sys
 import time
 import threading
 
@@ -145,10 +146,24 @@ class Master_Methods():
 
     def termination_monitoring_loop(self):
 
-        while self.num_ids_total != self.num_ids_recieved: #IF WE HAVEN'T RECIEVED ALL IDS
-            while not self.chunks_outstanding_queue.empty() #OR ASSIGNED ALL CHUNKS
-                while not self.data_strings_queue.empty(): #OR LOGGED ALL DATA
-                    self.termination_monitoring_loop(): #WE'RE NOT DONE! KEEP CHECKING 
+        if (self.num_ids_total == self.num_ids_recieved) and self.data_strings_queue.empty():
+            print("Data Collection Complete")
+            sys.exit()
+
+        elif self.chunks_oustanding_queue.empty():
+
+            #SCENARIO 1: SLAVES ARE WORKING ON LAST DATA ASSIGNMENTS & WILL COME BACK IF WE WAIT
+                #SOLUTION: WAIT 
+            #SCENARIO 2: SLAVES ARE DOWN FOR SOME REASON & WILL NEVER COME BACK
+                #SOLUTION: ALERT HUMAN
+            #SCENARIO 3: SOME SCRAPERS & ASSIGNMENTS HAVE BEEN LOST, BUT THE PROGRAM OVERALL IS RUNNING
+                #SOLUTION: REDO PREPARATION & CONTINE
+
+            pass
+
+        else:
+            time.sleep(10*60)
+            sys.exit()
 
     def input_scraping_scope(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
