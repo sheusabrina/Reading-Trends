@@ -30,8 +30,8 @@ class Slave_Methods():
 
     def convert_chunk(self, chunk_response):
 
-        chunk = recieved_chunk.content.decode()
-        chunk = chunk.split(",")
+        old_chunk = chunk_response.content.decode()
+        old_chunk = old_chunk.split(",")
 
         chars_to_remove = [",", "[", "]", " "]
         new_chunk = []
@@ -101,12 +101,14 @@ class Slave(Slave_Methods):
     def kickoff(self): #DATA COLLECTION LOOP
         self.request_chunk()
 
-        while self.chunk_key_list():
+        if self.chunk_id_list is None:
+            sys.exit()
+
+        else:
             self.collect_data_chunk()
             self.transmit_data()
-            self.request_chunk()
 
-        sys.exit() #WHEN MASTER STOPS DISTRIBUTING CHUNKS, TERMINATE
+        self.kickoff()
 
 class Review_Slave(Slave):
 
