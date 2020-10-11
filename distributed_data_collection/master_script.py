@@ -131,47 +131,37 @@ class Master_Methods():
 
         run(host=self.host, port=self.port, debug=True)
 
-    def log_data_loop(self): #REMOVE RECURSION
+    def log_data_loop(self):
 
-        if not self.data_strings_queue.empty():
-            data_string = self.data_strings_queue.get()
+        while True: #INFINITE LOOP
 
-            self.generate_datetime()
-            self.datafile.write("\n{},{}".format(data_string, self.now_string))
-            self.datafile.close()
+            if not self.data_strings_queue.empty():
+                data_string = self.data_strings_queue.get()
 
-            self.data_strings_queue.task_done()
+                self.generate_datetime()
+                self.datafile.write("\n{},{}".format(data_string, self.now_string))
+                self.datafile.close()
 
-        self.log_data_loop()
+                self.data_strings_queue.task_done()
 
-    def termination_monitoring_loop(self): #REMOVE RECURSION
+    def termination_monitoring_loop(self):
 
-        if (self.num_ids_total == self.num_ids_recieved) and self.data_strings_queue.empty():
-            print("Data Collection Complete")
-            sys.exit()
+        terminate = False
 
-        elif not self.chunks_oustanding_queue.empty():
-            time.sleep(10*60)
-            self.termination_monitoring_loop()
+        while terminate == False:
 
-        elif self.chunks_oustanding_queue.empty():
+            if (self.num_ids_total == self.num_ids_recieved) and self.data_strings_queue.empty():
+                terminate = True
 
-            #SCENARIO 1: SLAVES ARE WORKING ON LAST DATA ASSIGNMENTS & WILL COME BACK IF WE WAIT
-                #SOLUTION: WAIT
-            #SCENARIO 2: SLAVES ARE DOWN FOR SOME REASON & WILL NEVER COME BACK
-                #SOLUTION: ALERT HUMAN
-            #SCENARIO 3: SOME SCRAPERS & ASSIGNMENTS HAVE BEEN LOST, BUT THE PROGRAM OVERALL IS RUNNING
-                #SOLUTION: REDO PREPARATION & CONTINE
-                #THIS DOESN'T NEED TO BE AUTOMATED. HUMAN CAN DO IT.
+            elif self.chunks_oustanding_queue.empty():
 
-            #COMPROMISE SOLUTION: ALERT HUMAN & WAIT INDEFINITELY FOR EITHER DATA DELIVERY OR HUMAN INTERVENTION
-            print("Data collection is nearing completion or stuck. Check slave functionality") #THIS WILL BE MORE USEFUL ONCE SCRAPER CAN EMAIL ME!
-            time.sleep(3*60*60) #THREE HOURS
-            self.termination_monitoring_loop()
+                print("Data collection is nearing completion or stuck. Check slave functionality") #THIS WILL BE MORE USEFUL ONCE SCRAPER CAN EMAIL ME!
+                time.sleep(60*60) #HOUR
 
-        else:
-            time.sleep(10*60)
-            sys.exit()
+            else:
+                pass
+
+        sys.exit()
 
     def input_scraping_scope(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")

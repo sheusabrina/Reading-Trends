@@ -50,15 +50,14 @@ class Slave_Methods():
 
         return new_chunk
 
-    def data_transmission_loop(self): #REMOVE RECURSION
-        print("Entering data transmission loop")
+    def data_transmission(self):
 
-        if not self.data_strings_queue.empty():
-            data_string = self.data_strings_queue.get()
-            requests.post("http://{}/{}/api", data = {"data_string": data_string}).format(self.host, self.port)
-            self.data_strings_queue.task_done()
+        while True: #INFINITE LOOP, BUT IT ENDS WHEN THE PROGRAM DOES
 
-        self.data_transmission_loop()
+            if not self.data_strings_queue.empty():
+                data_string = self.data_strings_queue.get()
+                requests.post("http://{}/{}/api", data = {"data_string": data_string}).format(self.host, self.port)
+                self.data_strings_queue.task_done()
 
     def generate_url(self):
         self.url = self.base_url + str(self.id)
@@ -93,15 +92,19 @@ class Slave_Methods():
 
         self.scraper.sleep(self.max_sleep_time)
 
-    def termination_monitoring_loop(self): #REMOVE RECURSION
+    def termination_monitoring_loop(self):
 
-        if (not self.is_data_needed) and self.data_strings_queue.empty():
-            sys.exit()
+        terminate = False
 
-        else:
-            time.sleep(10*60) #I DON'T WANT TO BE RUNNING THIS CONSTANTLY
+        while terminate == False:
 
-        self.termination_monitoring_loop()
+            if (not self.is_data_needed) and self.data_strings_queue.empty():
+                terminate = True
+
+            else:
+                time.sleep(10*60)
+
+        sys.exit()
 
     def parse(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
@@ -110,6 +113,9 @@ class Slave_Methods():
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
 class Slave(Slave_Methods):
+
+    def data_transmission_loop(self):
+        pass
 
     def data_collection_loop(self):
         self.request_chunk()
