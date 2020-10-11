@@ -50,7 +50,7 @@ class Slave_Methods():
 
         return new_chunk
 
-    def data_transmission_loop(self):
+    def data_transmission_loop(self): #REMOVE RECURSION
         print("Entering data transmission loop")
 
         if not self.data_strings_queue.empty():
@@ -93,7 +93,7 @@ class Slave_Methods():
 
         self.scraper.sleep(self.max_sleep_time)
 
-    def termination_monitoring_loop(self):
+    def termination_monitoring_loop(self): #REMOVE RECURSION
 
         if (not self.is_data_needed) and self.data_strings_queue.empty():
             sys.exit()

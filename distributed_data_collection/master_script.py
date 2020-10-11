@@ -131,7 +131,7 @@ class Master_Methods():
 
         run(host=self.host, port=self.port, debug=True)
 
-    def log_data_loop(self):
+    def log_data_loop(self): #REMOVE RECURSION
 
         if not self.data_strings_queue.empty():
             data_string = self.data_strings_queue.get()
@@ -144,7 +144,7 @@ class Master_Methods():
 
         self.log_data_loop()
 
-    def termination_monitoring_loop(self):
+    def termination_monitoring_loop(self): #REMOVE RECURSION
 
         if (self.num_ids_total == self.num_ids_recieved) and self.data_strings_queue.empty():
             print("Data Collection Complete")
