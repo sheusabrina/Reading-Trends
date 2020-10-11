@@ -1,7 +1,7 @@
 #HOW TO USE SLAVE:
     #MAKE SURE THAT MASTER SCRIPT IS ALREADY RUNNING
     #INIT SLAVE WITH REST API HOST & PORT (MASTER'S COMPUTER)
-    #CALL DATA COLLECTION LOOP METHOD
+    #CALL KICKOFF
 
 #import libraries
 from bs4 import BeautifulSoup
@@ -98,7 +98,7 @@ class Slave(Slave_Methods):
             self.log_data()
             self.sleep()
 
-    def data_collection_loop(self):
+    def kickoff(self): #DATA COLLECTION LOOP
         self.request_chunk()
 
         while self.chunk_key_list():
