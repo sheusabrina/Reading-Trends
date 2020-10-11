@@ -143,6 +143,13 @@ class Master_Methods():
 
         self.log_data_loop()
 
+    def termination_monitoring_loop(self):
+
+        while self.num_ids_total != self.num_ids_recieved: #IF WE HAVEN'T RECIEVED ALL IDS
+            while not self.chunks_outstanding_queue.empty() #OR ASSIGNED ALL CHUNKS
+                while not self.data_strings_queue.empty(): #OR LOGGED ALL DATA
+                    self.termination_monitoring_loop(): #WE'RE NOT DONE! KEEP CHECKING 
+
     def input_scraping_scope(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
