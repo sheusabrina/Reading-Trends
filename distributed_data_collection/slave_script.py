@@ -91,12 +91,14 @@ class Slave(Slave_Methods):
 
     def collect_data_chunk(self):
 
+        self.chunk_data_strings_list = []
         for id in self.chunk_id_list:
             self.current_id = id
             self.generate_current_url()
             self.scrape_url()
             self.generate_soup()
             self.parse()
+            self.generate_data_string()
             self.log_data()
             self.sleep()
 
@@ -148,7 +150,7 @@ class Review_Slave(Slave):
 
     def generate_data_string(self):
 
-        self.current_data_string = data = "{},{},{},{},{},{},{},{},{},{}".format(self.current_id, self.is_currnet_valid, self.current_date, self.current_book_title, self.current_book_id, self.current_rating, self.current_reviewer_href, self.current_start_date, self.current_finished_date, self.current_shelved_date)
+        self.current_data_string = "{},{},{},{},{},{},{},{},{},{}".format(self.current_id, self.is_current_valid, self.current_date, self.current_book_title, self.current_book_id, self.current_rating, self.current_reviewer_href, self.current_start_date, self.current_finished_date, self.current_shelved_date)
 
 class Book_Slave(Slave):
 
