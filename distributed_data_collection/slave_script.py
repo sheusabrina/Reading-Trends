@@ -135,6 +135,8 @@ class Slave(Slave_Methods):
 
     def kickoff(self):
 
+        time.sleep(30) #SEE IF THE DELAY SOLVES THE ACTIVE REFUSAL ERROR
+
         thread_data_collection = threading.Thread(target = self.data_collection_loop).start()
         thread_data_transmission = threading.Thread(target = self.data_transmission_loop).start()
         thread_termination_monitoring = threading.Thread(target = self.termination_monitoring_loop).start()
