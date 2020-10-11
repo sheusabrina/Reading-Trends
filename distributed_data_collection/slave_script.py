@@ -1,4 +1,4 @@
-data_transmission_loop#HOW TO USE SLAVE:
+#HOW TO USE SLAVE:
     #MAKE SURE THAT MASTER SCRIPT IS ALREADY RUNNING
     #INIT SLAVE WITH REST API HOST & PORT (MASTER'S COMPUTER)
     #CALL KICKOFF
@@ -6,8 +6,10 @@ data_transmission_loop#HOW TO USE SLAVE:
 #import libraries
 from bs4 import BeautifulSoup
 import requests
+import queue
 import sys
 import time
+import threading
 
 #import classes
 from parser_script import Review_Parser, Book_Parser
@@ -49,6 +51,7 @@ class Slave_Methods():
         return new_chunk
 
     def data_transmission_loop(self):
+        print("Entering data transmission loop")
 
         if not self.data_strings_queue.empty():
             data_string = self.data_strings_queue.get()
@@ -83,6 +86,7 @@ class Slave_Methods():
             self.soup = self.parser.html_to_soup(self.webpage_as_string)
 
     def log_data(self):
+        print("logging data")
         self.data_strings_queue.put(self.data_string)
 
     def sleep(self):
@@ -129,8 +133,8 @@ class Slave(Slave_Methods):
     def kickoff(self):
 
         thread_data_collection = threading.Thread(target = self.data_collection_loop()).start()
-        thread_data_transmission = threading.Thread(target = self.transmit_data()).start()
-        thread_termination_monitoring = threading.Thread(target = self.transmit_data()).start()
+        thread_data_transmission = threading.Thread(target = self.data_transmission_loop()).start()
+        thread_termination_monitoring = threading.Thread(target = self.termination_monitoring_loop()).start()
 
 class Review_Slave(Slave):
 
@@ -142,7 +146,7 @@ class Review_Slave(Slave):
 
     def parse(self):
 
-        self.is_review_valid = self.parser.review_soup_is_review_valid(self.soup)
+        self.is_review_valid = self.parser.review_soup_is_valid(self.soup)
 
         if self.is_review_valid:
             self.date = self.parser.review_soup_to_date(self.soup)
@@ -167,6 +171,7 @@ class Review_Slave(Slave):
             self.shelved_date = None
 
     def generate_data_string(self):
+        print("Generating data string")
 
         self.data_string = "{},{},{},{},{},{},{},{},{},{}".format(self.id, self.is_review_valid, self.date, self.book_title, self.book_id, self.rating, self.reviewer_href, self.start_date, self.finished_date, self.shelved_date)
 
