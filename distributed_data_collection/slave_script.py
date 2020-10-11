@@ -15,19 +15,7 @@ from scraper_script import Scraper
 
 class Slave_Methods():
 
-    def __init__(self, max_sleep_time, minion_type, host, port):
-
-        #DIFFERENTIATED NAMES & PARSERS
-
-        if minion_type == "book":
-            self.base_url = "https://www.goodreads.com/book/show/"
-            self.parser = Book_Parser()
-
-        if minion_type == "review":
-            self.base_url = "https://www.goodreads.com/review/show/"
-            self.parser = Review_Parser()
-
-        #SHARED FIELDS
+    def __init__(self, max_sleep_time, host, port):
 
         self.scraper = Scraper()
         self.max_sleep_time = max_sleep_time
@@ -122,6 +110,12 @@ class Slave(Slave_Methods):
 
 class Review_Slave(Slave):
 
+    def __init__(self, max_sleep_time, host, port):
+        super().__init__(max_sleep_time, host, port)
+
+        self.base_url = "https://www.goodreads.com/review/show/"
+        self.parser = Review_Parser()
+
     def parse(self):
 
         self.is_current_valid = self.parser.review_soup_is_valid(self.current_soup)
@@ -151,3 +145,11 @@ class Review_Slave(Slave):
     def generate_data_string(self):
 
         self.current_data_string = data = "{},{},{},{},{},{},{},{},{},{}".format(self.current_id, self.is_currnet_valid, self.current_date, self.current_book_title, self.current_book_id, self.current_rating, self.current_reviewer_href, self.current_start_date, self.current_finished_date, self.current_shelved_date)
+
+class Book_Slave(Slave):
+
+    def __init__(self, max_sleep_time, host, port):
+        super().__init__(max_sleep_time, host, port)
+
+        self.base_url = "https://www.goodreads.com/review/show/"
+        self.parser = Review_Parser()
