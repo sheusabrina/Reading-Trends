@@ -81,7 +81,6 @@ class Master_Methods():
         #QUEUES & COUNTERS
         self.chunks_outstanding_queue = queue.Queue(maxsize=0)
         self.data_strings_queue = queue.Queue(maxsize=0)
-        self.num_chunks_recieved = 0
 
         self.num_chunks_total = math.ceil(self.num_ids_total/self.num_ids_per_chunk)
 
@@ -97,7 +96,7 @@ class Master_Methods():
 
     def print_progress(self):
         self.generate_datetime()
-        print("{:,} / {:,} data chunks collected ({:.2%} complete) at {}".format(self.num_chunks_recieved, self.num_chunks_total, self.num_chunks_recieved/self.num_chunks_total, self.now_string))
+        print("{:,} / {:,} data points collected ({:.2%} complete) at {}".format(self.num_ids_recieved, self.num_ids_total, self.num_ids_recieved/self.num_ids_total, self.now_string))
 
     def print_progress_inter(self):
         self.print_progress()
@@ -121,7 +120,7 @@ class Master_Methods():
         data_string = list(request.forms.get("data_string"))
         self.data_strings_queue.put(data_string)
 
-        self.num_chunks_recieved += 1
+        self.num_ids_recieved += 1
 
         return "Data Recieved"
 
