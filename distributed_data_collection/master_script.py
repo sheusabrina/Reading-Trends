@@ -60,6 +60,7 @@ class Master_Methods():
             self.ids_to_scrape_list = [x for x in self.ids_requested_list]
 
         else: #IF CSV, SCRAPE ITEMS NOT ALREADY IN CSV
+            self.ids_to_scrape_list = []
 
             log_file_data = pd.read_csv(self.log_file_name)
             ids_in_data_log = log_file_data[self.data_log_id_column_name].unique()
