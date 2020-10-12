@@ -3,6 +3,9 @@
     #INIT SLAVE WITH REST API HOST & PORT (MASTER'S COMPUTER)
     #CALL KICKOFF
 
+#TO-DO:
+    #WHY DOESN'T SHUTDOWN HAPPEN?
+
 #import libraries
 from bs4 import BeautifulSoup
 import requests

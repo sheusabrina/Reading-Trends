@@ -4,6 +4,13 @@
     #CALL KICKOFF METHOD
     #MASTER IS READY FOR SLAVES
 
+#TO-DO LIST:
+    #FIX BUG WITH DATA LOG READING
+    #FIX INTERMITTENT ALERT THREAD
+    #ADD EMAIL ALERTS
+    #ADD TERMINATION
+    #USE DAEMON THREADS
+
 #import libraries
 import bottle
 from bottle import route, run, template, post, get, request
