@@ -1,0 +1,29 @@
+#NOTES
+test_file_urls.txt
+notes_to_do_list.txt
+
+#TEST HTML FILES
+#test_review.html
+#test_review_error.html
+#test_review_unpopulated.html
+#test_review_grounded.html
+
+#test_book.html
+#test_book_angels_demons.html
+#test_book_meditations.html
+#test_book_hp1.html
+
+#test_book_hp1_binary.html
+#test_book_hp1_regular.html
+
+#DATABASES
+review_id_data.csv
+review_id_sample_data.csv
+review_data.csv
+review_data_sample.csv
+book_data.csv
+book_data_copy.csv
+test_database.csv
+
+#Cache Files
+*.pyc
