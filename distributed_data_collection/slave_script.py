@@ -145,20 +145,18 @@ class Slave(Slave_Methods):
 
     def kickoff(self):
 
+        #GIVE SERVER TIME TO START UP
         print("Slave Sleeping...")
-        time.sleep(40) #SEE IF THE DELAY SOLVES THE ACTIVE REFUSAL ERROR
+        time.sleep(40)
         print("Slave Sleep Completed")
 
-        thread_data_collection = threading.Thread(target = self.data_collection_loop)
-        thread_data_parsing = threading.Thread(target = self.data_parsing_loop)
-        thread_termination_monitoring = threading.Thread(target = self.termination_monitoring_loop)
-        thread_data_transmission = threading.Thread(target = self.data_transmission_loop)
+        #BACKGROUND THREADS
+        thread_data_collection = threading.Thread(target = self.data_collection_loop, daemon = True).start()
+        thread_data_parsing = threading.Thread(target = self.data_parsing_loop, daemon = True).start()
+        thread_data_transmission = threading.Thread(target = self.data_transmission_loop, daemon = True).start()
 
-        thread_list = [thread_data_collection, thread_data_parsing, thread_termination_monitoring, thread_data_transmission]
-
-        for thread in thread_list:
-            thread.daemon = True 
-            thread.start()
+        #MAIN PROGRAM
+        self.termination_monitoring_loop()
 
 class Review_Slave(Slave):
 
