@@ -218,5 +218,5 @@ class Book_Master(Master):
 host, port = "localhost", 8080
 
 test_review_master = Review_Master("test_database", host, port, 3)
-test_review_master.input_scraping_scope(120, 130)
+test_review_master.input_scraping_scope(150, 155)
 test_review_master.kickoff()

@@ -5,6 +5,7 @@
 
 #TO-DO:
     #WHY DOESN'T SHUTDOWN HAPPEN?
+    #SEARCH ON "#RAISE VALUE AFTER TESTING IS COMPLETE" & MAKE CORRECTION
 
 #import libraries
 from bs4 import BeautifulSoup
@@ -32,14 +33,14 @@ class Slave_Methods():
         self.port = port
         self.api_url = "http://{}:{}/api".format(self.host, self.port)
 
-        self.is_data_needed = True
+        self.is_none_recieved = False
 
     def request_chunk(self):
 
         chunk_response = requests.get(self.api_url)
 
         if self.is_chunk_none(chunk_response):
-            self.is_data_needed = False
+            self.is_none_recieved = True
 
         else:
             chunk_id_list = self.convert_chunk(chunk_response)
@@ -101,13 +102,13 @@ class Slave_Methods():
         terminate = False
 
         while terminate == False:
-
-            if (not self.is_data_needed) and self.data_strings_queue.empty():
-                terminate = True
+            if self.is_none_recieved and self.data_strings_queue.empty() and self.soup_tuple_queue.empty() and self.data_strings_queue.empty():
+                terminate == True
 
             else:
-                time.sleep(10*60)
+                time.sleep(10) #RAISE VALUE AFTER TESTING IS COMPLETE
 
+        print("Data Collected. Terminating")
         sys.exit()
 
     def is_chunk_none(self, chunk):
@@ -129,7 +130,7 @@ class Slave(Slave_Methods):
 
     def data_collection_loop(self):
 
-        while self.is_data_needed:
+        while not self.is_none_recieved:
 
             if self.id_queue.empty():
                 self.request_chunk()
