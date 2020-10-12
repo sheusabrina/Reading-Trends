@@ -57,6 +57,9 @@ class Slave_Methods():
         while True: #INFINITE LOOP, BUT IT ENDS WHEN THE PROGRAM DOES
 
             if not self.data_strings_queue.empty():
+
+                print("Transmitting")
+
                 data_string = self.data_strings_queue.get()
                 requests.post(self.api_url, data = {"data_string": data_string})
                 self.data_strings_queue.task_done()
@@ -112,14 +115,18 @@ class Slave(Slave_Methods):
 
         while self.chunk_id_list is not None:
 
+            print("Collected chunk")
+
             for id in self.chunk_id_list:
-                self.id_to_soup_tuple
+                self.id_to_soup_tuple(id)
 
             self.request_chunk()
 
         self.is_data_needed = False
 
     def data_parsing_loop(self):
+
+        print("Entering Parsing Loop")
 
         while True: #INFINITE LOOP, BUT IT ENDS WHEN THE PROGRAM DOES
 
@@ -131,9 +138,9 @@ class Slave(Slave_Methods):
         time.sleep(30) #SEE IF THE DELAY SOLVES THE ACTIVE REFUSAL ERROR
 
         thread_data_collection = threading.Thread(target = self.data_collection_loop).start()
-        thread_data_transmission = threading.Thread(target = self.data_transmission_loop).start()
         thread_data_parsing = threading.Thread(target = self.data_parsing_loop).start()
         thread_termination_monitoring = threading.Thread(target = self.termination_monitoring_loop).start()
+        thread_data_transmission = threading.Thread(target = self.data_transmission_loop).start()
 
 class Review_Slave(Slave):
 
@@ -144,6 +151,8 @@ class Review_Slave(Slave):
         self.parser = Review_Parser()
 
     def parse(self):
+
+        print("Parsing")
 
         soup_tuple = self.soup_tuple_queue.get()
         id, soup = soup_tuple[0], soup_tuple[1]
