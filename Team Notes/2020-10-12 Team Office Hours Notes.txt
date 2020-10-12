@@ -1,0 +1,29 @@
+Office Hours with Brian:
+	- Model 1: Predicts number of reviews, given a book and a date.
+		- Input: aggregated review counts for historical time periods (ie, monthly reviews per book)
+		- Model should be built and tested on pre-covid data only.
+		- May want to predict log of number of reviews, since that works better for a regression.
+		- Use time as a feature (ie, first month = 0 and flags by month/quarter/season to capture any seasonality)
+		- Model accuracy can then be measured on post-periods. If model deteriorates significantly in COVID, suggestive of change. 
+	- Model 2: Suggests hypothesis for model deterioration by identifying drivers of model 1 error. 
+		- Input: book metadata, and model 1 error (delta = model 1 result - model 1 prediction)
+		- Random forest can identify the most useful features, which we can then explore further. (For example, if random forest identifies genre as important, we can then look at avg error by genre)
+		- May want to look into lyme technique (whatever that is)
+	- Think strategically about threshold for excluding books from the model. We don't want to have the noise driven by unimportant books with only a handful of reviews. (Num reviews? Self-published? Language?)
+
+Group Discussion:
+	- The same proceedure can be used for avg rating, so we can actually look at both!
+	- What kind of model? Let's see how close linear regression gets us. 
+	- Can use current data sample (350K data points) to write the code that makes the model. 
+	- Will work with repository forks for the moment, will switch to all having read/write access if approval becomes a bottleneck (or is just annoying).
+	- Will need to think about a mechanism to merge different editions of the same book (isbn library? title/author matching?)
+
+Current Status:
+	- Distributed scraper: sort of works, kind of buggy, but should be close to a point where we can deploy a version and clean up non-essential features (ie, progress updates, error alerts) later.
+	- Book metadata research: in progress, data is in weird format and needs to be cleaned
+ 
+Next Steps:
+	- Get distributed scraper running (Leora)
+	- Research book meta data options (Preston)
+	- Research distributed hosting solutions - Google Cloud? (Kathleen)
+	- Start coding models while we are collecting data
