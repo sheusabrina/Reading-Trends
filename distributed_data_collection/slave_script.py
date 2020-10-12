@@ -33,7 +33,12 @@ class Slave_Methods():
     def request_chunk(self):
 
         chunk_response = requests.get(self.api_url)
-        self.chunk_id_list = self.convert_chunk(chunk_response)
+
+        if self.is_chunk_none(chunk_response):
+            self.is_data_needed = False
+
+        else:
+            self.chunk_id_list = self.convert_chunk(chunk_response)
 
     def convert_chunk(self, chunk_response):
 
@@ -99,6 +104,15 @@ class Slave_Methods():
 
         sys.exit()
 
+    def is_chunk_none(self, chunk):
+
+        chunk = chunk.content.decode()
+
+        if chunk == "":
+            return True
+        else:
+            return False
+
     def parse(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
@@ -109,6 +123,7 @@ class Slave(Slave_Methods):
 
     def data_collection_loop(self):
 
+        self.chunk_id_list = None
         self.request_chunk()
 
         while self.chunk_id_list is not None:
