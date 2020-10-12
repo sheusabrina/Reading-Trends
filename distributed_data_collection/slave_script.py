@@ -21,6 +21,7 @@ class Slave_Methods():
 
         self.scraper = Scraper()
         self.max_sleep_time = max_sleep_time
+        self.id_queue = queue.Queue(maxsize=0)
         self.soup_tuple_queue = queue.Queue(maxsize=0)
         self.data_strings_queue = queue.Queue(maxsize=0)
 
@@ -38,7 +39,9 @@ class Slave_Methods():
             self.is_data_needed = False
 
         else:
-            self.chunk_id_list = self.convert_chunk(chunk_response)
+            chunk_id_list = self.convert_chunk(chunk_response)
+            for id in chunk_id_list:
+                self.id_queue.put(id)
 
     def convert_chunk(self, chunk_response):
 
@@ -123,17 +126,15 @@ class Slave(Slave_Methods):
 
     def data_collection_loop(self):
 
-        self.chunk_id_list = None
-        self.request_chunk()
+        while self.is_data_needed:
 
-        while self.chunk_id_list is not None:
+            if self.id_queue.empty():
+                self.request_chunk()
 
-            for id in self.chunk_id_list:
+            else:
+                id = self.id_queue.get()
                 self.id_to_soup_tuple(id)
-
-            self.request_chunk()
-
-        self.is_data_needed = False
+                self.id_queue.task_done()
 
     def data_parsing_loop(self):
 
