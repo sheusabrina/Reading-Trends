@@ -92,11 +92,10 @@ class Master_Methods():
         self.chunks_outstanding_queue = queue.Queue(maxsize=0)
         self.data_strings_queue = queue.Queue(maxsize=0)
 
-        self.num_chunks_total = math.ceil(self.num_ids_total/self.num_ids_per_chunk)
+        num_chunks_total = math.ceil(self.num_ids_total/self.num_ids_per_chunk)
 
-        #EACH CHUNK IS A LIST OF ITEMS
-        for chunk_number in range(1, self.num_chunks_total +1):
-            chunk_ids = [self.ids_to_scrape_list[i] for i in range(chunk_number, len(self.ids_to_scrape_list), self.num_chunks_total)]
+        for i in range(0, num_chunks_total):
+            chunk_ids = self.ids_to_scrape_list[i::num_chunks_total]
             self.chunks_outstanding_queue.put(chunk_ids)
 
     def generate_datetime(self):
