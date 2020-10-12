@@ -130,10 +130,10 @@ class Slave(Slave_Methods):
 
         time.sleep(30) #SEE IF THE DELAY SOLVES THE ACTIVE REFUSAL ERROR
 
-        thread_data_collection = threading.Thread(target = self.data_collection_loop, daemon = True).start()
-        thread_data_transmission = threading.Thread(target = self.data_transmission_loop, daemon = True).start()
-        thread_data_parsing = threading.Thread(target = self.data_parsing_loop, daemon = True).start()
-        thread_termination_monitoring = threading.Thread(target = self.termination_monitoring_loop, daemon = True).start()
+        thread_data_collection = threading.Thread(target = self.data_collection_loop).start()
+        thread_data_transmission = threading.Thread(target = self.data_transmission_loop).start()
+        thread_data_parsing = threading.Thread(target = self.data_parsing_loop).start()
+        thread_termination_monitoring = threading.Thread(target = self.termination_monitoring_loop).start()
 
 class Review_Slave(Slave):
 

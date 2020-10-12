@@ -147,6 +147,7 @@ class Master_Methods():
                 self.data_strings_queue.task_done()
 
     def termination_monitoring_loop(self):
+        print("entering termination monitoring")
 
         terminate = False
 
@@ -181,9 +182,9 @@ class Master(Master_Methods):
     def kickoff(self):
         self.prepare()
 
-        thread_api = threading.Thread(target = self.run_rest_api, daemon = True).start()
-        thread_log_data = threading.Thread(target = self.log_data_loop, daemon = True).start()
-        thread_print_progress_inter = threading.Thread(target = self.print_progress_inter, daemon = True).start()
+        thread_api = threading.Thread(target = self.run_rest_api).start()
+        thread_log_data = threading.Thread(target = self.log_data_loop).start()
+        thread_print_progress_inter = threading.Thread(target = self.print_progress_inter).start()
 
 class Review_Master(Master):
 
