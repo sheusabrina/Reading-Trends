@@ -155,7 +155,7 @@ class Master_Methods():
             if (self.num_ids_total == self.num_ids_recieved) and self.data_strings_queue.empty():
                 terminate = True
 
-            elif self.chunks_oustanding_queue.empty():
+            elif self.chunks_oustanding_queue.empty() and self.soup_tuple_queue.empty():
 
                 print("Data collection is nearing completion or stuck. Check slave functionality") #THIS WILL BE MORE USEFUL ONCE SCRAPER CAN EMAIL ME!
                 time.sleep(60*60) #HOUR
