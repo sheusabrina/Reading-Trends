@@ -2,7 +2,7 @@
     #INIT WITH HOST AND PORT OF OWN COMPUTER
     #INPUT SCRAPING SCOPE
     #CALL KICKOFF METHOD
-    #MASTER IS READY FOR SLAVES
+    #YOU HAVE TO CLICK CTRL-C TWICE TO TERMINATE.
 
 #TO-DO LIST:
     #FIX BUG WITH DATA LOG READING
@@ -81,7 +81,7 @@ class Master_Methods():
             sys.exit()
 
         self.num_ids_total = len(self.ids_to_scrape_list)
-        random.shuffle(self.ids_to_scrape_list)
+        #random.shuffle(self.ids_to_scrape_list) #PUT THIS BACK AFTER TESTING
 
     def generate_chunks(self):
 
@@ -93,6 +93,9 @@ class Master_Methods():
 
         for i in range(0, num_chunks_total):
             chunk_ids = self.ids_to_scrape_list[i::num_chunks_total]
+
+            print("chunk ids: {}".format(chunk_ids))
+
             self.chunks_outstanding_queue.put(chunk_ids)
 
     def generate_datetime(self):
@@ -102,7 +105,7 @@ class Master_Methods():
 
     def print_progress(self):
         self.generate_datetime()
-        print("{:,} / {:,} data points collected ({:.2%} complete) at {}".format(self.num_ids_logged, self.num_ids_total, self.num_ids_logged/self.num_ids_total, self.now_string))
+        #print("{:,} / {:,} data points collected ({:.2%} complete) at {}".format(self.num_ids_logged, self.num_ids_total, self.num_ids_logged/self.num_ids_total, self.now_string))
 
     def print_progress_inter(self):
 
@@ -128,6 +131,8 @@ class Master_Methods():
         data_string = request.forms.get("data_string")
         self.data_strings_queue.put(data_string)
 
+        print("Recieved: {}".format(data_string[0:2]))
+
         return "Data Recieved"
 
     def run_rest_api(self):
@@ -147,9 +152,13 @@ class Master_Methods():
             self.datafile.write("\n{},{}".format(data_string, self.now_string))
             self.datafile.close()
 
+            print("Logged:".format(data_string[0:2]))
+
             self.data_strings_queue.task_done()
 
             self.num_ids_logged += 1
+
+        print("Log Data Loop Completed")
 
     def input_scraping_scope(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
@@ -163,7 +172,6 @@ class Master(Master_Methods):
         self.prepare_scope()
         self.generate_chunks()
         self.prepare_log_file()
-        self.run_rest_api()
 
     def kickoff(self):
         self.prepare()
@@ -177,10 +185,13 @@ class Master(Master_Methods):
                 active_threads.append(thread)
                 thread.start()
 
+        self.run_rest_api()
+
         #BLOCKING
         while self.num_ids_total != self.num_ids_logged:
             time.sleep(1)
 
+        print("Blocking Complete / Initiating Shutdown")
         self.active = False
 
         print("Data Collected. Terminating")
@@ -211,5 +222,5 @@ class Book_Master(Master):
 host, port = "localhost", 8080
 
 test_review_master = Review_Master("test_database", host, port, 3)
-test_review_master.input_scraping_scope(150, 155)
+test_review_master.input_scraping_scope(10, 15)
 test_review_master.kickoff()

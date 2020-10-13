@@ -38,6 +38,7 @@ class Slave_Methods():
         else:
             chunk_id_list = self.convert_chunk(chunk_response)
             for id in chunk_id_list:
+                print("Recieved: {}".format(id))
                 self.id_queue.put(id)
 
     def convert_chunk(self, chunk_response):
@@ -62,6 +63,9 @@ class Slave_Methods():
         while self.active or (not self.data_strings_queue.empty()):
 
             data_string = self.data_strings_queue.get()
+
+            print("Transmitting: {}".format(data_string[0:2]))
+
             requests.post(self.api_url, data = {"data_string": data_string})
             self.data_strings_queue.task_done()
 
@@ -80,6 +84,8 @@ class Slave_Methods():
                 num_invalid_responses_recieved += 1
 
                 soup = self.parser.html_to_soup(webpage_as_string)
+
+        print("Parsed: {}".format(id))
 
         tuple = (id, soup)
         self.soup_tuple_queue.put(tuple)
