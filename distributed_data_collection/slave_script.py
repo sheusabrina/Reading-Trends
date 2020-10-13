@@ -151,13 +151,14 @@ class Slave(Slave_Methods):
             thread.start()
 
         #BLOCK IN MAIN THREAD
+
         while self.active:
             time.sleep(1)
 
         print("Slave Block Complete...")
 
-        #for thread in active_threads:
-            #thread.join()
+        for thread in active_threads:
+            thread.join()
 
         print("Data Collected. Terminating.")
 
