@@ -25,7 +25,7 @@ class Master_Methods():
     def __init__(self, file_name, host, port, num_ids_per_chunk):
 
         self.num_ids_per_chunk = num_ids_per_chunk
-        self.num_ids_recieved = 0
+        self.num_ids_logged = 0
         self.log_file_name = "databases/"+ file_name + ".csv"
         self.host = host
         self.port = port
@@ -102,7 +102,7 @@ class Master_Methods():
 
     def print_progress(self):
         self.generate_datetime()
-        print("{:,} / {:,} data points collected ({:.2%} complete) at {}".format(self.num_ids_recieved, self.num_ids_total, self.num_ids_recieved/self.num_ids_total, self.now_string))
+        print("{:,} / {:,} data points collected ({:.2%} complete) at {}".format(self.num_ids_logged, self.num_ids_total, self.num_ids_logged/self.num_ids_total, self.now_string))
 
     def print_progress_inter(self):
 
@@ -128,8 +128,6 @@ class Master_Methods():
         data_string = request.forms.get("data_string")
         self.data_strings_queue.put(data_string)
 
-        self.num_ids_recieved += 1
-
         return "Data Recieved"
 
     def run_rest_api(self):
@@ -151,6 +149,8 @@ class Master_Methods():
 
             self.data_strings_queue.task_done()
 
+            self.num_ids_logged += 1
+
     def input_scraping_scope(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
@@ -167,7 +167,7 @@ class Master(Master_Methods):
 
     def kickoff(self):
         self.prepare()
-        
+
         #BACKGROUND THREADS
         self.active = True
         active_threads = []
@@ -178,7 +178,7 @@ class Master(Master_Methods):
                 thread.start()
 
         #BLOCKING
-        while self.num_ids_total != self.num_ids_recieved:
+        while self.num_ids_total != self.num_ids_logged:
             time.sleep(1)
 
         self.active = False
