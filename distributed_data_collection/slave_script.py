@@ -142,8 +142,6 @@ class Slave(Slave_Methods):
         while self.active:
             time.sleep(1)
 
-        #TERMINATION
-        [thread.join() for thread in active_threads]
         print("Data Collected. Terminating.")
 
 class Review_Slave(Slave):
