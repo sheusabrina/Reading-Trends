@@ -69,6 +69,8 @@ class Slave_Methods():
             requests.post(self.api_url, data = {"data_string": data_string})
             self.data_strings_queue.task_done()
 
+        print("Terminating Data Transmission Loop")
+
     def id_to_soup_tuple(self, id):
         url = self.base_url + str(id)
         webpage_as_string = self.scraper.url_to_string_content(url)
@@ -123,10 +125,14 @@ class Slave(Slave_Methods):
             else:
                 self.request_chunk()
 
+        print("Terminating Data Scraping Loop")
+
     def data_parsing_loop(self):
 
         while self.active or (not self.soup_tuple_queue.empty()):
             self.parse()
+
+        print("Terminating Data Parsing Loop")
 
     def kickoff(self):
 
@@ -147,6 +153,11 @@ class Slave(Slave_Methods):
         #BLOCK IN MAIN THREAD
         while self.active:
             time.sleep(1)
+
+        print("Slave Block Complete...")
+
+        #for thread in active_threads:
+            #thread.join()
 
         print("Data Collected. Terminating.")
 

@@ -152,8 +152,6 @@ class Master_Methods():
             self.datafile.write("\n{},{}".format(data_string, self.now_string))
             self.datafile.close()
 
-            print("Logged:".format(data_string[0:2]))
-
             self.data_strings_queue.task_done()
 
             self.num_ids_logged += 1
