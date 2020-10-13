@@ -59,7 +59,7 @@ class Slave_Methods():
 
     def data_transmission_loop(self):
 
-        while self.active and (not self.data_strings_queue.empty()):
+        while self.active or (not self.data_strings_queue.empty()):
 
             data_string = self.data_strings_queue.get()
             requests.post(self.api_url, data = {"data_string": data_string})
@@ -117,11 +117,9 @@ class Slave(Slave_Methods):
             else:
                 self.request_chunk()
 
-        print("Data Coll")
-
     def data_parsing_loop(self):
 
-        while self.active and (not self.soup_queue.empty()):
+        while self.active or (not self.soup_tuple_queue.empty()):
             self.parse()
 
     def kickoff(self):

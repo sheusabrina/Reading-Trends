@@ -6,7 +6,6 @@
 
 #TO-DO LIST:
     #FIX BUG WITH DATA LOG READING
-    #FIX INTERMITTENT ALERT THREAD
     #ADD EMAIL ALERTS
 
 #import libraries
@@ -141,7 +140,7 @@ class Master_Methods():
 
     def log_data_loop(self):
 
-        while self.active and (not self.data_strings_queue.empty()):
+        while self.active or (not self.data_strings_queue.empty()):
 
             data_string = self.data_strings_queue.get()
 
@@ -172,7 +171,7 @@ class Master(Master_Methods):
         self.active = True
         active_threads = []
 
-        for method in self.run_rest_api, self.log_data_loop, self.print_progress_inter]:
+        for method in [self.run_rest_api, self.log_data_loop, self.print_progress_inter]:
                 thread = threading.Thread(target = method, daemon = True)
                 active_threads.append(thread)
                 thread.start()
