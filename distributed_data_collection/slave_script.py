@@ -3,15 +3,10 @@
     #INIT SLAVE WITH REST API HOST & PORT (MASTER'S COMPUTER)
     #CALL KICKOFF
 
-#TO-DO:
-    #WHY DOESN'T SHUTDOWN HAPPEN?
-    #SEARCH ON "#RAISE VALUE AFTER TESTING IS COMPLETE" & MAKE CORRECTION
-
 #import libraries
 from bs4 import BeautifulSoup
 import requests
 import queue
-import sys
 import time
 import threading
 
@@ -33,14 +28,12 @@ class Slave_Methods():
         self.port = port
         self.api_url = "http://{}:{}/api".format(self.host, self.port)
 
-        self.is_none_recieved = False
-
     def request_chunk(self):
 
         chunk_response = requests.get(self.api_url)
 
         if self.is_chunk_none(chunk_response):
-            self.is_none_recieved = True
+            self.active = False
 
         else:
             chunk_id_list = self.convert_chunk(chunk_response)
@@ -66,13 +59,11 @@ class Slave_Methods():
 
     def data_transmission_loop(self):
 
-        while True: #INFINITE LOOP, BUT IT ENDS WHEN THE PROGRAM DOES
+        while self.active and (not self.data_strings_queue.empty()):
 
-            if not self.data_strings_queue.empty():
-
-                data_string = self.data_strings_queue.get()
-                requests.post(self.api_url, data = {"data_string": data_string})
-                self.data_strings_queue.task_done()
+            data_string = self.data_strings_queue.get()
+            requests.post(self.api_url, data = {"data_string": data_string})
+            self.data_strings_queue.task_done()
 
     def id_to_soup_tuple(self, id):
         url = self.base_url + str(id)
@@ -97,20 +88,6 @@ class Slave_Methods():
 
         self.scraper.sleep(self.max_sleep_time)
 
-    def termination_monitoring_loop(self):
-
-        terminate = False
-
-        while terminate == False:
-            if self.is_none_recieved and self.data_strings_queue.empty() and self.soup_tuple_queue.empty() and self.data_strings_queue.empty():
-                terminate == True
-
-            else:
-                time.sleep(10) #RAISE VALUE AFTER TESTING IS COMPLETE
-
-        print("Data Collected. Terminating")
-        sys.exit()
-
     def is_chunk_none(self, chunk):
 
         chunk = chunk.content.decode()
@@ -128,39 +105,48 @@ class Slave_Methods():
 
 class Slave(Slave_Methods):
 
-    def data_collection_loop(self):
+    def data_scraping_loop(self):
 
-        while not self.is_none_recieved:
+        while self.active:
 
-            if self.id_queue.empty():
-                self.request_chunk()
-
-            else:
+            if not self.id_queue.empty():
                 id = self.id_queue.get()
                 self.id_to_soup_tuple(id)
                 self.id_queue.task_done()
 
+            else:
+                self.request_chunk()
+
+        print("Data Coll")
+
     def data_parsing_loop(self):
 
-        while True: #INFINITE LOOP, BUT IT ENDS WHEN THE PROGRAM DOES
-
-            if not self.soup_tuple_queue.empty():
-                self.parse()
+        while self.active and (not self.soup_queue.empty()):
+            self.parse()
 
     def kickoff(self):
 
         #GIVE SERVER TIME TO START UP
         print("Slave Sleeping...")
         time.sleep(40)
-        print("Slave Sleep Completed")
+        print("Slave Kicking Off...")
 
         #BACKGROUND THREADS
-        thread_data_collection = threading.Thread(target = self.data_collection_loop, daemon = True).start()
-        thread_data_parsing = threading.Thread(target = self.data_parsing_loop, daemon = True).start()
-        thread_data_transmission = threading.Thread(target = self.data_transmission_loop, daemon = True).start()
+        self.active = True
+        active_threads = []
 
-        #MAIN PROGRAM
-        self.termination_monitoring_loop()
+        for method in [self.data_scraping_loop, self.data_parsing_loop, self.data_transmission_loop]:
+            thread = threading.Thread(target = method, daemon = True)
+            active_threads.append(thread)
+            thread.start()
+
+        #BLOCK IN MAIN THREAD
+        while self.active:
+            time.sleep(1)
+
+        #TERMINATION
+        [thread.join() for thread in active_threads]
+        print("Data Collected. Terminating.")
 
 class Review_Slave(Slave):
 

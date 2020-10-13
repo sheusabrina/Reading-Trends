@@ -8,8 +8,6 @@
     #FIX BUG WITH DATA LOG READING
     #FIX INTERMITTENT ALERT THREAD
     #ADD EMAIL ALERTS
-    #ADD TERMINATION
-    #USE DAEMON THREADS
 
 #import libraries
 import bottle
@@ -108,8 +106,10 @@ class Master_Methods():
         print("{:,} / {:,} data points collected ({:.2%} complete) at {}".format(self.num_ids_recieved, self.num_ids_total, self.num_ids_recieved/self.num_ids_total, self.now_string))
 
     def print_progress_inter(self):
-        self.print_progress()
-        time.sleep(5*60)
+
+        while self.active:
+            self.print_progress()
+            time.sleep(20)
 
     def transmit_chunk_ids(self):
 
@@ -141,37 +141,16 @@ class Master_Methods():
 
     def log_data_loop(self):
 
-        while True: #INFINITE LOOP
+        while self.active and (not self.data_strings_queue.empty()):
 
-            if not self.data_strings_queue.empty():
-                data_string = self.data_strings_queue.get()
+            data_string = self.data_strings_queue.get()
 
-                self.open_log_file()
-                self.generate_datetime()
-                self.datafile.write("\n{},{}".format(data_string, self.now_string))
-                self.datafile.close()
+            self.open_log_file()
+            self.generate_datetime()
+            self.datafile.write("\n{},{}".format(data_string, self.now_string))
+            self.datafile.close()
 
-                self.data_strings_queue.task_done()
-
-    def termination_monitoring_loop(self):
-        print("entering termination monitoring")
-
-        terminate = False
-
-        while terminate == False:
-
-            if (self.num_ids_total == self.num_ids_recieved) and self.data_strings_queue.empty():
-                terminate = True
-
-            elif self.chunks_oustanding_queue.empty() and self.soup_tuple_queue.empty():
-
-                print("Data collection is nearing completion or stuck. Check slave functionality") #THIS WILL BE MORE USEFUL ONCE SCRAPER CAN EMAIL ME!
-                time.sleep(60*60) #HOUR
-
-            else:
-                pass
-
-        sys.exit()
+            self.data_strings_queue.task_done()
 
     def input_scraping_scope(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
@@ -189,9 +168,23 @@ class Master(Master_Methods):
     def kickoff(self):
         self.prepare()
 
-        thread_api = threading.Thread(target = self.run_rest_api).start()
-        thread_log_data = threading.Thread(target = self.log_data_loop).start()
-        thread_print_progress_inter = threading.Thread(target = self.print_progress_inter).start()
+        #BACKGROUND THREADS
+        self.active = True
+        active_threads = []
+
+        for method in self.run_rest_api, self.log_data_loop, self.print_progress_inter]:
+                thread = threading.Thread(target = method, daemon = True)
+                active_threads.append(thread)
+                thread.start()
+
+        #BLOCKING
+        while self.num_ids_total != self.num_ids_recieved:
+            time.sleep(1)
+
+        self.active = False
+
+        print("Data Collected. Terminating")
+        sys.exit()
 
 class Review_Master(Master):
 
