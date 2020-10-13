@@ -163,15 +163,16 @@ class Master(Master_Methods):
         self.prepare_scope()
         self.generate_chunks()
         self.prepare_log_file()
+        self.run_rest_api()
 
     def kickoff(self):
         self.prepare()
-
+        
         #BACKGROUND THREADS
         self.active = True
         active_threads = []
 
-        for method in [self.run_rest_api, self.log_data_loop, self.print_progress_inter]:
+        for method in [self.log_data_loop, self.print_progress_inter]:
                 thread = threading.Thread(target = method, daemon = True)
                 active_threads.append(thread)
                 thread.start()
