@@ -213,10 +213,11 @@ class Book_Master(Master):
 
     def input_scraping_scope(self, review_database_file):
         review_df = pd.read_csv(review_database_file, low_memory=False)
-        self.ids_requested_list = list(review_df.book_id.values)
+        review_df.dropna(inplace = True)
+        review_df.reset_index(inplace = True, drop = True)
 
-    def prepare_scope(self):
-        pass 
+        self.ids_requested_list = review_df.book_id.unique()
+        self.ids_requested_list = [int(x) for x in self.ids_requested_list if x != "None"]
 
     def add_headers_to_log_file(self):
         self.datafile.write("book_id,book_author,book_language,num_reviews,num_ratings,avg_rating,isbn13,editions_url,book_publication_date,book_first_publication_date,series,data_log_time")
