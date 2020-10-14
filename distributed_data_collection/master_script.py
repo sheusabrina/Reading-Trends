@@ -129,8 +129,6 @@ class Master_Methods():
         data_string = request.forms.get("data_string")
         self.data_strings_queue.put(data_string)
 
-        print("Recieved: {}".format(data_string[0:2]))
-
         return "Data Recieved"
 
     def run_rest_api(self):
@@ -225,6 +223,9 @@ class Book_Master(Master):
 #TESTING
 host, port = "localhost", 8080
 
-#test_review_master = Review_Master("test_database", host, port, 3)
-#test_review_master.input_scraping_scope(10, 15)
+#test_review_master = Review_Master("test_review_database", host, port, 3)
+#test_review_master.input_scraping_scope(10, 50)
 #test_review_master.kickoff()
+
+test_book_master = Book_Master("test_book_data", host, port, 3)
+test_book_master.input_scraping_scope("databases/test_review_database.csv")

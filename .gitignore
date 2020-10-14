@@ -24,6 +24,8 @@ review_data_sample.csv
 book_data.csv
 book_data_copy.csv
 test_database.csv
+test_review_database.csv
+test_book_database.csv
 
 #Cache Files
 *.pyc
