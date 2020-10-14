@@ -26,7 +26,6 @@ class Slave_Methods():
 
         self.host = host
         self.port = port
-        self.api_url = "http://{}:{}/api".format(self.host, self.port)
 
     def request_chunk(self):
 
@@ -154,6 +153,7 @@ class Review_Slave(Slave):
     def __init__(self, max_sleep_time, host, port):
         super().__init__(max_sleep_time, host, port)
 
+        self.api_url = "http://{}:{}/api_review".format(self.host, self.port)
         self.base_url = "https://www.goodreads.com/review/show/"
         self.parser = Review_Parser()
 
@@ -198,11 +198,12 @@ class Book_Slave(Slave):
     def __init__(self, max_sleep_time, host, port):
         super().__init__(max_sleep_time, host, port)
 
+        self.api_url = "http://{}:{}/api_book".format(self.host, self.port)
         self.base_url = "https://www.goodreads.com/review/show/"
         self.parser = Review_Parser()
 
 #TESTING
-host, port = "localhost", 8080
+#host, port = "localhost", 8080
 
-test_slave = Review_Slave(1, host, port)
-test_slave.kickoff()
+#test_slave = Review_Slave(1, host, port)
+#test_slave.kickoff()

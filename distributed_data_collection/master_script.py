@@ -1,4 +1,4 @@
-#HOW TO USE MASTER: 
+#HOW TO USE MASTER:
     #INIT WITH HOST AND PORT OF OWN COMPUTER
     #INPUT SCRAPING SCOPE
     #CALL KICKOFF METHOD
@@ -134,8 +134,8 @@ class Master_Methods():
         return "Data Recieved"
 
     def run_rest_api(self):
-        bottle.route("/api")(self.transmit_chunk_ids)
-        bottle.route("/api", method = "POST")(self.recieve_data)
+        bottle.route(self.api_path)(self.transmit_chunk_ids)
+        bottle.route(self.api_path, method = "POST")(self.recieve_data)
 
         run(host=self.host, port=self.port, debug=True)
 
@@ -196,6 +196,7 @@ class Review_Master(Master):
     def __init__(self, file_name, host, port, num_ids_per_chunk):
         super().__init__(file_name, host, port, num_ids_per_chunk)
         self.data_log_id_column_name = "review_id"
+        self.api_path = "/api_review"
 
     def input_scraping_scope(self, min_id, max_id):
         self.ids_requested_list = range(min_id, max_id)
@@ -208,6 +209,7 @@ class Book_Master(Master):
     def __init__(self, file_name, host, port, num_ids_per_chunk):
         super().__init__(file_name, host, port, num_ids_per_chunk)
         self.data_log_id_column_name = "book_id"
+        self.api_path = "/api_book"
 
     def add_headers_to_log_file(self):
         self.datafile.write("book_id,book_author,book_language,num_reviews,num_ratings,avg_rating,isbn13,editions_url,book_publication_date,book_first_publication_date,series,data_log_time")
