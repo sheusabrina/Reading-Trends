@@ -81,7 +81,7 @@ class Master_Methods():
             sys.exit()
 
         self.num_ids_total = len(self.ids_to_scrape_list)
-        random.shuffle(self.ids_to_scrape_list) #PUT THIS BACK AFTER TESTING
+        random.shuffle(self.ids_to_scrape_list)
 
     def generate_chunks(self):
 
@@ -94,8 +94,6 @@ class Master_Methods():
         for i in range(0, num_chunks_total):
             chunk_ids = self.ids_to_scrape_list[i::num_chunks_total]
 
-            print("chunk ids: {}".format(chunk_ids))
-
             self.chunks_outstanding_queue.put(chunk_ids)
 
     def generate_datetime(self):
@@ -105,7 +103,7 @@ class Master_Methods():
 
     def print_progress(self):
         self.generate_datetime()
-        #print("{:,} / {:,} data points collected ({:.2%} complete) at {}".format(self.num_ids_logged, self.num_ids_total, self.num_ids_logged/self.num_ids_total, self.now_string))
+        print("{:,} / {:,} data points collected ({:.2%} complete) at {}".format(self.num_ids_logged, self.num_ids_total, self.num_ids_logged/self.num_ids_total, self.now_string))
 
     def print_progress_inter(self):
 
