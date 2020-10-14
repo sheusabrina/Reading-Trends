@@ -211,12 +211,19 @@ class Book_Master(Master):
         self.data_log_id_column_name = "book_id"
         self.api_path = "/api_book"
 
+    def input_scraping_scope(self, review_database_file):
+        review_df = pd.read_csv(review_database_file, low_memory=False)
+        self.ids_requested_list = list(review_df.book_id.values)
+
+    def prepare_scope(self):
+        pass 
+
     def add_headers_to_log_file(self):
         self.datafile.write("book_id,book_author,book_language,num_reviews,num_ratings,avg_rating,isbn13,editions_url,book_publication_date,book_first_publication_date,series,data_log_time")
 
 #TESTING
 host, port = "localhost", 8080
 
-test_review_master = Review_Master("test_database", host, port, 3)
-test_review_master.input_scraping_scope(10, 15)
-test_review_master.kickoff()
+#test_review_master = Review_Master("test_database", host, port, 3)
+#test_review_master.input_scraping_scope(10, 15)
+#test_review_master.kickoff()
