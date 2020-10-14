@@ -38,6 +38,10 @@ class Slave_Methods():
         else:
             chunk_id_list = self.convert_chunk(chunk_response)
             for id in chunk_id_list:
+<<<<<<< HEAD
+=======
+                #print("Recieved: {}".format(id)) #FOR TESTING
+>>>>>>> 00c42e9cb9b66464531dd42f9882209361763fad
                 self.id_queue.put(id)
 
     def convert_chunk(self, chunk_response):
@@ -63,9 +67,19 @@ class Slave_Methods():
 
             data_string = self.data_strings_queue.get()
 
+<<<<<<< HEAD
             requests.post(self.api_url, data = {"data_string": data_string})
             self.data_strings_queue.task_done()
 
+=======
+            #print("Transmitting: {}".format(data_string[0:2])) #FOR TESTING
+
+            requests.post(self.api_url, data = {"data_string": data_string})
+            self.data_strings_queue.task_done()
+
+        #print("Terminating Data Transmission Loop") #FOR TESTING
+
+>>>>>>> 00c42e9cb9b66464531dd42f9882209361763fad
     def id_to_soup_tuple(self, id):
         url = self.base_url + str(id)
         webpage_as_string = self.scraper.url_to_string_content(url)
@@ -84,6 +98,8 @@ class Slave_Methods():
 
         tuple = (id, soup)
         self.soup_tuple_queue.put(tuple)
+
+        #print("Soup: {}".format(id)) #FOR TESTING
 
     def sleep(self):
 
@@ -119,15 +135,18 @@ class Slave(Slave_Methods):
                 self.request_chunk()
 
     def data_parsing_loop(self):
+        print("Entering Data Parsing Loop")
 
         while self.active or (not self.soup_tuple_queue.empty()):
+            print("Parsing...")
             self.parse()
+            print("Parse Complete")
 
     def kickoff(self):
 
         #GIVE SERVER TIME TO START UP
         print("Slave Sleeping...")
-        time.sleep(40)
+        #time.sleep(40)
         print("Slave Kicking Off...")
 
         #BACKGROUND THREADS
