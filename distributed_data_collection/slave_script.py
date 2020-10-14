@@ -38,7 +38,6 @@ class Slave_Methods():
         else:
             chunk_id_list = self.convert_chunk(chunk_response)
             for id in chunk_id_list:
-                print("Recieved: {}".format(id))
                 self.id_queue.put(id)
 
     def convert_chunk(self, chunk_response):
@@ -64,12 +63,8 @@ class Slave_Methods():
 
             data_string = self.data_strings_queue.get()
 
-            print("Transmitting: {}".format(data_string[0:2]))
-
             requests.post(self.api_url, data = {"data_string": data_string})
             self.data_strings_queue.task_done()
-
-        print("Terminating Data Transmission Loop")
 
     def id_to_soup_tuple(self, id):
         url = self.base_url + str(id)
@@ -86,8 +81,6 @@ class Slave_Methods():
                 num_invalid_responses_recieved += 1
 
                 soup = self.parser.html_to_soup(webpage_as_string)
-
-        print("Parsed: {}".format(id))
 
         tuple = (id, soup)
         self.soup_tuple_queue.put(tuple)
@@ -125,14 +118,10 @@ class Slave(Slave_Methods):
             else:
                 self.request_chunk()
 
-        print("Terminating Data Scraping Loop")
-
     def data_parsing_loop(self):
 
         while self.active or (not self.soup_tuple_queue.empty()):
             self.parse()
-
-        print("Terminating Data Parsing Loop")
 
     def kickoff(self):
 
@@ -155,8 +144,6 @@ class Slave(Slave_Methods):
         while self.active:
             time.sleep(1)
 
-        print("Slave Block Complete...")
-
         for thread in active_threads:
             thread.join()
 
@@ -172,37 +159,39 @@ class Review_Slave(Slave):
 
     def parse(self):
 
-        soup_tuple = self.soup_tuple_queue.get()
-        id, soup = soup_tuple[0], soup_tuple[1]
+        if not self.soup_tuple_queue.empty():
 
-        is_review_valid = self.parser.review_soup_is_valid(soup)
+            soup_tuple = self.soup_tuple_queue.get()
+            id, soup = soup_tuple[0], soup_tuple[1]
 
-        if is_review_valid:
-            date = self.parser.review_soup_to_date(soup)
-            book_title = self.parser.review_soup_to_book_title(soup)
-            book_id = self.parser.review_soup_to_book_id(soup)
-            rating = self.parser.review_soup_to_rating(soup)
-            reviewer_href = self.parser.review_soup_to_reviewer_href(soup)
+            is_review_valid = self.parser.review_soup_is_valid(soup)
 
-            progress_dict = self.parser.review_soup_to_progress_dict(soup)
-            start_date = self.parser.progress_dict_to_start_date(progress_dict)
-            finished_date = self.parser.progress_dict_to_finish_date(progress_dict)
-            shelved_date = self.parser.progress_dict_to_shelved_date(progress_dict)
+            if is_review_valid:
+                date = self.parser.review_soup_to_date(soup)
+                book_title = self.parser.review_soup_to_book_title(soup)
+                book_id = self.parser.review_soup_to_book_id(soup)
+                rating = self.parser.review_soup_to_rating(soup)
+                reviewer_href = self.parser.review_soup_to_reviewer_href(soup)
 
-        else:
-            date = None
-            book_title = None
-            book_id = None
-            rating = None
-            reviewer_href = None
-            start_date = None
-            finished_date = None
-            shelved_date = None
+                progress_dict = self.parser.review_soup_to_progress_dict(soup)
+                start_date = self.parser.progress_dict_to_start_date(progress_dict)
+                finished_date = self.parser.progress_dict_to_finish_date(progress_dict)
+                shelved_date = self.parser.progress_dict_to_shelved_date(progress_dict)
 
-        data_string = "{},{},{},{},{},{},{},{},{},{}".format(id, is_review_valid, date, book_title, book_id, rating, reviewer_href, start_date, finished_date, shelved_date)
-        self.data_strings_queue.put(data_string)
+            else:
+                date = None
+                book_title = None
+                book_id = None
+                rating = None
+                reviewer_href = None
+                start_date = None
+                finished_date = None
+                shelved_date = None
 
-        self.soup_tuple_queue.task_done()
+            data_string = "{},{},{},{},{},{},{},{},{},{}".format(id, is_review_valid, date, book_title, book_id, rating, reviewer_href, start_date, finished_date, shelved_date)
+            self.data_strings_queue.put(data_string)
+
+            self.soup_tuple_queue.task_done()
 
 class Book_Slave(Slave):
 
