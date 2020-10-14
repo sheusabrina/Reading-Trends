@@ -190,7 +190,6 @@ class Review_Slave(Slave):
 
             data_string = "{},{},{},{},{},{},{},{},{},{}".format(id, is_review_valid, date, book_title, book_id, rating, reviewer_href, start_date, finished_date, shelved_date)
             self.data_strings_queue.put(data_string)
-
             self.soup_tuple_queue.task_done()
 
 class Book_Slave(Slave):
@@ -202,6 +201,29 @@ class Book_Slave(Slave):
         self.base_url = "https://www.goodreads.com/review/show/"
         self.parser = Review_Parser()
 
+    def parse(self):
+
+        if not self.soup_tuple_queue.empty():
+
+            soup_tuple = self.soup_tuple_queue.get()
+            id, soup = soup_tuple[0], soup_tuple[1]
+
+            author = self.parser.book_soup_to_author(soup)
+            language = self.parser.book_soup_to_language(soup)
+            num_reviews = self.parser.book_soup_to_num_reviews(soup)
+            num_ratings = self.parser.book_soup_to_num_ratings(soup)
+            avg_rating = self.parser.book_soup_to_avg_rating(soup)
+            isbn13 = self.parser.book_soup_to_isbn13(soup)
+            editions_href = self.parser.book_soup_to_editions_href(soup)
+            publication_date = self.parser.book_soup_to_publication_date(soup)
+            first_publication_date = self.parser.book_soup_to_first_publication_date(soup)
+            series = self.parser.book_soup_to_series(soup)
+
+            data_string = "{},{},{},{},{},{},{},{},{},{},{}".format(id, author, num_reviews, num_ratings, avg_rating, isbn13, editions_href, publication_date, first_publication_date, series)
+
+            self.data_strings_queue.put(data_string)
+            self.soup_tuple_queue.task_done()
+            
 #TESTING
 #host, port = "localhost", 8080
 
