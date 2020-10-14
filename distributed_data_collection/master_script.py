@@ -81,7 +81,7 @@ class Master_Methods():
             sys.exit()
 
         self.num_ids_total = len(self.ids_to_scrape_list)
-        #random.shuffle(self.ids_to_scrape_list) #PUT THIS BACK AFTER TESTING
+        random.shuffle(self.ids_to_scrape_list) #PUT THIS BACK AFTER TESTING
 
     def generate_chunks(self):
 
@@ -178,12 +178,10 @@ class Master(Master_Methods):
         self.active = True
         active_threads = []
 
-        for method in [self.log_data_loop, self.print_progress_inter]:
+        for method in [self.log_data_loop, self.print_progress_inter, self.run_rest_api]:
                 thread = threading.Thread(target = method, daemon = True)
                 active_threads.append(thread)
                 thread.start()
-
-        self.run_rest_api()
 
         #BLOCKING
         while self.num_ids_total != self.num_ids_logged:
