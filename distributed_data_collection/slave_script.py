@@ -198,8 +198,8 @@ class Book_Slave(Slave):
         super().__init__(max_sleep_time, host, port)
 
         self.api_url = "http://{}:{}/api_book".format(self.host, self.port)
-        self.base_url = "https://www.goodreads.com/review/show/"
-        self.parser = Review_Parser()
+        self.base_url = "https://www.goodreads.com/book/show/"
+        self.parser = Book_Parser()
 
     def parse(self):
 
