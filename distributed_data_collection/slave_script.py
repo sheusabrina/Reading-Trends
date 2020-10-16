@@ -219,13 +219,16 @@ class Book_Slave(Slave):
             first_publication_date = self.parser.book_soup_to_first_publication_date(soup)
             series = self.parser.book_soup_to_series(soup)
 
-            data_string = "{},{},{},{},{},{},{},{},{},{},{}".format(id, author, num_reviews, num_ratings, avg_rating, isbn13, editions_href, publication_date, first_publication_date, series)
+            data_string = "{},{},{},{},{},{},{},{},{},{},{}".format(id, author, language, num_reviews, num_ratings, avg_rating, isbn13, editions_href, publication_date, first_publication_date, series)
 
             self.data_strings_queue.put(data_string)
             self.soup_tuple_queue.task_done()
-            
-#TESTING
-#host, port = "localhost", 8080
 
-#test_slave = Review_Slave(1, host, port)
-#test_slave.kickoff()
+#TESTING
+host, port = "localhost", 8080
+
+#test_review_slave = Review_Slave(1, host, port)
+#test_review_slave.kickoff()
+
+#test_book_slave = Book_Slave(5, host, port)
+#test_book_slave.kickoff()

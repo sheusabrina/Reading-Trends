@@ -227,5 +227,6 @@ host, port = "localhost", 8080
 #test_review_master.input_scraping_scope(10, 50)
 #test_review_master.kickoff()
 
-test_book_master = Book_Master("test_book_data", host, port, 3)
-test_book_master.input_scraping_scope("databases/test_review_database.csv")
+#test_book_master = Book_Master("test_book_database", host, port, 3)
+#test_book_master.input_scraping_scope("databases/test_review_database.csv")
+#test_book_master.kickoff()
