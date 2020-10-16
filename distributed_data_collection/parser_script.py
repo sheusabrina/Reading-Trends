@@ -136,11 +136,8 @@ class Review_Parser(Parser):
 class Book_Parser(Parser):
 
     def book_soup_to_author(self, book_soup):
-        #Note: If there are multiple authors, this identifies the first one only.
 
-        author = book_soup.find(attrs = {"class": "authorName"}) ## THIS SHOULD USUALLY WORK
-        if not author: #TRY REGEX IF IT DOESN'T
-            author = book_soup.find(attrs = {"class": re.compile("authorName")})
+        author = book_soup.find(attrs = {"class": re.compile("authorName")})
 
         author = author.get_text()
         author = string_cleaner(author)
@@ -149,8 +146,7 @@ class Book_Parser(Parser):
 
     def book_soup_to_language(self, book_soup):
 
-        details = self.book_soup_to_details_soup(book_soup) # REDUCING AMOUNT OF PAGE TO RUN REGEX ON
-        language = details.find(attrs = {"itemprop": re.compile("inLanguage")}) #DOESN'T WORK WITHOUT THE REGEX. DON'T TRY.
+        language = book_soup.find(attrs = {"itemprop": re.compile("inLanguage")})
 
         if language: #SOME BOOKS DON'T HAVE LANGUAGE
             language = language.get_text()
@@ -159,7 +155,8 @@ class Book_Parser(Parser):
 
     def book_soup_to_num_reviews(self, book_soup):
 
-        num_reviews = book_soup.find(attrs = {"itemprop": "reviewCount"}).get_text()
+        num_reviews = book_soup.find(attrs = {"itemprop": re.compile("reviewCount")}).get_text()
+
         num_reviews = num_reviews.replace("reviews","")
         num_reviews = num_reviews.replace("review","")
         num_reviews = string_cleaner(num_reviews)
@@ -169,7 +166,8 @@ class Book_Parser(Parser):
 
     def book_soup_to_num_ratings(self, book_soup):
 
-        num_ratings = book_soup.find(attrs = {"itemprop": "ratingCount"}).get_text()
+        num_ratings = book_soup.find(attrs = {"itemprop": re.compile("ratingCount")}).get_text()
+
         num_ratings = num_ratings.replace("ratings","")
         num_ratings = num_ratings.replace("rating", "")
         num_ratings = string_cleaner(num_ratings)
@@ -179,7 +177,8 @@ class Book_Parser(Parser):
 
     def book_soup_to_avg_rating(self, book_soup):
 
-        avg_rating = book_soup.find(attrs = {"itemprop": "ratingValue"}).get_text()
+        avg_rating = book_soup.find(attrs = {"itemprop": re.compile("ratingValue")}).get_text()
+
         avg_rating = string_cleaner(avg_rating)
         avg_rating = float(avg_rating)
 
@@ -187,40 +186,29 @@ class Book_Parser(Parser):
 
     def book_soup_to_isbn13(self, book_soup):
 
-        details = self.book_soup_to_details_soup(book_soup) # REDUCING AMOUNT OF PAGE TO RUN REGEX ON
-        isbn = details.find(attrs = {"itemprop": re.compile("isbn")}) #DOESN'T WORK WITHOUT THE REGEX. DON'T TRY.
+        isbn = book_soup.find(attrs = {"itemprop": re.compile("isbn")})
 
         if isbn: #SOME BOOK PAGES DON'T HAVE ISBN
-
             isbn = isbn.get_text()
 
         return isbn
 
     def book_soup_to_editions_href(self, book_soup):
 
-        details = self.book_soup_to_details_soup(book_soup) # REDUCING AMOUNT OF PAGE TO RUN REGEX ON
-        editions = details.find(attrs = {"class": re.compile("otherEditionsLink")}) #DOESN'T WORK WITHOUT THE REGEX. DON'T TRY.
+        editions = book_soup.find(attrs = {"class": re.compile("otherEditionsLink")})
 
         if editions: #SOME BOOKS DO NOT HAVE EDITIONS
-
             editions = editions.find(href = True)
             editions_url = editions.get("href")
 
         else:
-
             editions_url = None
 
         return editions_url
 
-    def book_soup_to_details_soup(self, book_soup):
-
-        details = book_soup.find(attrs = {"id": "details"})
-        return details
-
     def book_soup_to_publication_date(self, book_soup):
 
-        details = self.book_soup_to_details_soup(book_soup)
-        publication_details = details.find(text = re.compile("Published"))
+        publication_details = book_soup.find(text = re.compile("Published"))
 
         if "by" in publication_details: #REMOVE PUBLISHER IF LISTED
             publication_date = publication_details[:publication_details.index("by")]
@@ -235,8 +223,7 @@ class Book_Parser(Parser):
 
     def book_soup_to_first_publication_date(self, book_soup):
 
-        details = self.book_soup_to_details_soup(book_soup)
-        publication_date = details.find(text = re.compile("first published"))
+        publication_date = book_soup.find(text = re.compile("first published"))
 
         if publication_date: ## SOME BOOKS DON'T HAVE ONE
             publication_date = publication_date.replace("(first published ","")
@@ -248,15 +235,14 @@ class Book_Parser(Parser):
 
     def book_soup_to_series(self, book_soup):
 
-        #NOTE: If series name has a "#" in it, it will get cut off. I can live with that.
-
-        details = self.book_soup_to_details_soup(book_soup)
-        series = details.find(attrs = {"href": re.compile("series")})
+        series = book_soup.find(attrs = {"href": re.compile("series")})
 
         if series: ##SOME BOOKS DON'T HAVE ONE
             series = series.get_text()
             if "#" in series: #REMOVE NUMBER IF THERE IS ONE
                 series = series[:series.index("#")]
+
+        #NOTE: IF # IS PART OF AN ACTUAL SERIES NAME, THAT SERIES NAME IS GETTING TRUNCATED. OH WELL. 
 
             series = string_cleaner(series)
 
@@ -356,10 +342,6 @@ test_parser = Book_Parser()
 #print(editions_meditations)
 #print(editions_angels_demons)
 #print(editions_hp1_regular)
-
-#details_hp1_regular = test_parser.book_soup_to_details_soup(book_soup_hp1_regular)
-
-#print(details_hp1_regular)
 
 #publication_date_meditations = test_parser.book_soup_to_publication_date(book_soup_meditations)
 #publication_date_angels_demons = test_parser.book_soup_to_publication_date(book_soup_angels_demons)
