@@ -1,4 +1,4 @@
-#WE PROBABLY DON'T NEED THIS SCRIPT. I WAS BORED WHILE THE DATA SCRAPED... 
+#WE PROBABLY DON'T NEED THIS SCRIPT. I WAS BORED WHILE THE DATA SCRAPED...
 
 #import libraries
 import pandas as pd
@@ -66,5 +66,12 @@ class Visualizer():
         plt.show()
         plt.close("all")
 
-test_visualizer = Visualizer(merged_database)
-test_visualizer.show_ratings_by_day("Harry Potter & The Sorcerers' Stone Daily Ratings")
+#test_visualizer = Visualizer(merged_database)
+#test_visualizer.show_ratings_by_day("Harry Potter & The Sorcerers' Stone Daily Ratings")
+
+sample_df = pd.read_csv("databases/review_data.csv", low_memory = False)
+sample_df.dropna(inplace = True)
+sample_df.drop_duplicates(inplace = True)
+sample_df = sample_df[sample_df.book_title != "None"]
+sample_df = sample_df[sample_df.rating != "None"]
+review_counts = sample_df.book_title.value_counts().sort_values(ascending = False)
