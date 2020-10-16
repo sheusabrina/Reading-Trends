@@ -241,6 +241,8 @@ class Book_Parser(Parser):
             series = series.get_text()
             if "#" in series: #REMOVE NUMBER IF THERE IS ONE
                 series = series[:series.index("#")]
+            if series[0] == "(":
+                series = series[1:]
 
         #NOTE: IF # IS PART OF AN ACTUAL SERIES NAME, THAT SERIES NAME IS GETTING TRUNCATED. OH WELL.
 
