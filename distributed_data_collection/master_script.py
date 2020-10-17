@@ -205,16 +205,24 @@ class Review_Master(Master):
 
 class Book_Master(Master):
 
-    def __init__(self, file_name, host, port, num_ids_per_chunk):
+    def __init__(self, file_name, host, port, num_ids_per_chunk, min_num_reviews = None):
         super().__init__(file_name, host, port, num_ids_per_chunk)
         self.data_log_id_column_name = "book_id"
         self.api_path = "/api_book"
+        self.min_num_reviews = min_num_reviews
 
     def input_scraping_scope(self, review_database_file):
-        review_df = pd.read_csv(review_database_file, low_memory=False)
+        review_df = pd.read_csv(review_database_file, usecols=["book_id"])
         review_df.dropna(inplace = True)
         review_df = review_df[review_df.book_id != "None"]
         review_df.reset_index(inplace = True, drop = True)
+
+        if self.min_num_reviews:
+            review_df["num_reviews"] = 1
+            review_df = review_df.groupby("book_id").count()[["num_reviews"]]
+            review_df.reset_index(inplace = True)
+            review_df = review_df[review_df.num_reviews >= self.min_num_reviews]
+            review_df.sort_values(by = "num_reviews", ascending = False, inplace = True)
 
         self.ids_requested_list = review_df.book_id.unique()
         self.ids_requested_list = [int(x) for x in self.ids_requested_list if x != "None"]
