@@ -235,10 +235,15 @@ class Book_Parser(Parser):
         publication_date = book_soup.find(text = re.compile("first published"))
 
         if publication_date: ## SOME BOOKS DON'T HAVE ONE
-            publication_date = publication_date.replace("(first published ","")
-            publication_date = publication_date.replace(")","")
-            publication_date = string_cleaner(publication_date)
-            publication_date = date_suffix_cleaner(publication_date)
+
+            if "![CDATA[" in publication_date:
+                publication_date = None
+
+            else:
+                publication_date = publication_date.replace("(first published ","")
+                publication_date = publication_date.replace(")","")
+                publication_date = string_cleaner(publication_date)
+                publication_date = date_suffix_cleaner(publication_date)
 
         return publication_date
 
