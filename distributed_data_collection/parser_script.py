@@ -38,6 +38,9 @@ class Parser():
         if not text:
             is_soup_populated = False
 
+        #elif (len(text) == 1) and "This is a random-length HTML comment" in text[0]:
+            #is_soup_populated = False
+
         elif "This is a random-length HTML comment" in text[1]:
             is_soup_populated = False
 
