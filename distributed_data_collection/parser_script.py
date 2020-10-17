@@ -35,10 +35,14 @@ class Parser():
 
         text = soup.findAll(text = True)
 
-        if text:
-            is_soup_populated = True
-        else:
+        if not text:
             is_soup_populated = False
+
+        elif "This is a random-length HTML comment" in text[1]:
+            is_soup_populated = False
+
+        else:
+            is_soup_populated = True
 
         return is_soup_populated
 
