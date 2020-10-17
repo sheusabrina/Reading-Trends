@@ -212,6 +212,7 @@ class Book_Master(Master):
     def input_scraping_scope(self, review_database_file):
         review_df = pd.read_csv(review_database_file, low_memory=False)
         review_df.dropna(inplace = True)
+        review_df = review_df[review_df.book_id != "None"]
         review_df.reset_index(inplace = True, drop = True)
 
         self.ids_requested_list = review_df.book_id.unique()
