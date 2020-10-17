@@ -144,9 +144,11 @@ class Book_Parser(Parser):
 
     def book_soup_to_author(self, book_soup):
 
-        author = book_soup.find(attrs = {"class": re.compile("authorName")})
-
+        author = book_soup.find(attrs = {"id": re.compile("bookAuthors")})
+        author = author.find(attrs = {"itemprop": re.compile("author")})
         author = author.get_text()
+
+        author.replace("(Goodreads Author)","")
         author = string_cleaner(author)
 
         return author
