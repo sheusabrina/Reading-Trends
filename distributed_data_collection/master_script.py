@@ -69,7 +69,7 @@ class Master_Methods():
             log_file_data = pd.read_csv(self.log_file_name, usecols=[self.data_log_id_column_name])
             log_file_data.dropna(inplace = True)
             ids_in_data_log = log_file_data[self.data_log_id_column_name].unique()
-            ids_in_data_log = [str(id) for id in ids_in_data_log]
+            ids_in_data_log = [int(id) for id in ids_in_data_log]
 
             for id in self.ids_requested_list: #IDS NOT IN CSV DATA ADDED TO TO_BE_SCRAPED LIST
 
@@ -225,10 +225,13 @@ class Book_Master(Master):
 #TESTING
 host, port = "localhost", 8080
 
-#test_review_master = Review_Master("test_review_database", host, port, 3)
-#test_review_master.input_scraping_scope(10, 50)
-#test_review_master.kickoff()
+min_2017_ID = 1484362322 #I want to actually analyze data from 2018-2020, but I'm pulling 2017 data too just because the ID generation isn't quite linear.
+max_id = min_2017_ID + 10000
 
-#test_book_master = Book_Master("test_book_database", host, port, 3)
-#test_book_master.input_scraping_scope("databases/test_review_database.csv")
+test_review_master = Review_Master("review_data", host, port, 50)
+test_review_master.input_scraping_scope(min_2017_ID, max_id)
+test_review_master.kickoff()
+
+#test_book_master = Book_Master("test_book_database", host, port, 10)
+#test_book_master.input_scraping_scope("../databases/review_data.csv")
 #test_book_master.kickoff()
