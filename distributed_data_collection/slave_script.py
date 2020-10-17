@@ -76,6 +76,7 @@ class Slave_Methods():
             while self.parser.is_soup_populated(soup) == False:
 
                 pausetime = max(self.max_sleep_time, num_invalid_responses_recieved*60) #IF IT'S THE FIRST ERROR, REGULAR SLEEPTIME. FOR SUBSEQUENT ERRORS, INCREASINGLY LARGE WAIT TIMES.
+                print("{} invalid responses recieved. Pausing for {:.1f} minutes".format(num_invalid_responses_recieved, pausetime/60))
                 time.sleep(pausetime)
                 num_invalid_responses_recieved += 1
 
