@@ -114,6 +114,7 @@ class Slave(Slave_Methods):
                 id = self.id_queue.get()
                 self.id_to_soup_tuple(id)
                 self.id_queue.task_done()
+                self.sleep()
 
             else:
                 self.request_chunk()
