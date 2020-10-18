@@ -255,7 +255,8 @@ class Book_Parser(Parser):
             series = series.get_text()
             series = series.replace("(", "")
             series = series.replace(")","")
-            series = series[:series.index("#")]
+            if "#" in series:
+                series = series[:series.index("#")]
 
             series = string_cleaner(series)
 
