@@ -148,7 +148,7 @@ class Book_Parser(Parser):
         author = author.find(attrs = {"itemprop": re.compile("author")})
         author = author.get_text()
 
-        author.replace("(Goodreads Author)","")
+        author = author.replace("(Goodreads Author)","")
         author = string_cleaner(author)
 
         return author
@@ -253,20 +253,10 @@ class Book_Parser(Parser):
 
         if series: ##SOME BOOKS DON'T HAVE ONE
             series = series.get_text()
-
-            #REMOVE FIRST PAREN
-            if len(series) > 0:
-                if series[0] == "(":
-                    series = series[1:]
-
-            #REMOVE NUMBER IF THERE IS ONE
-            if "#" in series:
-                series = series[:series.index("#")]
-
-        #NOTE: IF # IS PART OF AN ACTUAL SERIES NAME, THAT SERIES NAME IS GETTING TRUNCATED. OH WELL.
+            series = series.replace("(", "")
+            series = series.replace(")","")
+            series = series[:series.index("#")]
 
             series = string_cleaner(series)
 
         return series
-
-test_parser = Book_Parser()
