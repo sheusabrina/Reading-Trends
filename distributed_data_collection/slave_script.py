@@ -67,6 +67,7 @@ class Slave_Methods():
 
     def id_to_soup_tuple(self, id):
         url = self.base_url + str(id)
+
         webpage_as_string = self.scraper.url_to_string_content(url)
         soup = self.parser.html_to_soup(webpage_as_string)
 
@@ -79,7 +80,8 @@ class Slave_Methods():
                 print("{} invalid responses recieved. Pausing for {:.1f} minutes".format(num_invalid_responses_recieved, pausetime/60))
                 time.sleep(pausetime)
                 num_invalid_responses_recieved += 1
-
+                
+                webpage_as_string = self.scraper.url_to_string_content(url)
                 soup = self.parser.html_to_soup(webpage_as_string)
 
         tuple = (id, soup)
@@ -232,5 +234,5 @@ host, port = "localhost", 8080
 #test_review_slave = Review_Slave(1, host, port)
 #test_review_slave.kickoff()
 
-#test_book_slave = Book_Slave(5, host, port)
-#test_book_slave.kickoff()
+test_book_slave = Book_Slave(60, host, port) #KEEP IT LONG FOR BOOKS
+test_book_slave.kickoff()
