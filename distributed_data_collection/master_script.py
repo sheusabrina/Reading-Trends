@@ -233,13 +233,13 @@ class Book_Master(Master):
 #TESTING
 host, port = "localhost", 8080
 
-min_2017_ID = 1484362322 #I want to actually analyze data from 2018-2020, but I'm pulling 2017 data too just because the ID generation isn't quite linear.
-max_id = min_2017_ID + 10000
+min_2017_ID = 1484362322
+max_id = min_2017_ID + 30000
 
-test_review_master = Review_Master("review_data", host, port, 50)
-test_review_master.input_scraping_scope(min_2017_ID, max_id)
-test_review_master.kickoff()
+#test_review_master = Review_Master("review_data", host, port, 50)
+#test_review_master.input_scraping_scope(min_2017_ID, max_id)
+#test_review_master.kickoff()
 
-#test_book_master = Book_Master("test_book_database", host, port, 10)
-#test_book_master.input_scraping_scope("../databases/review_data.csv")
-#test_book_master.kickoff()
+test_book_master = Book_Master("test_book_database", host, port, 10, 7)
+test_book_master.input_scraping_scope("databases/review_data.csv")
+test_book_master.kickoff()
