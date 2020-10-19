@@ -240,6 +240,6 @@ max_id = min_2017_ID + 30000
 #test_review_master.input_scraping_scope(min_2017_ID, max_id)
 #test_review_master.kickoff()
 
-test_book_master = Book_Master("test_book_database", host, port, 10, 7)
+test_book_master = Book_Master("book_data", host, port, 5, 20)
 test_book_master.input_scraping_scope("databases/review_data.csv")
 test_book_master.kickoff()

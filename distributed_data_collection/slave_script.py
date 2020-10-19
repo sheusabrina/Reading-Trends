@@ -235,5 +235,5 @@ host, port = "localhost", 8080
 #test_review_slave = Review_Slave(1, host, port)
 #test_review_slave.kickoff()
 
-test_book_slave = Book_Slave(10, host, port) #KEEP IT LONG FOR BOOKS
+test_book_slave = Book_Slave(45, host, port) #KEEP IT LONG FOR BOOKS
 test_book_slave.kickoff()
