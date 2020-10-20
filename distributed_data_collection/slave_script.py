@@ -14,7 +14,7 @@ import threading
 from parser_script import Review_Parser, Book_Parser
 from scraper_script import Scraper
 
-class Slave_Methods():
+class Slave():
 
     def __init__(self, max_sleep_time, host, port):
 
@@ -106,8 +106,6 @@ class Slave_Methods():
 
     def generate_data_string(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
-
-class Slave(Slave_Methods):
 
     def data_scraping_loop(self):
 

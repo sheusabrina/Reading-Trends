@@ -20,7 +20,7 @@ import sys
 import time
 import threading
 
-class Master_Methods():
+class Master():
 
     def __init__(self, file_name, host, port, num_ids_per_chunk):
 
@@ -161,7 +161,6 @@ class Master_Methods():
     def add_headers_to_log_file(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
-class Master(Master_Methods):
 
     def prepare(self):
         self.prepare_scope()
