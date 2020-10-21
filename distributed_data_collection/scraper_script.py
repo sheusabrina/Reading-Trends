@@ -46,30 +46,3 @@ class Scraper():
     def url_to_html_regular(self, url, file_name):
         self.url_to_string_content(url)
         self.webpage_string_to_html_regular(file_name)
-
-## CREATING TEST FILES
-
-scraper = Scraper()
-
-#meditations book
-#scraper.url_to_html_regular("https://www.goodreads.com/book/show/30659", "test_book_meditations")
-
-#angels & demons book
-#scraper.url_to_html_regular("https://www.goodreads.com/book/show/960.Angels_Demons", "test_book_angels_demons")
-
-#deep fathom book
-#scraper.url_to_html_regular("https://www.goodreads.com/book/show/294045", "test_book_deep_fathom")
-
-#HP1 book
-#scraper.url_to_html_regular("https://www.goodreads.com/book/show/3", "test_book_hp1")
-#scraper.url_to_bytes_content("https://www.goodreads.com/book/show/3")
-#scraper.webpage_bytes_to_html_binary("test_book_hp1_binary")
-
-#scraper.url_to_string_content("https://www.goodreads.com/book/show/3")
-#scraper.webpage_string_to_html_regular("test_book_hp1_regular")
-
-#review (meditations)
-#scraper.url_to_html_regular("https://www.goodreads.com/review/show/2668957860", "test_review")
-
-#review, error page
-#scraper.url_to_html_regular("https://www.goodreads.com/review/show/166895786", "test_review_error")
