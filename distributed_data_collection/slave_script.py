@@ -27,6 +27,12 @@ class Slave():
         self.host = host
         self.port = port
 
+        self.active = True
+        self.nonterminable = True
+
+    def is_nonterminable(self):
+        return self.nonterminable
+
     def request_chunk(self):
 
         chunk_response = requests.get(self.api_url)
@@ -77,7 +83,7 @@ class Slave():
             while self.parser.is_soup_populated(soup) == False:
 
                 pausetime = max(self.max_sleep_time, num_invalid_responses_recieved*60) #IF IT'S THE FIRST ERROR, REGULAR SLEEPTIME. FOR SUBSEQUENT ERRORS, INCREASINGLY LARGE WAIT TIMES.
-                print("{} invalid responses recieved. Pausing for {:.1f} minutes".format(num_invalid_responses_recieved, pausetime/60))
+                print("{} invalid {} responses recieved. Pausing for {:.1f} minutes".format(num_invalid_responses_recieved, self.data_type, pausetime/60))
 
                 time.sleep(pausetime)
                 num_invalid_responses_recieved += 1
@@ -128,12 +134,11 @@ class Slave():
     def kickoff(self):
 
         #GIVE SERVER TIME TO START UP
-        print("Slave Sleeping...")
+        print("{} slave sleeping...".format(self.data_type))
         time.sleep(40)
-        print("Slave Kicking Off...")
+        print("{} slave kicking off...".format(self.data_type))
 
         #BACKGROUND THREADS
-        self.active = True
         active_threads = []
 
         for method in [self.data_scraping_loop, self.data_parsing_loop, self.data_transmission_loop]:
@@ -149,7 +154,9 @@ class Slave():
         for thread in active_threads:
             thread.join()
 
-        print("Data Collected. Terminating.")
+        self.nonterminable = False
+
+        print("{} data collected.".format(self.data_type))
 
 class Review_Slave(Slave):
 
@@ -159,6 +166,7 @@ class Review_Slave(Slave):
         self.api_url = "http://{}:{}/api_review".format(self.host, self.port)
         self.base_url = "https://www.goodreads.com/review/show/"
         self.parser = Review_Parser()
+        self.data_type = "review"
 
     def parse(self):
 
@@ -203,6 +211,7 @@ class Book_Slave(Slave):
         self.api_url = "http://{}:{}/api_book".format(self.host, self.port)
         self.base_url = "https://www.goodreads.com/book/show/"
         self.parser = Book_Parser()
+        self.data_type = "book"
 
     def parse(self):
 
@@ -227,11 +236,57 @@ class Book_Slave(Slave):
             self.data_strings_queue.put(data_string)
             self.soup_tuple_queue.task_done()
 
-#TESTING
-host, port = "localhost", 8080
+class Dual_Slave():
 
-#test_review_slave = Review_Slave(1, host, port)
-#test_review_slave.kickoff()
+    def __init__(self, review_max_sleep_time, review_host, review_port, book_max_sleep_time, book_host, book_port):
 
-test_book_slave = Book_Slave(45, host, port) #KEEP IT LONG FOR BOOKS
-test_book_slave.kickoff()
+        self.active = True
+        self.review_slave = Review_Slave(review_max_sleep_time, review_host, review_port)
+        self.book_slave = Book_Slave(book_max_sleep_time, book_host, book_port)
+
+    def kickoff_book_slave(self):
+        self.book_slave.kickoff()
+
+    def kickoff_review_slave(self):
+        self.review_slave.kickoff()
+
+    def is_active_loop(self):
+
+        while self.active:
+
+            review_running = self.review_slave.is_nonterminable()
+            book_running = self.book_slave.is_nonterminable()
+
+            if (not review_running) and (not book_running):
+                self.active = False
+
+            time.sleep(60*5)
+
+    def kickoff(self):
+
+        for method in [self.kickoff_book_slave, self.kickoff_review_slave, self.is_active_loop]:
+            thread = threading.Thread(target = method, daemon = True)
+            thread.start()
+
+        while self.active:
+            time.sleep(1)
+
+        print("All data collected. terminating")
+        sys.exit()
+
+#DUAL TESTING
+
+host = "localhost"
+review_port, book_port = 8080, 80
+review_time, book_time = 1, 120
+
+#test_dual_slave = Dual_Slave(review_time, host, review_port, book_time, host, book_port)
+#test_dual_slave.kickoff()
+
+# INDIVIDUAL TESTING
+
+test_review_slave = Review_Slave(review_time, host, review_port)
+test_review_slave.kickoff()
+
+#test_book_slave = Book_Slave(60, host, port) #KEEP IT LONG FOR BOOKS
+#test_book_slave.kickoff()

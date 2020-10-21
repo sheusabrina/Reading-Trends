@@ -29,6 +29,7 @@ class Master():
         self.log_file_name = "databases/"+ file_name + ".csv"
         self.host = host
         self.port = port
+        self.active = True
 
     def is_csv(self):
 
@@ -78,11 +79,11 @@ class Master():
 
         #TERMINATE IF NO ITEMS TO SCRAPE
         if not self.ids_to_scrape_list:
-            print("Data request contains no unknown data. Terminating.")
-            sys.exit()
+            print("Data request contains no unknown {} data.".format(self.data_type))
 
-        self.num_ids_total = len(self.ids_to_scrape_list)
-        random.shuffle(self.ids_to_scrape_list)
+        else:
+            self.num_ids_total = len(self.ids_to_scrape_list)
+            random.shuffle(self.ids_to_scrape_list)
 
     def generate_chunks(self):
 
@@ -104,7 +105,7 @@ class Master():
 
     def print_progress(self):
         self.generate_datetime()
-        print("{:,} / {:,} data points collected ({:.2%} complete) at {}".format(self.num_ids_logged, self.num_ids_total, self.num_ids_logged/self.num_ids_total, self.now_string))
+        print("{:,} / {:,} {} data points collected ({:.2%} complete) at {}".format(self.num_ids_logged, self.num_ids_total, self.data_type, self.num_ids_logged/self.num_ids_total, self.now_string))
 
     def print_progress_inter(self):
 
@@ -137,6 +138,9 @@ class Master():
         bottle.route(self.api_path, method = "POST")(self.recieve_data)
 
         run(host=self.host, port=self.port, debug=True)
+
+    def is_active(self):
+        return self.active
 
     def log_data_loop(self):
 
@@ -171,7 +175,6 @@ class Master():
         self.prepare()
 
         #BACKGROUND THREADS
-        self.active = True
         active_threads = []
 
         for method in [self.log_data_loop, self.print_progress_inter, self.run_rest_api]:
@@ -183,11 +186,9 @@ class Master():
         while self.num_ids_total != self.num_ids_logged:
             time.sleep(1)
 
-        print("Blocking Complete / Initiating Shutdown")
         self.active = False
 
-        print("Data Collected. Terminating")
-        sys.exit()
+        print("{} data collected.".format(self.data_type))
 
 class Review_Master(Master):
 
@@ -195,6 +196,7 @@ class Review_Master(Master):
         super().__init__(file_name, host, port, num_ids_per_chunk)
         self.data_log_id_column_name = "review_id"
         self.api_path = "/api_review"
+        self.data_type = "review"
 
     def input_scraping_scope(self, min_id, max_id):
         self.ids_requested_list = range(min_id, max_id)
@@ -208,9 +210,11 @@ class Book_Master(Master):
         super().__init__(file_name, host, port, num_ids_per_chunk)
         self.data_log_id_column_name = "book_id"
         self.api_path = "/api_book"
+        self.data_type = "book"
         self.min_num_reviews = min_num_reviews
 
     def input_scraping_scope(self, review_database_file):
+        review_database_file = "databases/" + review_database_file + ".csv"
         review_df = pd.read_csv(review_database_file, usecols=["book_id"])
         review_df.dropna(inplace = True)
         review_df = review_df[review_df.book_id != "None"]
@@ -229,16 +233,80 @@ class Book_Master(Master):
     def add_headers_to_log_file(self):
         self.datafile.write("book_id,book_author,book_language,num_reviews,num_ratings,avg_rating,isbn13,editions_url,book_publication_date,book_first_publication_date,series,data_log_time")
 
-#TESTING
-host, port = "localhost", 8080
+class Dual_Master():
 
-min_2017_ID = 1484362322
-max_id = min_2017_ID + 30000
+    def __init__(self, review_file_name, book_file_name, num_ids_per_chunk):
 
-#test_review_master = Review_Master("review_data", host, port, 50)
-#test_review_master.input_scraping_scope(min_2017_ID, max_id)
-#test_review_master.kickoff()
+        self.num_ids_per_chunk = num_ids_per_chunk
+        self.review_file_name = review_file_name
+        self.book_file_name = book_file_name
+        self.active = True
 
-test_book_master = Book_Master("book_data", host, port, 5, 20)
-test_book_master.input_scraping_scope("databases/review_data.csv")
-test_book_master.kickoff()
+    def input_review_configuration(self, host, port, min_id, max_id):
+
+        self.review_master = Review_Master(self.review_file_name, host, port, self.num_ids_per_chunk)
+        self.review_master.input_scraping_scope(min_id, max_id)
+        self.is_review_configured = True
+
+    def input_book_configuration(self, host, port, min_num_reviews = None):
+
+        self.book_master = Book_Master(self.book_file_name, host, port, self.num_ids_per_chunk, min_num_reviews)
+        self.book_master.input_scraping_scope(self.review_file_name)
+        self.is_book_configured = True
+
+    def kickoff_book_master(self):
+        self.book_master.kickoff()
+
+    def kickoff_review_master(self):
+        self.review_master.kickoff()
+
+    def is_active_loop(self):
+
+        while self.active:
+
+            review_active = self.book_master.is_active()
+            book_active = self.review_master.is_active()
+
+            if (not review_active) and (not book_active):
+                self.active = False
+
+            time.sleep(60*5)
+
+    def kickoff(self):
+
+        active_threads = []
+
+        for method in [self.kickoff_book_master, self.kickoff_review_master, self.is_active_loop]:
+            thread = threading.Thread(target = method, daemon = True)
+            active_threads.append(thread)
+            thread.start()
+
+        while self.active:
+            time.sleep(1)
+
+        print("All data collected. terminating")
+        sys.exit()
+
+
+#DUAL TESTING
+
+host = "localhost"
+review_port, book_port = 8080, 80
+
+min_id = 2216193211
+max_id = min_id + (6 * 10**4)
+
+#test_dual_master = Dual_Master("review_data_sample", "test_book_data", 20)
+#test_dual_master.input_review_configuration(host, review_port, min_id, max_id)
+#test_dual_master.input_book_configuration(host, book_port)
+#test_dual_master.kickoff()
+
+##INDIVIDUAL TESTING
+
+test_review_master = Review_Master("review_data", host, review_port, 65)
+test_review_master.input_scraping_scope(min_id, max_id)
+test_review_master.kickoff()
+
+#test_book_master = Book_Master("book_data", host, port, 50, 10)
+#test_book_master.input_scraping_scope("review_data")
+#test_book_master.kickoff()
