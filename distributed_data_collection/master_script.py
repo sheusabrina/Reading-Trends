@@ -111,7 +111,7 @@ class Master():
 
         while self.active:
             self.print_progress()
-            time.sleep(20)
+            time.sleep(60)
 
     def transmit_chunk_ids(self):
 
@@ -154,8 +154,6 @@ class Master():
 
             self.num_ids_logged += 1
 
-        print("Log Data Loop Completed")
-
     def input_scraping_scope(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
@@ -195,8 +193,15 @@ class Review_Master(Master):
         self.api_path = "/api_review"
         self.data_type = "review"
 
-    def input_scraping_scope(self, min_id, max_id):
-        self.ids_requested_list = range(min_id, max_id)
+    def input_scraping_scope(self, min_id, max_id, n = None):
+
+        num_ids_in_range = max_id - min_id
+
+        if n and (n< num_ids_in_range):
+            self.ids_requested_list = random.sample(range(min_id, max_id), n)
+
+        else:
+            self.ids_requested_list = range(min_id, max_id)
 
     def add_headers_to_log_file(self):
         self.datafile.write("review_id,is_URL_valid,review_publication_date,book_title,book_id,rating,reviewer_href,reviewer_started_reading_date,reviewer_finished_reading_date,reviwer_shelved_date,data_log_time")
@@ -239,10 +244,10 @@ class Dual_Master():
         self.book_file_name = book_file_name
         self.active = True
 
-    def input_review_configuration(self, host, port, min_id, max_id):
+    def input_review_configuration(self, host, port, min_id, max_id, n = None):
 
         self.review_master = Review_Master(self.review_file_name, host, port, self.num_ids_per_chunk)
-        self.review_master.input_scraping_scope(min_id, max_id)
+        self.review_master.input_scraping_scope(min_id, max_id, n)
         self.is_review_configured = True
 
     def input_book_configuration(self, host, port, min_num_reviews = None):
@@ -274,6 +279,9 @@ class Dual_Master():
 
     def kickoff(self):
 
+        if (not self.is_book_configured) or (not self.is_review_configured):
+            return "Configurations Must Be Inputted Prior to Kickoff"
+
         self.active_threads = []
 
         for method in [self.kickoff_book_master, self.kickoff_review_master, self.is_active_loop]:
@@ -287,16 +295,17 @@ class Dual_Master():
         print("All data collected. terminating")
         sys.exit()
 
-
-#DUAL TESTING
+#TESTING
 
 host = "localhost"
 review_port, book_port = 8080, 80
 
 min_id = 2216193211
-max_id = min_id + (6 * 10**4)
+max_id = 3607950182
+review_n = (5 * 10**4)
+book_cutoff = 15
 
 test_dual_master = Dual_Master("review_data", "book_data", 20)
-test_dual_master.input_review_configuration(host, review_port, min_id, max_id)
-test_dual_master.input_book_configuration(host, book_port)
+test_dual_master.input_review_configuration(host, review_port, min_id, max_id, review_n)
+test_dual_master.input_book_configuration(host, book_port, book_cutoff)
 test_dual_master.kickoff()
