@@ -169,12 +169,8 @@ class Master():
     def kickoff(self):
         self.prepare()
 
-        #BACKGROUND THREADS
-        active_threads = []
-
         for method in [self.log_data_loop, self.print_progress_inter, self.run_rest_api]:
                 thread = threading.Thread(target = method, daemon = True)
-                active_threads.append(thread)
                 thread.start()
 
         #BLOCKING
@@ -302,11 +298,7 @@ review_port, book_port = 8080, 80
 
 min_id = 2216193211
 max_id = 3607950182
-<<<<<<< HEAD
-review_n = (5 * 10**3)
-=======
-review_n = (5 * 10**4)
->>>>>>> f304f2f41809342596aa63de871a108053e0605e
+review_n = (1 * 10**4)
 book_cutoff = 15
 
 test_dual_master = Dual_Master("review_data", "book_data", 20)
