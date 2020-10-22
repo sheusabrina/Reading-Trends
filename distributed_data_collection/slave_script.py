@@ -261,6 +261,8 @@ class Dual_Slave():
 
     def kickoff(self):
 
+        self.active_threads = []
+
         for method in [self.kickoff_book_slave, self.kickoff_review_slave, self.is_active_loop]:
             thread = threading.Thread(target = method, daemon = True)
             self.active_threads.append(thread)
@@ -276,15 +278,15 @@ class Dual_Slave():
 
 host = "localhost"
 review_port, book_port = 8080, 80
-review_time, book_time = 1, 120
+review_time, book_time = 1, 90
 
-#test_dual_slave = Dual_Slave(review_time, host, review_port, book_time, host, book_port)
-#test_dual_slave.kickoff()
+test_dual_slave = Dual_Slave(review_time, host, review_port, book_time, host, book_port)
+test_dual_slave.kickoff()
 
 # INDIVIDUAL TESTING
 
-test_review_slave = Review_Slave(review_time, host, review_port)
-test_review_slave.kickoff()
+#test_review_slave = Review_Slave(review_time, host, review_port)
+#test_review_slave.kickoff()
 
-#test_book_slave = Book_Slave(60, host, port) #KEEP IT LONG FOR BOOKS
+#test_book_slave = Book_Slave(90, host, book_port) #SWEET SPOT SOMEWHERE BETWEEN 60-90
 #test_book_slave.kickoff()
