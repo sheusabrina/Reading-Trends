@@ -139,9 +139,6 @@ class Master():
 
         run(host=self.host, port=self.port, debug=True)
 
-    def is_active(self):
-        return self.active
-
     def log_data_loop(self):
 
         while self.active or (not self.data_strings_queue.empty()):
@@ -264,21 +261,24 @@ class Dual_Master():
 
         while self.active:
 
-            review_active = self.book_master.is_active()
-            book_active = self.review_master.is_active()
-
-            if (not review_active) and (not book_active):
+            if len(self.active_threads) == 0:
                 self.active = False
+
+            else:
+
+                for thread in self.active_threads:
+                    if not thread.is_alive():
+                        self.active_threads.remove(thread)
 
             time.sleep(60*5)
 
     def kickoff(self):
 
-        active_threads = []
+        self.active_threads = []
 
         for method in [self.kickoff_book_master, self.kickoff_review_master, self.is_active_loop]:
             thread = threading.Thread(target = method, daemon = True)
-            active_threads.append(thread)
+            self.active_threads.append(thread)
             thread.start()
 
         while self.active:

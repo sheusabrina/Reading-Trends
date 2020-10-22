@@ -28,10 +28,6 @@ class Slave():
         self.port = port
 
         self.active = True
-        self.nonterminable = True
-
-    def is_nonterminable(self):
-        return self.nonterminable
 
     def request_chunk(self):
 
@@ -154,8 +150,6 @@ class Slave():
         for thread in active_threads:
             thread.join()
 
-        self.nonterminable = False
-
         print("{} data collected.".format(self.data_type))
 
 class Review_Slave(Slave):
@@ -254,11 +248,14 @@ class Dual_Slave():
 
         while self.active:
 
-            review_running = self.review_slave.is_nonterminable()
-            book_running = self.book_slave.is_nonterminable()
-
-            if (not review_running) and (not book_running):
+            if len(self.active_threads) == 0:
                 self.active = False
+
+            else:
+
+                for thread in self.active_threads:
+                    if not thread.is_alive():
+                        self.active_threads.remove(thread)
 
             time.sleep(60*5)
 
@@ -266,6 +263,7 @@ class Dual_Slave():
 
         for method in [self.kickoff_book_slave, self.kickoff_review_slave, self.is_active_loop]:
             thread = threading.Thread(target = method, daemon = True)
+            self.active_threads.append(thread)
             thread.start()
 
         while self.active:
