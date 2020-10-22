@@ -296,17 +296,7 @@ review_port, book_port = 8080, 80
 min_id = 2216193211
 max_id = min_id + (6 * 10**4)
 
-test_dual_master = Dual_Master("review_data_sample", "test_book_data", 20)
+test_dual_master = Dual_Master("review_data", "book_data", 20)
 test_dual_master.input_review_configuration(host, review_port, min_id, max_id)
 test_dual_master.input_book_configuration(host, book_port)
 test_dual_master.kickoff()
-
-##INDIVIDUAL TESTING
-
-#test_review_master = Review_Master("review_data", host, review_port, 65)
-#test_review_master.input_scraping_scope(min_id, max_id)
-#test_review_master.kickoff()
-
-#test_book_master = Book_Master("book_data", host, book_port, 50, 20)
-#test_book_master.input_scraping_scope("review_data")
-#test_book_master.kickoff()

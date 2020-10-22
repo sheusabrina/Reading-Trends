@@ -274,7 +274,7 @@ class Dual_Slave():
         print("All data collected. terminating")
         sys.exit()
 
-#DUAL TESTING
+#TESTING
 
 host = "localhost"
 review_port, book_port = 8080, 80
@@ -282,11 +282,3 @@ review_time, book_time = 1, 90
 
 test_dual_slave = Dual_Slave(review_time, host, review_port, book_time, host, book_port)
 test_dual_slave.kickoff()
-
-# INDIVIDUAL TESTING
-
-#test_review_slave = Review_Slave(review_time, host, review_port)
-#test_review_slave.kickoff()
-
-#test_book_slave = Book_Slave(90, host, book_port) #SWEET SPOT SOMEWHERE BETWEEN 60-90
-#test_book_slave.kickoff()
