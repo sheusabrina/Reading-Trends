@@ -169,32 +169,39 @@ class Review_Slave(Slave):
             soup_tuple = self.soup_tuple_queue.get()
             id, soup = soup_tuple[0], soup_tuple[1]
 
-            is_review_valid = self.parser.review_soup_is_valid(soup)
+            try:
 
-            if is_review_valid:
-                date = self.parser.review_soup_to_date(soup)
-                book_title = self.parser.review_soup_to_book_title(soup)
-                book_id = self.parser.review_soup_to_book_id(soup)
-                rating = self.parser.review_soup_to_rating(soup)
-                reviewer_href = self.parser.review_soup_to_reviewer_href(soup)
+                is_review_valid = self.parser.review_soup_is_valid(soup)
 
-                progress_dict = self.parser.review_soup_to_progress_dict(soup)
-                start_date = self.parser.progress_dict_to_start_date(progress_dict)
-                finished_date = self.parser.progress_dict_to_finish_date(progress_dict)
-                shelved_date = self.parser.progress_dict_to_shelved_date(progress_dict)
+                if is_review_valid:
+                    date = self.parser.review_soup_to_date(soup)
+                    book_title = self.parser.review_soup_to_book_title(soup)
+                    book_id = self.parser.review_soup_to_book_id(soup)
+                    rating = self.parser.review_soup_to_rating(soup)
+                    reviewer_href = self.parser.review_soup_to_reviewer_href(soup)
 
-            else:
-                date = None
-                book_title = None
-                book_id = None
-                rating = None
-                reviewer_href = None
-                start_date = None
-                finished_date = None
-                shelved_date = None
+                    progress_dict = self.parser.review_soup_to_progress_dict(soup)
+                    start_date = self.parser.progress_dict_to_start_date(progress_dict)
+                    finished_date = self.parser.progress_dict_to_finish_date(progress_dict)
+                    shelved_date = self.parser.progress_dict_to_shelved_date(progress_dict)
 
-            data_string = "{},{},{},{},{},{},{},{},{},{}".format(id, is_review_valid, date, book_title, book_id, rating, reviewer_href, start_date, finished_date, shelved_date)
-            self.data_strings_queue.put(data_string)
+                else:
+                    date = None
+                    book_title = None
+                    book_id = None
+                    rating = None
+                    reviewer_href = None
+                    start_date = None
+                    finished_date = None
+                    shelved_date = None
+
+                data_string = "{},{},{},{},{},{},{},{},{},{}".format(id, is_review_valid, date, book_title, book_id, rating, reviewer_href, start_date, finished_date, shelved_date)
+                self.data_strings_queue.put(data_string)
+
+            except AttributeError:
+
+                print("Unable to parse {} id = {}. discarding soup".format(self.data_type, id)) 
+
             self.soup_tuple_queue.task_done()
 
 class Book_Slave(Slave):
@@ -214,20 +221,27 @@ class Book_Slave(Slave):
             soup_tuple = self.soup_tuple_queue.get()
             id, soup = soup_tuple[0], soup_tuple[1]
 
-            author = self.parser.book_soup_to_author(soup)
-            language = self.parser.book_soup_to_language(soup)
-            num_reviews = self.parser.book_soup_to_num_reviews(soup)
-            num_ratings = self.parser.book_soup_to_num_ratings(soup)
-            avg_rating = self.parser.book_soup_to_avg_rating(soup)
-            isbn13 = self.parser.book_soup_to_isbn13(soup)
-            editions_href = self.parser.book_soup_to_editions_href(soup)
-            publication_date = self.parser.book_soup_to_publication_date(soup)
-            first_publication_date = self.parser.book_soup_to_first_publication_date(soup)
-            series = self.parser.book_soup_to_series(soup)
+            try:
 
-            data_string = "{},{},{},{},{},{},{},{},{},{},{}".format(id, author, language, num_reviews, num_ratings, avg_rating, isbn13, editions_href, publication_date, first_publication_date, series)
+                author = self.parser.book_soup_to_author(soup)
+                language = self.parser.book_soup_to_language(soup)
+                num_reviews = self.parser.book_soup_to_num_reviews(soup)
+                num_ratings = self.parser.book_soup_to_num_ratings(soup)
+                avg_rating = self.parser.book_soup_to_avg_rating(soup)
+                isbn13 = self.parser.book_soup_to_isbn13(soup)
+                editions_href = self.parser.book_soup_to_editions_href(soup)
+                publication_date = self.parser.book_soup_to_publication_date(soup)
+                first_publication_date = self.parser.book_soup_to_first_publication_date(soup)
+                series = self.parser.book_soup_to_series(soup)
 
-            self.data_strings_queue.put(data_string)
+                data_string = "{},{},{},{},{},{},{},{},{},{},{}".format(id, author, language, num_reviews, num_ratings, avg_rating, isbn13, editions_href, publication_date, first_publication_date, series)
+
+                self.data_strings_queue.put(data_string)
+
+            except AttributeError:
+
+                print("Unable to parse {} id = {}. discarding soup".format(self.data_type, id))
+
             self.soup_tuple_queue.task_done()
 
 class Dual_Slave():
