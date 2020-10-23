@@ -74,11 +74,11 @@ class Slave():
         soup = self.parser.html_to_soup(webpage_as_string)
 
         if not self.parser.is_soup_populated(soup): #IF RESPONSE IS INVALID
-            num_invalid_responses_recieved = 0
+            num_invalid_responses_recieved = 1
 
             while self.parser.is_soup_populated(soup) == False:
 
-                pausetime = max(self.max_sleep_time, num_invalid_responses_recieved*60) #IF IT'S THE FIRST ERROR, REGULAR SLEEPTIME. FOR SUBSEQUENT ERRORS, INCREASINGLY LARGE WAIT TIMES.
+                pausetime = 2 * 60 * 60
                 print("{} invalid {} responses recieved. Pausing for {:.1f} minutes".format(num_invalid_responses_recieved, self.data_type, pausetime/60))
 
                 time.sleep(pausetime)
@@ -200,7 +200,7 @@ class Review_Slave(Slave):
 
             except AttributeError:
 
-                print("Unable to parse {} id = {}. discarding soup".format(self.data_type, id)) 
+                print("Unable to parse {} id = {}. discarding soup".format(self.data_type, id))
 
             self.soup_tuple_queue.task_done()
 
@@ -292,7 +292,7 @@ class Dual_Slave():
 
 host = "localhost"
 review_port, book_port = 8080, 80
-review_time, book_time = 1, 90
+review_time, book_time = 1, 10
 
 test_dual_slave = Dual_Slave(review_time, host, review_port, book_time, host, book_port)
 test_dual_slave.kickoff()
