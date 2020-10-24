@@ -298,9 +298,9 @@ class Dual_Master():
 host = "localhost"
 review_port, book_port = 8080, 80
 
-min_id = 2216193211
+min_id = 2235559808
 max_id = 3607950182
-review_n = (1 * 10**4)
+review_n = (3 * 10**4)
 book_cutoff = 12
 
 test_dual_master = Dual_Master("review_data", "book_data", 20)

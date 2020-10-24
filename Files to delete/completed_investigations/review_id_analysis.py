@@ -1,3 +1,6 @@
+#NB: This script was used for a review analysis over the summer. We subsequently redid the analysis more rigorously in 10/2020, and captured the code and notes based on that analysis in a Jupyter notebook.
+#DON'T REFER TO THIS SCRIPT. LOOK FOR THE NEW ANALYSIS!
+
 #import libraries
 from bs4 import BeautifulSoup
 from datetime import datetime
