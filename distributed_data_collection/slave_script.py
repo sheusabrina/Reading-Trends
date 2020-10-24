@@ -31,8 +31,13 @@ class Slave():
 
     def request_chunk(self):
 
-        chunk_response = requests.get(self.api_url)
+        try:
+            chunk_response = requests.get(self.api_url)
 
+        except ConnectionError:
+            print("ConnectionError in Request Chunk. Pausing")
+            time.sleep(60)
+            
         if self.is_chunk_none(chunk_response):
             self.active = False
 
@@ -64,8 +69,15 @@ class Slave():
 
             data_string = self.data_strings_queue.get()
 
-            requests.post(self.api_url, data = {"data_string": data_string})
-            self.data_strings_queue.task_done()
+            try:
+                requests.post(self.api_url, data = {"data_string": data_string})
+                self.data_strings_queue.task_done()
+
+            except ConnectionError:
+                self.data_strings_queue.task_done()
+                self.data_strings_queue.put(data_string)
+                print("ConnectionError in Data Transmission Loop. Pausing...")
+                sleep.time(60)
 
     def id_to_soup_tuple(self, id):
         url = self.base_url + str(id)
@@ -78,7 +90,7 @@ class Slave():
 
             while self.parser.is_soup_populated(soup) == False:
 
-                pausetime = 2 * 60 * 60
+                pausetime = 2.5 * 60 * 60
                 print("{} invalid {} responses recieved. Pausing for {:.1f} minutes".format(num_invalid_responses_recieved, self.data_type, pausetime/60))
 
                 time.sleep(pausetime)
@@ -292,7 +304,7 @@ class Dual_Slave():
 
 host = "localhost"
 review_port, book_port = 8080, 80
-review_time, book_time = 1, 85
+review_time, book_time = 1, 90
 
 test_dual_slave = Dual_Slave(review_time, host, review_port, book_time, host, book_port)
 test_dual_slave.kickoff()
