@@ -30,6 +30,7 @@ class Master():
         self.host = host
         self.port = port
         self.active = True
+        self.n = None
 
     def is_csv(self):
 
@@ -211,6 +212,7 @@ class Book_Master(Master):
         self.data_type = "book"
         self.min_num_reviews = min_num_reviews
 
+
     def input_scraping_scope(self, review_database_file):
         review_database_file = "databases/" + review_database_file + ".csv"
         review_df = pd.read_csv(review_database_file, usecols=["book_id"])
@@ -299,7 +301,7 @@ review_port, book_port = 8080, 80
 min_id = 2216193211
 max_id = 3607950182
 review_n = (1 * 10**4)
-book_cutoff = 15
+book_cutoff = 12
 
 test_dual_master = Dual_Master("review_data", "book_data", 20)
 test_dual_master.input_review_configuration(host, review_port, min_id, max_id, review_n)

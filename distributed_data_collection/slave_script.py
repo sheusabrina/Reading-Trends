@@ -292,7 +292,7 @@ class Dual_Slave():
 
 host = "localhost"
 review_port, book_port = 8080, 80
-review_time, book_time = 1, 10
+review_time, book_time = 1, 85
 
 test_dual_slave = Dual_Slave(review_time, host, review_port, book_time, host, book_port)
 test_dual_slave.kickoff()
