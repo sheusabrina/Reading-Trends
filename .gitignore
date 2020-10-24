@@ -29,3 +29,4 @@ test_book_database.csv
 
 #Cache Files
 *.pyc
+*-checkpoint.ipynb
