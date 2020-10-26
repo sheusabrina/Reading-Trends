@@ -1,0 +1,14 @@
+Current Status:
+	#Scraper (Leora): The scraper is in good shape with the dual scraping structure implemented.
+	#Scraping Scope (Leora): We have identified a cutoff point for relevant reviews and estimate roughly 1.4B data points in the total population.
+		#We will want to periodically audit the reviews to ensure no data holes by date.
+	#Distributed Computing (Kathleen): As an initial step, the scraper code is running on a free tier AWS server. We hope to have a distributed system running by EOW. Potential Challenges:
+		#Network configuration
+		#Size limits on CSV database
+	#Book Metadata Features (Preston): We have extracted topic data from the Open Library Data Dumps JSON files. As a next step, we will try a match with the existing book database. Potential Challenges:
+		#We don't know the degree to which the books that we need are included in the Open Library database.
+		#Subject data is somewhat messy and will likely require cleaning/matching.
+
+Next Steps:
+	#Set up recurring meeting time (Leora to email administration regarding cohort swap)
+	#Once we have the scraper running and a better sense of our book meta-data features, we will want to start aggregating up our review database into a book database that we can build a model off of.
