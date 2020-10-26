@@ -37,7 +37,7 @@ class Slave():
         except ConnectionError:
             print("ConnectionError in Request Chunk. Pausing")
             time.sleep(60)
-            
+
         if self.is_chunk_none(chunk_response):
             self.active = False
 
@@ -94,6 +94,7 @@ class Slave():
                 print("{} invalid {} responses recieved. Pausing for {:.1f} minutes".format(num_invalid_responses_recieved, self.data_type, pausetime/60))
 
                 time.sleep(pausetime)
+                print("{} slave kicking off...".format(self.data_type))
                 num_invalid_responses_recieved += 1
 
                 webpage_as_string = self.scraper.url_to_string_content(url)
