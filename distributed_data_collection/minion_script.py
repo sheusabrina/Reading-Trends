@@ -1,6 +1,6 @@
-#HOW TO USE SLAVE:
-    #MAKE SURE THAT MASTER SCRIPT IS ALREADY RUNNING
-    #INIT SLAVE WITH REST API HOST & PORT (MASTER'S COMPUTER)
+#HOW TO USE MINON:
+    #MAKE SURE THAT BOSS SCRIPT IS ALREADY RUNNING
+    #INIT MINON WITH REST API HOST & PORT (BOSS'S COMPUTER)
     #CALL KICKOFF
 
 #import libraries
@@ -14,7 +14,7 @@ import threading
 from parser_script import Review_Parser, Book_Parser
 from scraper_script import Scraper
 
-class Slave():
+class Minion():
 
     def __init__(self, max_sleep_time, host, port):
 
@@ -94,7 +94,7 @@ class Slave():
                 print("{} invalid {} responses recieved. Pausing for {:.1f} minutes".format(num_invalid_responses_recieved, self.data_type, pausetime/60))
 
                 time.sleep(pausetime)
-                print("{} slave kicking off...".format(self.data_type))
+                print("{} minion kicking off...".format(self.data_type))
                 num_invalid_responses_recieved += 1
 
                 webpage_as_string = self.scraper.url_to_string_content(url)
@@ -143,9 +143,9 @@ class Slave():
     def kickoff(self):
 
         #GIVE SERVER TIME TO START UP
-        print("{} slave sleeping...".format(self.data_type))
+        print("{} minion sleeping...".format(self.data_type))
         time.sleep(40)
-        print("{} slave kicking off...".format(self.data_type))
+        print("{} minion kicking off...".format(self.data_type))
 
         #BACKGROUND THREADS
         active_threads = []
@@ -165,7 +165,7 @@ class Slave():
 
         print("{} data collected.".format(self.data_type))
 
-class Review_Slave(Slave):
+class Review_Minion(Minion):
 
     def __init__(self, max_sleep_time, host, port):
         super().__init__(max_sleep_time, host, port)
@@ -217,7 +217,7 @@ class Review_Slave(Slave):
 
             self.soup_tuple_queue.task_done()
 
-class Book_Slave(Slave):
+class Book_Minion(Minion):
 
     def __init__(self, max_sleep_time, host, port):
         super().__init__(max_sleep_time, host, port)
@@ -257,19 +257,19 @@ class Book_Slave(Slave):
 
             self.soup_tuple_queue.task_done()
 
-class Dual_Slave():
+class Dual_Minion():
 
     def __init__(self, review_max_sleep_time, review_host, review_port, book_max_sleep_time, book_host, book_port):
 
         self.active = True
-        self.review_slave = Review_Slave(review_max_sleep_time, review_host, review_port)
-        self.book_slave = Book_Slave(book_max_sleep_time, book_host, book_port)
+        self.review_minion = Review_Minion(review_max_sleep_time, review_host, review_port)
+        self.book_minion = Book_Minion(book_max_sleep_time, book_host, book_port)
 
-    def kickoff_book_slave(self):
-        self.book_slave.kickoff()
+    def kickoff_book_minion(self):
+        self.book_minion.kickoff()
 
-    def kickoff_review_slave(self):
-        self.review_slave.kickoff()
+    def kickoff_review_minion(self):
+        self.review_minion.kickoff()
 
     def is_active_loop(self):
 
@@ -290,7 +290,7 @@ class Dual_Slave():
 
         self.active_threads = []
 
-        for method in [self.kickoff_book_slave, self.kickoff_review_slave, self.is_active_loop]:
+        for method in [self.kickoff_book_minion, self.kickoff_review_minion, self.is_active_loop]:
             thread = threading.Thread(target = method, daemon = True)
             self.active_threads.append(thread)
             thread.start()
@@ -307,5 +307,5 @@ host = "localhost"
 review_port, book_port = 8080, 80
 review_time, book_time = 1, 115
 
-test_dual_slave = Dual_Slave(review_time, host, review_port, book_time, host, book_port)
-test_dual_slave.kickoff()
+test_dual_minion = Dual_Minion(review_time, host, review_port, book_time, host, book_port)
+test_dual_minion.kickoff()

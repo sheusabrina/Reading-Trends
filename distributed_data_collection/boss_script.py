@@ -1,4 +1,4 @@
-#HOW TO USE MASTER:
+#HOW TO USE BOSS:
     #INIT WITH HOST AND PORT OF OWN COMPUTER
     #INPUT SCRAPING SCOPE
     #CALL KICKOFF METHOD
@@ -20,7 +20,7 @@ import sys
 import time
 import threading
 
-class Master():
+class Boss():
 
     def __init__(self, file_name, host, port, num_ids_per_chunk):
 
@@ -182,7 +182,7 @@ class Master():
 
         print("{} data collected.".format(self.data_type))
 
-class Review_Master(Master):
+class Review_Boss(Boss):
 
     def __init__(self, file_name, host, port, num_ids_per_chunk):
         super().__init__(file_name, host, port, num_ids_per_chunk)
@@ -203,7 +203,7 @@ class Review_Master(Master):
     def add_headers_to_log_file(self):
         self.datafile.write("review_id,is_URL_valid,review_publication_date,book_title,book_id,rating,reviewer_href,reviewer_started_reading_date,reviewer_finished_reading_date,reviwer_shelved_date,data_log_time")
 
-class Book_Master(Master):
+class Book_Boss(Boss):
 
     def __init__(self, file_name, host, port, num_ids_per_chunk, min_num_reviews = None):
         super().__init__(file_name, host, port, num_ids_per_chunk)
@@ -233,7 +233,7 @@ class Book_Master(Master):
     def add_headers_to_log_file(self):
         self.datafile.write("book_id,book_author,book_language,num_reviews,num_ratings,avg_rating,isbn13,editions_url,book_publication_date,book_first_publication_date,series,data_log_time")
 
-class Dual_Master():
+class Dual_Boss():
 
     def __init__(self, review_file_name, book_file_name, num_ids_per_chunk):
 
@@ -244,21 +244,21 @@ class Dual_Master():
 
     def input_review_configuration(self, host, port, min_id, max_id, n = None):
 
-        self.review_master = Review_Master(self.review_file_name, host, port, self.num_ids_per_chunk)
-        self.review_master.input_scraping_scope(min_id, max_id, n)
+        self.review_boss = Review_Boss(self.review_file_name, host, port, self.num_ids_per_chunk)
+        self.review_boss.input_scraping_scope(min_id, max_id, n)
         self.is_review_configured = True
 
     def input_book_configuration(self, host, port, min_num_reviews = None):
 
-        self.book_master = Book_Master(self.book_file_name, host, port, self.num_ids_per_chunk, min_num_reviews)
-        self.book_master.input_scraping_scope(self.review_file_name)
+        self.book_boss = Book_Boss(self.book_file_name, host, port, self.num_ids_per_chunk, min_num_reviews)
+        self.book_boss.input_scraping_scope(self.review_file_name)
         self.is_book_configured = True
 
-    def kickoff_book_master(self):
-        self.book_master.kickoff()
+    def kickoff_book_boss(self):
+        self.book_boss.kickoff()
 
-    def kickoff_review_master(self):
-        self.review_master.kickoff()
+    def kickoff_review_boss(self):
+        self.review_boss.kickoff()
 
     def is_active_loop(self):
 
@@ -282,7 +282,7 @@ class Dual_Master():
 
         self.active_threads = []
 
-        for method in [self.kickoff_book_master, self.kickoff_review_master, self.is_active_loop]:
+        for method in [self.kickoff_book_boss, self.kickoff_review_boss, self.is_active_loop]:
             thread = threading.Thread(target = method, daemon = True)
             self.active_threads.append(thread)
             thread.start()
@@ -304,7 +304,7 @@ review_n = (3 * 10**4)
 ids_per_chunk = 100
 book_cutoff = 10
 
-test_dual_master = Dual_Master("review_data", "book_data", ids_per_chunk)
-test_dual_master.input_review_configuration(host, review_port, min_id, max_id, review_n)
-test_dual_master.input_book_configuration(host, book_port, book_cutoff)
-test_dual_master.kickoff()
+test_dual_boss = Dual_Boss("review_data", "book_data", ids_per_chunk)
+test_dual_boss.input_review_configuration(host, review_port, min_id, max_id, review_n)
+test_dual_boss.input_book_configuration(host, book_port, book_cutoff)
+test_dual_boss.kickoff()
