@@ -300,9 +300,9 @@ review_port, book_port = 8080, 80
 
 min_id = 2235559808
 max_id = 3607950182
-review_n = (3 * 10**4)
+review_n = (10**6)
 ids_per_chunk = 100
-book_cutoff = 10
+book_cutoff = 5
 
 test_dual_boss = Dual_Boss("review_data", "book_data", ids_per_chunk)
 test_dual_boss.input_review_configuration(host, review_port, min_id, max_id, review_n)
