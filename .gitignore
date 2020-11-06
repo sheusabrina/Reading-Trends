@@ -1,6 +1,7 @@
 #NOTES
 test_file_urls.txt
 notes_to_do_list.txt
+goodreads_api_dev_key.py
 
 #TEST HTML FILES
 #test_review.html
@@ -26,6 +27,10 @@ book_data_copy.csv
 test_database.csv
 test_review_database.csv
 test_book_database.csv
+*.csv
+
+#MISC
+scraper_one_pager_diagram.pptx
 
 #Cache Files
 *.pyc
