@@ -303,8 +303,14 @@ class Dual_Minion():
 
 #TESTING
 
-host = "localhost"
-review_port, book_port = 8080, 80
+# for local:
+#host = "localhost"
+#review_port, book_port = 8080, 80
+
+# for distributed system:
+host = '52.14.142.88'
+review_port, book_port = 6000, 7000
+
 review_time, book_time = 1, 115
 
 test_dual_minion = Dual_Minion(review_time, host, review_port, book_time, host, book_port)
