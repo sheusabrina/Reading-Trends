@@ -305,7 +305,7 @@ review_port, book_port = 6000, 7000
 
 min_id = 2235559808
 max_id = 3607950182
-review_n = (10**6)
+review_n = (10**5)
 ids_per_chunk = 100
 book_cutoff = 5
 
