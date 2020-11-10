@@ -295,8 +295,13 @@ class Dual_Boss():
 
 #TESTING
 
-host = "localhost" # "0.0.0.0"
-review_port, book_port = 8080, 80
+# for local:
+#host = "localhost" # "0.0.0.0"
+#review_port, book_port = 8080, 80
+
+# for distributed system:
+host = '172.31.47.154'
+review_port, book_port = 6000, 7000
 
 min_id = 2235559808
 max_id = 3607950182
