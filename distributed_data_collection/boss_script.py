@@ -308,13 +308,10 @@ host = '172.31.47.154'
 review_port, book_port = 6000, 7000
 
 min_id = 2235559808
-<<<<<<< HEAD
 max_id = 3607950182
 review_n = (10**5)
-=======
 max_id = 3607950182 #min_id + 10000
 review_n = 10**5
->>>>>>> upstream/master
 ids_per_chunk = 100
 book_cutoff = 5
 
