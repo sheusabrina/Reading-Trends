@@ -31,6 +31,7 @@ class Boss():
         self.port = port
         self.active = True
         self.n = None
+        self.allow_duplicates = False
 
     def is_csv(self):
 
@@ -62,7 +63,7 @@ class Boss():
 
         #IDENTIFYING ITEMS TO SCRAPE
 
-        if not self.is_csv(): #IF NO CSV, ALL DATA NEEDS TO BE SCRAPED
+        if (not self.is_csv()) or self.allow_duplicates: #IF NO CSV OR IF WE ARE ALLOWING DUPLICATES, ALL DATA NEEDS TO BE SCRAPED
             self.ids_to_scrape_list = [x for x in self.ids_requested_list]
 
         else: #IF CSV, SCRAPE ITEMS NOT ALREADY IN CSV
@@ -161,7 +162,6 @@ class Boss():
     def add_headers_to_log_file(self):
         print("This method should be overwritten in each inherited class. If this is printed, something is not working correctly.")
 
-
     def prepare(self):
         self.prepare_scope()
         self.generate_chunks()
@@ -190,8 +190,9 @@ class Review_Boss(Boss):
         self.api_path = "/api_review"
         self.data_type = "review"
 
-    def input_scraping_scope(self, min_id, max_id, n = None):
+    def input_scraping_scope(self, min_id, max_id, n = None, allow_duplicates = False):
 
+        #SCRAPING SCOPE
         num_ids_in_range = max_id - min_id
 
         if n and (n< num_ids_in_range):
@@ -199,6 +200,10 @@ class Review_Boss(Boss):
 
         else:
             self.ids_requested_list = range(min_id, max_id)
+
+        #DUPLICATES
+        if allow_duplicates:
+            self.allow_duplicates = True
 
     def add_headers_to_log_file(self):
         self.datafile.write("review_id,is_URL_valid,review_publication_date,book_title,book_id,rating,reviewer_href,reviewer_started_reading_date,reviewer_finished_reading_date,reviwer_shelved_date,data_log_time")
@@ -211,7 +216,6 @@ class Book_Boss(Boss):
         self.api_path = "/api_book"
         self.data_type = "book"
         self.min_num_reviews = min_num_reviews
-
 
     def input_scraping_scope(self, review_database_file):
         review_database_file = "databases/" + review_database_file + ".csv"
@@ -242,10 +246,10 @@ class Dual_Boss():
         self.book_file_name = book_file_name
         self.active = True
 
-    def input_review_configuration(self, host, port, min_id, max_id, n = None):
+    def input_review_configuration(self, host, port, min_id, max_id, n = None, allow_duplicates = False):
 
         self.review_boss = Review_Boss(self.review_file_name, host, port, self.num_ids_per_chunk)
-        self.review_boss.input_scraping_scope(min_id, max_id, n)
+        self.review_boss.input_scraping_scope(min_id, max_id, n, allow_duplicates)
         self.is_review_configured = True
 
     def input_book_configuration(self, host, port, min_num_reviews = None):
@@ -296,7 +300,7 @@ class Dual_Boss():
 #TESTING
 
 # for local:
-#host = "localhost" # "0.0.0.0"
+#host = "localhost"
 #review_port, book_port = 8080, 80
 
 # for distributed system:
@@ -304,12 +308,12 @@ host = '172.31.47.154'
 review_port, book_port = 6000, 7000
 
 min_id = 2235559808
-max_id = 3607950182
-review_n = (10**6)
+max_id = 3607950182 #min_id + 10000
+review_n = 10**5
 ids_per_chunk = 100
 book_cutoff = 5
 
 test_dual_boss = Dual_Boss("review_data", "book_data", ids_per_chunk)
-test_dual_boss.input_review_configuration(host, review_port, min_id, max_id, review_n)
+test_dual_boss.input_review_configuration(host, review_port, min_id, max_id, review_n, allow_duplicates = True)
 test_dual_boss.input_book_configuration(host, book_port, book_cutoff)
 test_dual_boss.kickoff()
