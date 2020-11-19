@@ -2,6 +2,9 @@ import pandas as pd
 import datetime
 import numpy as np
 
+#NOTES:
+    #WE SHOULD EXPERIMENT WITH ADDING BOOK PUBLICATION DATE, BOOK FIRST PUBLICATION DATE, AND AUTHOR FEATURES
+
 class Aggregator():
 
     def __init__(self, review_file, book_file, start_date, end_date, grain):
@@ -13,9 +16,9 @@ class Aggregator():
         self.check_grain()
 
         self.review_df = pd.read_csv(review_file, usecols=["review_id","is_URL_valid", "review_publication_date", "book_id"], na_values="None")
-        self.book_df = pd.read_csv(book_file, usecols=["book_id" "book_language", "num_reviews", "num_ratings", "avg_rating" ,"isbn13", "book_publication_date", "book_first_publication_date", "series"], na_values="None")
+        self.book_df = pd.read_csv(book_file, usecols=["book_id", "book_language", "num_reviews", "num_ratings", "avg_rating" ,"isbn13", "series"], na_values="None")
 
-    def check_grain():
+    def check_grain(self):
 
         if self.grain not in ["day", "week", "month", "quarter"]:
 
@@ -29,6 +32,7 @@ class Aggregator():
     def drop_invalid_reviews(self):
 
         self.review_df = self.review_df[self.review_df.is_URL_valid == True]
+        self.review_df.drop(columns = "is_URL_valid", inplace = True)
 
     def datetime_conversion(self, input_df):
 
@@ -40,7 +44,11 @@ class Aggregator():
 
     def drop_out_of_time_reviews(self):
 
-        self.reviews_df = self.reviews_df[(self.reviews_df.review_publication_date >= self.start_date) and (self.reviews_df.review_publication_date <= self.end_date)]
+        self.review_df = self.review_df[self.review_df.review_publication_date >= self.start_date]
+        self.review_df = self.review_df[self.review_df.review_publication_date <= self.end_date]
+
+        #self.review_df = self.review_df[(self.review_df.review_publication_date >= self.start_date) and (self.review_df.review_publication_date <= self.end_date)]
+
 
     def clean_data(self):
 
@@ -48,7 +56,7 @@ class Aggregator():
 
         for df in df_list:
             self.drop_invalid_rows(df)
-            self.date_time_conversion()
+            self.datetime_conversion(df)
 
         self.drop_invalid_reviews()
         self.drop_out_of_time_reviews()
