@@ -75,17 +75,17 @@ class Aggregator():
             pass
 
         elif self.grain == "week":
-            self.reviews_df["review_publication_date"] = self.reviews_df["review_publication_date"].dt.strftime('%Y-%W')
+            self.review_df["review_publication_date"] = self.review_df["review_publication_date"].dt.strftime('%Y-%W')
 
         else: #GRAIN IS MONTH OR QUARTER
 
             #FOR MONTH, USE BUILT IN
-            self.reviews_df["review_publication_date"] = self.reviews_df["review_publication_date"].dt.strftime('%Y-%m')
+            self.review_df["review_publication_date"] = self.review_df["review_publication_date"].dt.strftime('%Y-%m')
 
             #FOR QUARTER, ADD ADDITIONAL PROCESSING
 
-            if self.grain = "quarter":
-                self.reviews_df["review_publication_date"] = self.reviews_df["review_publication_date"].apply(lambda month_year: "{}-{}".format(month_year.year, (month_year.month -1)//3 +1 )
+            if self.grain == "quarter":
+                self.review_df["review_publication_date"] = self.review_df["review_publication_date"].apply(lambda month_year: "{}-{}".format(month_year.year, (month_year.month -1)//3 +1 ))
 
 
 data_file_name_book = ""
