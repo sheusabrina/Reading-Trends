@@ -110,8 +110,24 @@ class Aggregator():
         self.resample_reviews()
         self.transform_given_text_columns()
 
+    def reshape_data_by_book(self):
+
+        review_df_copy = self.review_df.copy()
+        review_df_copy["review_count"] = 1
+
+        self.aggregated_df = pd.pivot_table(review_df_copy, index=["book_id"], columns = "review_publication_date", values=["review_count"], aggfunc=np.sum)
+        self.aggregated_df.columns = [' '.join(col).strip() for col in self.aggregated_df.columns.values]
+        self.aggregated_df.reset_index(inplace = True, drop = False)
+        self.aggregated_df.fillna(0, inplace = True)
+
+        print(self.aggregated_df.head())
+
 
 data_file_name_review = "distributed_data_collection/databases/review_data_sample.csv"
 data_file_name_book = "distributed_data_collection/databases/book_data_exc_corruption.csv"
 start_date = datetime.datetime(2018, 1, 1)
 end_date = datetime.datetime(2020, 2, 29)
+
+test_aggregator = Aggregator(data_file_name_review, data_file_name_book, start_date, end_date, "month")
+test_aggregator.process_scraper_output()
+test_aggregator.reshape_data_by_book()
