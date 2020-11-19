@@ -31,14 +31,10 @@ class Aggregator():
 
     def drop_invalid_rows(self, input_df):
 
-        print("Dropping Invalid Rows...")
-
         input_df.dropna(inplace = True)
         input_df.drop_duplicates(inplace = True)
 
     def drop_invalid_reviews(self):
-
-        print("Dropping Invalid Reviews...")
 
         self.review_df = self.review_df[self.review_df.is_URL_valid == "True"]
         self.review_df.drop(columns = "is_URL_valid", inplace = True)
@@ -53,21 +49,15 @@ class Aggregator():
 
     def drop_out_of_time_reviews(self):
 
-        print("Dropping Out Of Time Reviews...")
-
         self.review_df = self.review_df[self.review_df.review_publication_date >= self.start_date]
         self.review_df = self.review_df[self.review_df.review_publication_date <= self.end_date]
 
     def drop_reviews_for_unknown_books(self):
 
-        print("Dropping Reviews for Unknown Books...")
-
         known_book_ids = self.book_df.book_id.unique()
         self.review_df = self.review_df[self.review_df["book_id"].isin(known_book_ids)]
 
     def drop_long_series_names(self):
-
-        print("Dropping Long Series Names...")
 
         max_characters = 60
         self.book_df["series"] = self.book_df["series"].apply(lambda series: series if len(series)< max_characters else np.nan)
@@ -201,7 +191,7 @@ class Aggregator():
         elif aggregation_type == "by_date":
             self.aggregate_data_by_date()
 
-        #self.merge_book_data_to_aggregated()
+        self.merge_book_data_to_aggregated()
 
         return self.aggregated_df
 
@@ -211,9 +201,9 @@ data_file_name_book = "distributed_data_collection/databases/book_data_exc_corru
 start_date = datetime.datetime(2018, 1, 1)
 end_date = datetime.datetime(2020, 2, 29)
 
-test_aggregator = Aggregator(data_file_name_review, data_file_name_book, start_date, end_date, "quarter")
-data_by_book = test_aggregator.aggregate("by_book")
+test_aggregator = Aggregator(data_file_name_review, data_file_name_book, start_date, end_date, "month")
+test_data = test_aggregator.aggregate("by_date")
 
-print(data_by_book)
+print(test_data)
 
 #data_by_date = test_aggregator.aggregate("by_date")
