@@ -120,7 +120,6 @@ class Aggregator():
         self.aggregated_df.reset_index(inplace = True, drop = False)
         self.aggregated_df.fillna(0, inplace = True)
 
-        print(self.aggregated_df.head())
     def reshape_data_by_date(self):
 
         review_df_copy = self.review_df.copy()
@@ -142,7 +141,15 @@ class Aggregator():
 
         self.aggregated_df["time_id"] = self.aggregated_df["review_publication_date"].apply(lambda date: time_period_id_dict.get(date))
 
+    def merge_book_data_to_aggregated(self):
+
+        self.book_df["book_id"] = self.book_df["book_id"].apply(lambda id: int(id))
+        self.aggregated_df["book_id"] = self.aggregated_df["book_id"].apply(lambda id: int(id))
+
+        self.aggregated_df = self.aggregated_df.merge(self.book_df, on = "book_id")
+
         print(self.aggregated_df)
+        print(self.aggregated_df.columns)
 
 data_file_name_review = "distributed_data_collection/databases/review_data_sample.csv"
 data_file_name_book = "distributed_data_collection/databases/book_data_exc_corruption.csv"
@@ -152,3 +159,4 @@ end_date = datetime.datetime(2020, 2, 29)
 test_aggregator = Aggregator(data_file_name_review, data_file_name_book, start_date, end_date, "month")
 test_aggregator.process_scraper_output()
 test_aggregator.reshape_data_by_date()
+test_aggregator.merge_book_data_to_aggregated()
