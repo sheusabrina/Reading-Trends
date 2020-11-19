@@ -36,7 +36,8 @@ class Aggregator():
 
     def drop_invalid_reviews(self):
 
-        self.review_df = self.review_df[self.review_df.is_URL_valid == "True"]
+        self.review_df = self.review_df[self.review_df.is_URL_valid != "FALSE"]
+        self.review_df = self.review_df[self.review_df.is_URL_valid != "False"]
         self.review_df.drop(columns = "is_URL_valid", inplace = True)
 
     def datetime_conversion(self, input_df):
