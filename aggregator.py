@@ -15,9 +15,11 @@ class Aggregator():
 
         self.check_grain()
 
-        self.review_df = pd.read_csv(review_file, usecols=["review_id","is_URL_valid", "review_publication_date", "book_id"], na_values="None")
-        self.book_df = pd.read_csv(book_file, usecols=["book_id", "book_language", "num_reviews", "num_ratings", "avg_rating" ,"isbn13", "series"], na_values="None")
+        na_val_list = ["None", " ", ""]
+        col_type_dict = {"review_id": np.float64, "review_publication_date": "str", "is_URL_valid": "str", "book_id": np.float64, "book_language": "str", "num_reviews": np.float64, "num_ratings": np.float64, "avg_rating": np.float64, "isbn13": "str", "series": "str"}
 
+        self.review_df = pd.read_csv(review_file, usecols=["review_id","is_URL_valid", "review_publication_date", "book_id"], na_values= na_val_list, dtype = col_type_dict)
+        self.book_df = pd.read_csv(book_file, usecols=["book_id", "book_language", "num_reviews", "num_ratings", "avg_rating" ,"isbn13", "series"], na_values= na_val_list, dtype = col_type_dict)
     def check_grain(self):
 
         if self.grain not in ["day", "week", "month", "quarter"]:
@@ -154,7 +156,8 @@ class Aggregator():
 
         return self.aggregated_df
 
-data_file_name_review = "distributed_data_collection/databases/review_data_sample.csv"
+#data_file_name_review = "distributed_data_collection/databases/review_data_sample.csv"
+data_file_name_review = "distributed_data_collection/databases/review_data.csv"
 data_file_name_book = "distributed_data_collection/databases/book_data_exc_corruption.csv"
 start_date = datetime.datetime(2018, 1, 1)
 end_date = datetime.datetime(2020, 2, 29)
