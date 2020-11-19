@@ -49,6 +49,10 @@ class Aggregator():
 
         #self.review_df = self.review_df[(self.review_df.review_publication_date >= self.start_date) and (self.review_df.review_publication_date <= self.end_date)]
 
+    def drop_reviews_for_unknown_books(self):
+
+        known_book_ids = self.book_df.book_id.unique()
+        self.review_df = self.review_df[self.review_df["book_id"].isin(known_book_ids)]
 
     def clean_data(self):
 
@@ -60,6 +64,7 @@ class Aggregator():
 
         self.drop_invalid_reviews()
         self.drop_out_of_time_reviews()
+        self.drop_reviews_for_unknown_books()
 
         for df in df_list:
             df.reset_index(inplace = True, drop = True)
