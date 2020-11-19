@@ -31,7 +31,7 @@ class Aggregator():
 
     def drop_invalid_rows(self, input_df):
 
-        input_df.dropna(inplace = True)
+        input_df.dropna(inplace = True, how = "all")
         input_df.drop_duplicates(inplace = True)
 
     def drop_invalid_reviews(self):
@@ -60,7 +60,8 @@ class Aggregator():
     def drop_long_series_names(self):
 
         max_characters = 60
-        self.book_df["series"] = self.book_df["series"].apply(lambda series: series if len(series)< max_characters else np.nan)
+
+        self.book_df["series"] = self.book_df["series"].apply(lambda series: series if ( (len(str(series)) < max_characters) ) else np.nan)
 
     def clean_data(self):
 
