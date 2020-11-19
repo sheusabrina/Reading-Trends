@@ -67,6 +67,7 @@ class Aggregator():
 
         max_characters = 60
 
+        #WHY DOES THIS SOMETIMES CAUSE A SettingWithCopyWarning
         self.book_df["series"] = self.book_df["series"].apply(lambda series: series if ( (len(str(series)) < max_characters) ) else np.nan)
 
     def clean_data(self):
@@ -81,7 +82,6 @@ class Aggregator():
         self.drop_out_of_time_reviews()
         self.drop_reviews_for_unknown_books()
         self.drop_unreviewed_books()
-
         self.drop_long_series_names()
 
         for df in df_list:
