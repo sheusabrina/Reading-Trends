@@ -22,7 +22,7 @@ class Aggregator():
         self.book_df = pd.read_csv(book_file, usecols=["book_id", "book_language", "num_reviews", "num_ratings", "avg_rating" ,"isbn13", "series"], na_values= na_val_list, dtype = col_type_dict)
 
         print("Aggregator Initiated.")
-        
+
     def check_grain(self):
 
         if self.grain not in ["day", "week", "month", "quarter"]:
@@ -57,6 +57,11 @@ class Aggregator():
         known_book_ids = self.book_df.book_id.unique()
         self.review_df = self.review_df[self.review_df["book_id"].isin(known_book_ids)]
 
+    def drop_long_series_names(self):
+
+        max_characters = 60
+        self.book_df["series"] = self.book_df["series"].apply(lambda series: series if len(series)< max_characters else np.nan)
+
     def clean_data(self):
 
         df_list = [self.review_df, self.book_df]
@@ -68,6 +73,7 @@ class Aggregator():
         self.drop_invalid_reviews()
         self.drop_out_of_time_reviews()
         self.drop_reviews_for_unknown_books()
+        self.drop_long_series_names()
 
         for df in df_list:
             df.reset_index(inplace = True, drop = True)
