@@ -31,10 +31,14 @@ class Aggregator():
 
     def drop_invalid_rows(self, input_df):
 
+        print("Dropping Invalid Rows...")
+
         input_df.dropna(inplace = True)
         input_df.drop_duplicates(inplace = True)
 
     def drop_invalid_reviews(self):
+
+        print("Dropping Invalid Reviews...")
 
         self.review_df = self.review_df[self.review_df.is_URL_valid == "True"]
         self.review_df.drop(columns = "is_URL_valid", inplace = True)
@@ -49,15 +53,21 @@ class Aggregator():
 
     def drop_out_of_time_reviews(self):
 
+        print("Dropping Out Of Time Reviews...")
+
         self.review_df = self.review_df[self.review_df.review_publication_date >= self.start_date]
         self.review_df = self.review_df[self.review_df.review_publication_date <= self.end_date]
 
     def drop_reviews_for_unknown_books(self):
 
+        print("Dropping Reviews for Unknown Books...")
+
         known_book_ids = self.book_df.book_id.unique()
         self.review_df = self.review_df[self.review_df["book_id"].isin(known_book_ids)]
 
     def drop_long_series_names(self):
+
+        print("Dropping Long Series Names...")
 
         max_characters = 60
         self.book_df["series"] = self.book_df["series"].apply(lambda series: series if len(series)< max_characters else np.nan)
@@ -73,6 +83,7 @@ class Aggregator():
         self.drop_invalid_reviews()
         self.drop_out_of_time_reviews()
         self.drop_reviews_for_unknown_books()
+
         self.drop_long_series_names()
 
         for df in df_list:
