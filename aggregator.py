@@ -87,6 +87,24 @@ class Aggregator():
             if self.grain == "quarter":
                 self.review_df["review_publication_date"] = self.review_df["review_publication_date"].apply(lambda month_year: "{}-{}".format(month_year.year, (month_year.month -1)//3 +1 ))
 
+    def transform_text_column(self, input_df, col):
+
+        input_df["{}_none".format(col)] = np.where(input_df[col].isnull(), 1, 0)
+
+        col_values = input_df[[col]]
+        valid_values = col_values.dropna()
+        valid_values = valid_values[col].unique()
+
+        for val in valid_values:
+            input_df["{}_{}".format(col, val)] = np.where(input_df[col] == val, 1, 0)
+
+        input_df.drop(columns = col, inplace = True)
+
+    def transform_given_text_columns(self):
+
+        for col in ["series", "book_language"]: #WE MAY WANT TO TEST ADDING AUTHOR
+            self.transform_text_column(self.book_df, col)
+
 
 data_file_name_review = "distributed_data_collection/databases/review_data_sample.csv"
 data_file_name_book = "distributed_data_collection/databases/book_data_exc_corruption.csv"
