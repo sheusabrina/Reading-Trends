@@ -148,9 +148,9 @@ class Aggregator():
         self.process_scraper_output()
 
         if aggregation_type == "by_book":
-            self.reshape_data_by_book()
+            self.aggregate_data_by_book()
         elif aggregation_type == "by_date":
-            self.reshape_data_by_date()
+            self.aggregate_data_by_date()
 
         self.merge_book_data_to_aggregated()
 
