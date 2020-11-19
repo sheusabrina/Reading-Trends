@@ -161,6 +161,8 @@ class Aggregator():
         if self.grain != "day":
             self.generate_time_id_granular()
 
+        self.aggregated_df.drop(columns = "review_publication_date", inplace = True)
+
         print("Review Data Aggregated.")
 
     def generate_time_id_total(self):
