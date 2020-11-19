@@ -57,6 +57,11 @@ class Aggregator():
         known_book_ids = self.book_df.book_id.unique()
         self.review_df = self.review_df[self.review_df["book_id"].isin(known_book_ids)]
 
+    def drop_unreviewed_books(self):
+
+        reviewed_book_ids = self.review_df.book_id.unique()
+        self.book_df = self.book_df[self.book_df["book_id"].isin(reviewed_book_ids)]
+
     def drop_long_series_names(self):
 
         max_characters = 60
@@ -74,6 +79,7 @@ class Aggregator():
         self.drop_invalid_reviews()
         self.drop_out_of_time_reviews()
         self.drop_reviews_for_unknown_books()
+        self.drop_unreviewed_books()
 
         self.drop_long_series_names()
 
