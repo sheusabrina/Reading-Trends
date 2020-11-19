@@ -88,7 +88,7 @@ class Aggregator():
                 self.review_df["review_publication_date"] = self.review_df["review_publication_date"].apply(lambda month_year: "{}-{}".format(month_year.year, (month_year.month -1)//3 +1 ))
 
 
-data_file_name_book = ""
-data_file_name_review = ""
+data_file_name_review = "distributed_data_collection/databases/review_data_sample.csv"
+data_file_name_book = "distributed_data_collection/databases/book_data_exc_corruption.csv"
 start_date = datetime.datetime(2018, 1, 1)
 end_date = datetime.datetime(2020, 2, 29)
