@@ -47,8 +47,6 @@ class Aggregator():
         self.review_df = self.review_df[self.review_df.review_publication_date >= self.start_date]
         self.review_df = self.review_df[self.review_df.review_publication_date <= self.end_date]
 
-        #self.review_df = self.review_df[(self.review_df.review_publication_date >= self.start_date) and (self.review_df.review_publication_date <= self.end_date)]
-
     def drop_reviews_for_unknown_books(self):
 
         known_book_ids = self.book_df.book_id.unique()
@@ -166,4 +164,4 @@ end_date = datetime.datetime(2020, 2, 29)
 
 test_aggregator = Aggregator(data_file_name_review, data_file_name_book, start_date, end_date, "month")
 data_by_book = test_aggregator.aggregate("by_book")
-data_by_date = test_aggregator.aggregate("by_date")
+#data_by_date = test_aggregator.aggregate("by_date")
