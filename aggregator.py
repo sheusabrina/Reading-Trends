@@ -121,7 +121,28 @@ class Aggregator():
         self.aggregated_df.fillna(0, inplace = True)
 
         print(self.aggregated_df.head())
+    def reshape_data_by_date(self):
 
+        review_df_copy = self.review_df.copy()
+        review_df_copy["review_count"] = 1
+
+        self.aggregated_df = pd.pivot_table(review_df_copy, index=["book_id", "review_publication_date"], values=["review_count"], aggfunc=np.sum)
+        self.aggregated_df = self.aggregated_df.reindex(pd.MultiIndex.from_product(self.aggregated_df.index.levels, names=self.aggregated_df.index.names))
+        self.aggregated_df.reset_index(inplace = True, drop = False)
+        self.aggregated_df.fillna(0, inplace = True)
+
+        time_period_id_dict = {}
+        time_period_list = self.review_df.review_publication_date.unique()
+        time_period_list.sort()
+
+        for i in range(0, len(time_period_list)):
+            time_period_val = time_period_list[i]
+            time_period_id = i + 1
+            time_period_id_dict[time_period_val] = time_period_id
+
+        self.aggregated_df["time_id"] = self.aggregated_df["review_publication_date"].apply(lambda date: time_period_id_dict.get(date))
+
+        print(self.aggregated_df)
 
 data_file_name_review = "distributed_data_collection/databases/review_data_sample.csv"
 data_file_name_book = "distributed_data_collection/databases/book_data_exc_corruption.csv"
@@ -130,4 +151,4 @@ end_date = datetime.datetime(2020, 2, 29)
 
 test_aggregator = Aggregator(data_file_name_review, data_file_name_book, start_date, end_date, "month")
 test_aggregator.process_scraper_output()
-test_aggregator.reshape_data_by_book()
+test_aggregator.reshape_data_by_date()
