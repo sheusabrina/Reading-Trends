@@ -75,15 +75,12 @@ class Aggregator():
         elif self.grain == "week":
             self.review_df["review_publication_date"] = self.review_df["review_publication_date"].dt.strftime('%Y-%W')
 
-        else: #GRAIN IS MONTH OR QUARTER
-
-            #FOR MONTH, USE BUILT IN
+        elif self.grain == "month":
             self.review_df["review_publication_date"] = self.review_df["review_publication_date"].dt.strftime('%Y-%m')
 
-            #FOR QUARTER, ADD ADDITIONAL PROCESSING
-
-            if self.grain == "quarter":
-                self.review_df["review_publication_date"] = self.review_df["review_publication_date"].apply(lambda month_year: "{}-{}".format(month_year.year, (month_year.month -1)//3 +1 ))
+        elif self.grain == "quarter":
+            self.review_df["review_publication_date"] = self.review_df["review_publication_date"].dt.strftime('%Y-%m')
+            self.review_df["review_publication_date"] = self.review_df["review_publication_date"].apply(lambda year_month: "{}-{}".format(year_month.split("-")[0], (int(year_month.split("-")[1]) -1)//3 +1) )
 
     def transform_text_column(self, input_df, col):
 
