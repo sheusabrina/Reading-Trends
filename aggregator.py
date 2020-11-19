@@ -105,6 +105,11 @@ class Aggregator():
         for col in ["series", "book_language"]: #WE MAY WANT TO TEST ADDING AUTHOR
             self.transform_text_column(self.book_df, col)
 
+    def process_scraper_output(self):
+        self.clean_data()
+        self.resample_reviews()
+        self.transform_given_text_columns()
+
 
 data_file_name_review = "distributed_data_collection/databases/review_data_sample.csv"
 data_file_name_book = "distributed_data_collection/databases/book_data_exc_corruption.csv"
