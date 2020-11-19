@@ -158,6 +158,15 @@ class Aggregator():
         self.aggregated_df.reset_index(inplace = True, drop = False)
         self.aggregated_df.fillna(0, inplace = True)
 
+        self.generate_time_id_total()
+
+        if self.grain != "day":
+            self.generate_time_id_granular()
+
+        print("Review Data Aggregated.")
+
+    def generate_time_id_total(self):
+
         time_period_id_dict = {}
         time_period_list = self.review_df.review_publication_date.unique()
         time_period_list.sort()
@@ -167,9 +176,11 @@ class Aggregator():
             time_period_id = i + 1
             time_period_id_dict[time_period_val] = time_period_id
 
-        self.aggregated_df["time_id"] = self.aggregated_df["review_publication_date"].apply(lambda date: time_period_id_dict.get(date))
+        self.aggregated_df["time_id_total"] = self.aggregated_df["review_publication_date"].apply(lambda date: time_period_id_dict.get(date))
 
-        print("Review Data Aggregated.")
+    def generate_time_id_granular(self):
+
+        self.aggregated_df["time_id_granular"] = self.aggregated_df["review_publication_date"].apply(lambda year_gran: int(year_gran.split("-")[1]))
 
     def merge_book_data_to_aggregated(self):
 
@@ -190,12 +201,12 @@ class Aggregator():
         elif aggregation_type == "by_date":
             self.aggregate_data_by_date()
 
-        self.merge_book_data_to_aggregated()
+        #self.merge_book_data_to_aggregated()
 
         return self.aggregated_df
 
-#data_file_name_review = "distributed_data_collection/databases/review_data_sample.csv"
-data_file_name_review = "distributed_data_collection/databases/review_data.csv"
+data_file_name_review = "distributed_data_collection/databases/review_data_sample.csv"
+#data_file_name_review = "distributed_data_collection/databases/review_data.csv"
 data_file_name_book = "distributed_data_collection/databases/book_data_exc_corruption.csv"
 start_date = datetime.datetime(2018, 1, 1)
 end_date = datetime.datetime(2020, 2, 29)
