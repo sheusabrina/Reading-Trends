@@ -20,6 +20,9 @@ class Aggregator():
 
         self.review_df = pd.read_csv(review_file, usecols=["review_id","is_URL_valid", "review_publication_date", "book_id"], na_values= na_val_list, dtype = col_type_dict)
         self.book_df = pd.read_csv(book_file, usecols=["book_id", "book_language", "num_reviews", "num_ratings", "avg_rating" ,"isbn13", "series"], na_values= na_val_list, dtype = col_type_dict)
+
+        print("Aggregator Initiated.")
+        
     def check_grain(self):
 
         if self.grain not in ["day", "week", "month", "quarter"]:
@@ -103,11 +106,18 @@ class Aggregator():
             self.transform_text_column(self.book_df, col)
 
     def process_scraper_output(self):
+
+        print("Processing Scraper Output...")
+
         self.clean_data()
         self.resample_reviews()
         self.transform_given_text_columns()
 
-    def reshape_data_by_book(self):
+        print("Scraper Output Processed.")
+
+    def aggregate_data_by_book(self):
+
+        print("Aggregating Review Data...")
 
         review_df_copy = self.review_df.copy()
         review_df_copy["review_count"] = 1
@@ -117,7 +127,11 @@ class Aggregator():
         self.aggregated_df.reset_index(inplace = True, drop = False)
         self.aggregated_df.fillna(0, inplace = True)
 
-    def reshape_data_by_date(self):
+        print("Review Data Aggregated.")
+
+    def aggregate_data_by_date(self):
+
+        print("Aggregating Review Data...")
 
         review_df_copy = self.review_df.copy()
         review_df_copy["review_count"] = 1
@@ -138,13 +152,20 @@ class Aggregator():
 
         self.aggregated_df["time_id"] = self.aggregated_df["review_publication_date"].apply(lambda date: time_period_id_dict.get(date))
 
+        print("Review Data Aggregated.")
+
     def merge_book_data_to_aggregated(self):
+
+        print("Merging Book Data...")
 
         self.book_df["book_id"] = self.book_df["book_id"].apply(lambda id: int(id))
         self.aggregated_df["book_id"] = self.aggregated_df["book_id"].apply(lambda id: int(id))
         self.aggregated_df = self.aggregated_df.merge(self.book_df, on = "book_id")
 
+        print("Book Data Merged.")
+
     def aggregate(self, aggregation_type):
+
         self.process_scraper_output()
 
         if aggregation_type == "by_book":
@@ -164,4 +185,7 @@ end_date = datetime.datetime(2020, 2, 29)
 
 test_aggregator = Aggregator(data_file_name_review, data_file_name_book, start_date, end_date, "quarter")
 data_by_book = test_aggregator.aggregate("by_book")
+
+print(data_by_book)
+
 #data_by_date = test_aggregator.aggregate("by_date")
