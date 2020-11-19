@@ -145,7 +145,7 @@ class Aggregator():
     def aggregate(self, aggregation_type):
         self.process_scraper_output()
 
-        if aggregate_type == "by_book":
+        if aggregation_type == "by_book":
             self.reshape_data_by_book()
         elif aggregation_type == "by_date":
             self.reshape_data_by_date()
@@ -159,6 +159,6 @@ data_file_name_book = "distributed_data_collection/databases/book_data_exc_corru
 start_date = datetime.datetime(2018, 1, 1)
 end_date = datetime.datetime(2020, 2, 29)
 
-test_aggregator = Aggregator(data_file_name_review, data_file_name_book, start_date, end_date, "month")
+test_aggregator = Aggregator(data_file_name_review, data_file_name_book, start_date, end_date, "quarter")
 data_by_book = test_aggregator.aggregate("by_book")
 #data_by_date = test_aggregator.aggregate("by_date")
