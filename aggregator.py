@@ -7,7 +7,7 @@ import numpy as np
 
 class Aggregator():
 
-    def __init__(self, review_file, book_file, start_date, end_date, grain):
+    def __init__(self, review_file, book_file, review_column_list, book_column_list, start_date, end_date, grain):
 
         self.start_date = start_date
         self.end_date = end_date
@@ -18,8 +18,8 @@ class Aggregator():
         na_val_list = ["None", " ", ""]
         col_type_dict = {"review_id": np.float64, "review_publication_date": "str", "is_URL_valid": "str", "book_id": np.float64, "book_language": "str", "num_reviews": np.float64, "num_ratings": np.float64, "avg_rating": np.float64, "isbn13": "str", "series": "str"}
 
-        self.review_df = pd.read_csv(review_file, usecols=["review_id","is_URL_valid", "review_publication_date", "book_id"], na_values= na_val_list, dtype = col_type_dict)
-        self.book_df = pd.read_csv(book_file, usecols=["book_id", "book_language", "num_reviews", "num_ratings", "avg_rating" ,"isbn13", "series"], na_values= na_val_list, dtype = col_type_dict)
+        self.review_df = pd.read_csv(review_file, usecols= review_column_list, na_values= na_val_list, dtype = col_type_dict)
+        self.book_df = pd.read_csv(book_file, usecols= book_column_list, na_values= na_val_list, dtype = col_type_dict)
 
         print("Aggregator Initiated.")
 
@@ -65,10 +65,12 @@ class Aggregator():
 
     def drop_long_series_names(self):
 
-        max_characters = 60
+        if "series" in self.book_df.columns:
 
-        #WHY DOES THIS SOMETIMES CAUSE A SettingWithCopyWarning
-        self.book_df["series"] = self.book_df["series"].apply(lambda series: series if ( (len(str(series)) < max_characters) ) else np.nan)
+            max_characters = 60
+
+            #WHY DOES THIS SOMETIMES CAUSE A SettingWithCopyWarning
+            self.book_df["series"] = self.book_df["series"].apply(lambda series: series if ( (len(str(series)) < max_characters) ) else np.nan)
 
     def clean_data(self):
 
@@ -87,7 +89,7 @@ class Aggregator():
         for df in df_list:
             df.reset_index(inplace = True, drop = True)
 
-    def resample_reviews(self): ##ASK SOMEONE TO DOUBLE CHECK THIS!
+    def resample_reviews(self):
 
         if self.grain == "day":
             pass
@@ -104,20 +106,22 @@ class Aggregator():
 
     def transform_text_column(self, input_df, col):
 
-        input_df["{}_none".format(col)] = np.where(input_df[col].isnull(), 1, 0)
+        if col in input_df.columns:
 
-        col_values = input_df[[col]]
-        valid_values = col_values.dropna()
-        valid_values = valid_values[col].unique()
+            input_df["{}_none".format(col)] = np.where(input_df[col].isnull(), 1, 0)
 
-        for val in valid_values:
-            input_df["{}_{}".format(col, val)] = np.where(input_df[col] == val, 1, 0)
+            col_values = input_df[[col]]
+            valid_values = col_values.dropna()
+            valid_values = valid_values[col].unique()
 
-        input_df.drop(columns = col, inplace = True)
+            for val in valid_values:
+                input_df["{}_{}".format(col, val)] = np.where(input_df[col] == val, 1, 0)
+
+            input_df.drop(columns = col, inplace = True)
 
     def transform_given_text_columns(self):
 
-        for col in ["series", "book_language"]: #WE MAY WANT TO TEST ADDING AUTHOR
+        for col in ["series", "book_language", "author"]:
             self.transform_text_column(self.book_df, col)
 
     def process_scraper_output(self):
@@ -205,15 +209,20 @@ class Aggregator():
 
         return self.aggregated_df
 
+##TESTING AGGREGATOR
+
 data_file_name_review = "distributed_data_collection/databases/review_data_sample.csv"
 #data_file_name_review = "distributed_data_collection/databases/review_data.csv"
 data_file_name_book = "distributed_data_collection/databases/book_data_exc_corruption.csv"
+
+review_column_list = ["review_id","is_URL_valid", "review_publication_date", "book_id"]
+book_column_list =["book_id", "book_language", "num_reviews", "num_ratings", "avg_rating" ,"isbn13", "series"]
+
 start_date = datetime.datetime(2018, 1, 1)
 end_date = datetime.datetime(2020, 2, 29)
 
-test_aggregator = Aggregator(data_file_name_review, data_file_name_book, start_date, end_date, "month")
+test_aggregator = Aggregator(data_file_name_review, data_file_name_book, review_column_list, book_column_list, start_date, end_date, "month")
 test_data = test_aggregator.aggregate("by_date")
+#test_data = test_aggregator.aggregate("by_book")
 
 print(test_data)
-
-#data_by_date = test_aggregator.aggregate("by_date")
