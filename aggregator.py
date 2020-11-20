@@ -36,8 +36,8 @@ class Aggregator():
 
     def drop_invalid_reviews(self):
 
-        self.review_df = self.review_df[self.review_df.is_URL_valid != "FALSE"]
-        self.review_df = self.review_df[self.review_df.is_URL_valid != "False"]
+        self.review_df = self.review_df[self.review_df.is_URL_valid != "FALSE"].copy()
+        self.review_df = self.review_df[self.review_df.is_URL_valid != "False"].copy()
         self.review_df.drop(columns = "is_URL_valid", inplace = True)
 
     def datetime_conversion(self, input_df):
@@ -50,8 +50,8 @@ class Aggregator():
 
     def drop_out_of_time_reviews(self):
 
-        self.review_df = self.review_df[self.review_df.review_publication_date >= self.start_date]
-        self.review_df = self.review_df[self.review_df.review_publication_date <= self.end_date]
+        self.review_df = self.review_df[self.review_df.review_publication_date >= self.start_date].copy()
+        self.review_df = self.review_df[self.review_df.review_publication_date <= self.end_date].copy()
 
     def drop_reviews_for_unknown_books(self):
 
@@ -61,7 +61,7 @@ class Aggregator():
     def drop_unreviewed_books(self):
 
         reviewed_book_ids = self.review_df.book_id.unique()
-        self.book_df = self.book_df[self.book_df["book_id"].isin(reviewed_book_ids)]
+        self.book_df = self.book_df[self.book_df["book_id"].isin(reviewed_book_ids)].copy()
 
     def drop_long_series_names(self):
 
@@ -70,7 +70,7 @@ class Aggregator():
             max_characters = 60
 
             #WHY DOES THIS SOMETIMES CAUSE A SettingWithCopyWarning
-            self.book_df["series"] = self.book_df["series"].apply(lambda series: series if ( (len(str(series)) < max_characters) ) else np.nan)
+            self.book_df["series"] = self.book_df["series"].apply(lambda series: series if ( (len(str(series)) < max_characters) ) else np.nan).copy()
 
     def clean_data(self):
 
