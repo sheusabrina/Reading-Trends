@@ -2,12 +2,9 @@ import pandas as pd
 import datetime
 import numpy as np
 
-#NOTES:
-    #WE SHOULD EXPERIMENT WITH ADDING BOOK PUBLICATION DATE, BOOK FIRST PUBLICATION DATE, AND AUTHOR FEATURES
-
 class Aggregator():
 
-    def __init__(self, review_file, book_file, review_column_list, book_column_list, start_date, end_date, grain):
+    def __init__(self, review_file, book_file, book_column_list, start_date, end_date, grain):
 
         self.start_date = start_date
         self.end_date = end_date
@@ -15,11 +12,18 @@ class Aggregator():
 
         self.check_grain()
 
+        self.review_column_list = ["review_id","is_URL_valid", "review_publication_date", "book_id"]
+        self.book_column_list = ["book_id", "isbn13"]
+
+        for col in book_column_list:
+            if col not in self.book_column_list:
+                self.book_column_list.append(col)
+
         na_val_list = ["None", " ", ""]
         col_type_dict = {"review_id": np.float64, "review_publication_date": "str", "is_URL_valid": "str", "book_id": np.float64, "book_language": "str", "num_reviews": np.float64, "num_ratings": np.float64, "avg_rating": np.float64, "isbn13": "str", "series": "str"}
 
-        self.review_df = pd.read_csv(review_file, usecols= review_column_list, na_values= na_val_list, dtype = col_type_dict)
-        self.book_df = pd.read_csv(book_file, usecols= book_column_list, na_values= na_val_list, dtype = col_type_dict)
+        self.review_df = pd.read_csv(review_file, usecols = self.review_column_list, na_values= na_val_list, dtype = col_type_dict)
+        self.book_df = pd.read_csv(book_file, usecols= self.book_column_list, na_values= na_val_list, dtype = col_type_dict)
 
         print("Aggregator Initiated.")
 
@@ -68,8 +72,6 @@ class Aggregator():
         if "series" in self.book_df.columns:
 
             max_characters = 60
-
-            #WHY DOES THIS SOMETIMES CAUSE A SettingWithCopyWarning
             self.book_df["series"] = self.book_df["series"].apply(lambda series: series if ( (len(str(series)) < max_characters) ) else np.nan).copy()
 
     def clean_data(self):
@@ -215,14 +217,10 @@ data_file_name_review = "distributed_data_collection/databases/review_data_sampl
 #data_file_name_review = "distributed_data_collection/databases/review_data.csv"
 data_file_name_book = "distributed_data_collection/databases/book_data_exc_corruption.csv"
 
-review_column_list = ["review_id","is_URL_valid", "review_publication_date", "book_id"]
-book_column_list =["book_id", "book_language", "num_reviews", "num_ratings", "avg_rating" ,"isbn13", "series"]
+book_column_list = ["book_language", "num_reviews", "num_ratings", "avg_rating", "series"]
 
 start_date = datetime.datetime(2018, 1, 1)
 end_date = datetime.datetime(2020, 2, 29)
 
-test_aggregator = Aggregator(data_file_name_review, data_file_name_book, review_column_list, book_column_list, start_date, end_date, "month")
+test_aggregator = Aggregator(data_file_name_review, data_file_name_book, book_column_list, start_date, end_date, "month")
 test_data = test_aggregator.aggregate("by_date")
-#test_data = test_aggregator.aggregate("by_book")
-
-print(test_data)
