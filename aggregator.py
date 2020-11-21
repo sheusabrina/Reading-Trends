@@ -211,6 +211,19 @@ class Aggregator():
 
         return self.aggregated_df
 
+##HOW TO USE AGGREGATOR:
+
+#Aggregator takes the csv files containing scraped data and transforms them into a format which can be used for modeling. It takes the following arguments:
+    #review_file = file name for the csv file containing scraped review data
+    #book_file = file name for the csv file containing scraped book data
+    #book_column_list = a list of book data fields which should be included in the transformed data table. It can contain any of the following values:
+        #book_column_list = ["book_language", "num_reviews", "num_ratings", "avg_rating", "series", "author"]
+    #start date = all data from before this date will be removed (should be entered as a datetime)
+    #end_date = all data from after this date will be removed (should be entered as a datetime)
+    #grain = the level at which review dates should be aggregated. It will accept one of the following values:
+        #acceptable_values = ["day", "week", "month", "quarter"]
+#After instantiating aggregator, use the .aggregate("by_book") or .aggregate("by_date") method to transform data into one of two forms.
+
 ##TESTING AGGREGATOR
 
 data_file_name_review = "distributed_data_collection/databases/review_data_sample.csv"
