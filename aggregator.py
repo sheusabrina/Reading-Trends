@@ -20,7 +20,7 @@ class Aggregator():
                 self.book_column_list.append(col)
 
         na_val_list = ["None", " ", ""]
-        col_type_dict = {"review_id": np.float64, "review_publication_date": "str", "is_URL_valid": "str", "book_id": np.float64, "book_language": "str", "num_reviews": np.float64, "num_ratings": np.float64, "avg_rating": np.float64, "isbn13": "str", "series": "str"}
+        col_type_dict = {"review_id": np.float64, "review_publication_date": "str", "book_publication_date": "str", "data_log_time":"str", "is_URL_valid": "str", "book_id": np.float64, "book_language": "str", "num_reviews": np.float64, "num_ratings": np.float64, "avg_rating": np.float64, "isbn13": "str", "series": "str"}
 
         self.review_df = pd.read_csv(review_file, usecols = self.review_column_list, na_values= na_val_list, dtype = col_type_dict)
         self.book_df = pd.read_csv(book_file, usecols= self.book_column_list, na_values= na_val_list, dtype = col_type_dict)
