@@ -94,7 +94,7 @@ class Aggregator():
     def resample_reviews(self):
 
         if self.grain == "day":
-            pass
+            self.review_df["review_publication_date"] = self.review_df["review_publication_date"].dt.strftime('%Y-%m-%d')
 
         elif self.grain == "week":
             self.review_df["review_publication_date"] = self.review_df["review_publication_date"].dt.strftime('%Y-%W')
