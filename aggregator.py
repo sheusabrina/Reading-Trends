@@ -236,12 +236,12 @@ class Aggregator():
 
 data_file_name_review = "distributed_data_collection/databases/review_data_sample.csv"
 #data_file_name_review = "distributed_data_collection/databases/review_data.csv"
-data_file_name_book = "distributed_data_collection/databases/book_data_exc_corruption.csv"
+data_file_name_book = "distributed_data_collection/databases/book_data_sample.csv"
 
 book_column_list = ["book_language", "num_reviews", "num_ratings", "avg_rating", "series"]
 
 start_date = datetime.datetime(2018, 1, 1)
 end_date = datetime.datetime(2020, 2, 29)
 
-test_aggregator = Aggregator(data_file_name_review, data_file_name_book, book_column_list, start_date, end_date, "month")
-test_data = test_aggregator.aggregate("by_date")
+#test_aggregator = Aggregator(data_file_name_review, data_file_name_book, book_column_list, start_date, end_date, "month")
+#test_data = test_aggregator.aggregate("by_date")
