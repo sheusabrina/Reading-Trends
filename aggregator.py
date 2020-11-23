@@ -198,6 +198,13 @@ class Aggregator():
 
         print("Book Data Merged.")
 
+    def drop_non_features(self):
+
+        non_feature_list = ["isbn13"]
+
+        for col in non_feature_list:
+            self.aggregated_df.drop(columns = col, inplace = True)
+
     def aggregate(self, aggregation_type):
 
         self.process_scraper_output()
@@ -208,6 +215,7 @@ class Aggregator():
             self.aggregate_data_by_date()
 
         self.merge_book_data_to_aggregated()
+        self.drop_non_features()
 
         return self.aggregated_df
 
