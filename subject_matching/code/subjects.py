@@ -125,6 +125,8 @@ sub_index = sub_lists.index
 sub_text = ["".join(l).lower() for l in sub_lists]
 sub_text = [re.sub(letter_patt, " ", t) for t in sub_text]
 
+## Manually change the word 'children' to 'child' because the stemmer doesn't
+sub_text = [re.sub("children", "child", t) for t in sub_text]
 
 
 ## Stemming ##
