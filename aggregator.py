@@ -110,11 +110,11 @@ class Aggregator():
 
     def generate_time_columns(self):
 
-        self.review_df["review_publication_year"] = self.review_df["review_publication_date"].apply(lambda year_grain: int(year_grain.split("-")[0]))
-        self.review_df["review_publication_{}".format(self.grain)] = self.review_df["review_publication_date"].apply(lambda year_grain: int(year_grain.split("-")[-1]))
+        self.aggregated_df["review_publication_year"] = self.aggregated_df["review_publication_date"].apply(lambda year_grain: int(year_grain.split("-")[0]))
+        self.aggregated_df["review_publication_{}".format(self.grain)] = self.aggregated_df["review_publication_date"].apply(lambda year_grain: int(year_grain.split("-")[-1]))
 
         if self.grain == "day":
-            self.review_df["review_publication_month"] = self.review_df["review_publication_date"].apply(lambda year_grain: int(year_grain.split("-")[1]))
+            self.aggregated_df["review_publication_month"] = self.aggregated_df["review_publication_date"].apply(lambda year_grain: int(year_grain.split("-")[1]))
 
     def transform_text_column(self, input_df, col):
 
@@ -177,9 +177,8 @@ class Aggregator():
         self.aggregated_df.reset_index(inplace = True, drop = False)
         self.aggregated_df.fillna(0, inplace = True)
 
-        self.generate_time_columns()
-
         #self.generate_time_id_total()
+        self.generate_time_columns()
 
         #if self.grain != "day":
             #self.generate_time_id_granular()
@@ -220,10 +219,11 @@ class Aggregator():
 
     def drop_non_features(self):
 
-        non_feature_list = ["isbn13"]
+        non_feature_list = ["isbn13", "review_publication_date"]
 
         for col in non_feature_list:
-            self.aggregated_df.drop(columns = col, inplace = True)
+            if col in self.aggregated_df.columns:
+                self.aggregated_df.drop(columns = col, inplace = True)
 
     def aggregate(self, aggregation_type):
 
