@@ -123,7 +123,7 @@ class Aggregator():
 
     def transform_given_text_columns(self):
 
-        for col in ["series", "book_language", "author"]:
+        for col in ["series", "book_language", "book_author"]:
             self.transform_text_column(self.book_df, col)
 
     def process_scraper_output(self):
