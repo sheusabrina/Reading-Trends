@@ -4,11 +4,12 @@ import numpy as np
 
 class Aggregator():
 
-    def __init__(self, review_file, book_file, book_column_list, start_date, end_date, grain):
+    def __init__(self, review_file, book_file, book_column_list, start_date, end_date, grain, print_updates = True):
 
         self.start_date = start_date
         self.end_date = end_date
         self.grain = grain
+        self.print_updates = print_updates
 
         self.check_grain()
 
@@ -25,7 +26,8 @@ class Aggregator():
         self.review_df = pd.read_csv(review_file, usecols = self.review_column_list, na_values= na_val_list, dtype = col_type_dict)
         self.book_df = pd.read_csv(book_file, usecols= self.book_column_list, na_values= na_val_list, dtype = col_type_dict)
 
-        print("Aggregator Initiated.")
+        if self.print_updates:
+            print("Aggregator Initiated.")
 
     def check_grain(self):
 
@@ -128,17 +130,20 @@ class Aggregator():
 
     def process_scraper_output(self):
 
-        print("Processing Scraper Output...")
+        if self.print_updates:
+            print("Processing Scraper Output...")
 
         self.clean_data()
         self.resample_reviews()
         self.transform_given_text_columns()
 
-        print("Scraper Output Processed.")
+        if self.print_updates:
+            print("Scraper Output Processed.")
 
     def aggregate_data_by_book(self):
 
-        print("Aggregating Review Data...")
+        if self.print_updates:
+            print("Aggregating Review Data...")
 
         review_df_copy = self.review_df.copy()
         review_df_copy["review_count"] = 1
@@ -148,11 +153,13 @@ class Aggregator():
         self.aggregated_df.reset_index(inplace = True, drop = False)
         self.aggregated_df.fillna(0, inplace = True)
 
-        print("Review Data Aggregated.")
+        if self.print_updates:
+            print("Review Data Aggregated.")
 
     def aggregate_data_by_date(self):
 
-        print("Aggregating Review Data...")
+        if self.print_updates:
+            print("Aggregating Review Data...")
 
         review_df_copy = self.review_df.copy()
         review_df_copy["review_count"] = 1
@@ -169,7 +176,8 @@ class Aggregator():
 
         self.aggregated_df.drop(columns = "review_publication_date", inplace = True)
 
-        print("Review Data Aggregated.")
+        if self.print_updates:
+            print("Review Data Aggregated.")
 
     def generate_time_id_total(self):
 
@@ -190,13 +198,15 @@ class Aggregator():
 
     def merge_book_data_to_aggregated(self):
 
-        print("Merging Book Data...")
+        if self.print_updates:
+            print("Merging Book Data...")
 
         self.book_df["book_id"] = self.book_df["book_id"].apply(lambda id: int(id))
         self.aggregated_df["book_id"] = self.aggregated_df["book_id"].apply(lambda id: int(id))
         self.aggregated_df = self.aggregated_df.merge(self.book_df, on = "book_id")
 
-        print("Book Data Merged.")
+        if self.print_updates:
+            print("Book Data Merged.")
 
     def drop_non_features(self):
 
