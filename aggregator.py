@@ -297,8 +297,6 @@ start_date = datetime.datetime(2018, 1, 1)
 end_date = datetime.datetime(2020, 2, 29)
 
 #test_aggregator = Aggregator(data_file_name_review, data_file_name_book, book_column_list, start_date, end_date, "month", subject_file = data_file_name_subject)
-test_aggregator = Aggregator(data_file_name_review, data_file_name_book, book_column_list, start_date, end_date, "month")
+#test_aggregator = Aggregator(data_file_name_review, data_file_name_book, book_column_list, start_date, end_date, "month")
 
-test_data = test_aggregator.aggregate("by_book")
-
-print(test_data.describe())
+#test_data = test_aggregator.aggregate("by_date")
