@@ -177,33 +177,10 @@ class Aggregator():
         self.aggregated_df.reset_index(inplace = True, drop = False)
         self.aggregated_df.fillna(0, inplace = True)
 
-        #self.generate_time_id_total()
         self.generate_time_columns()
-
-        #if self.grain != "day":
-            #self.generate_time_id_granular()
-
-        #self.aggregated_df.drop(columns = "review_publication_date", inplace = True)
 
         if self.print_updates:
             print("Review Data Aggregated.")
-
-    #def generate_time_id_total(self):
-
-        #time_period_id_dict = {}
-        #time_period_list = self.review_df.review_publication_date.unique()
-        #time_period_list.sort()
-
-        #for i in range(0, len(time_period_list)):
-            #time_period_val = time_period_list[i]
-            #time_period_id = i + 1
-            #time_period_id_dict[time_period_val] = time_period_id
-
-        #self.aggregated_df["time_id_total"] = self.aggregated_df["review_publication_date"].apply(lambda date: time_period_id_dict.get(date))
-
-    #def generate_time_id_granular(self):
-
-        #self.aggregated_df["time_id_granular"] = self.aggregated_df["review_publication_date"].apply(lambda year_gran: int(year_gran.split("-")[1]))
 
     def merge_book_data_to_aggregated(self):
 
