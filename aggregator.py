@@ -4,13 +4,15 @@ import numpy as np
 
 class Aggregator():
 
-    def __init__(self, review_file, book_file, book_column_list, start_date, end_date, grain, print_updates = True, subject_file = None):
+    def __init__(self, review_file, book_file, book_column_list, start_date, end_date, grain, print_updates = True, clean_authors = False, subject_file = None):
 
         self.start_date = start_date
         self.end_date = end_date
         self.grain = grain
         self.print_updates = print_updates
+        self.book_file = book_file
         self.subject_file = subject_file
+        self.clean_authors = clean_authors
 
         self.check_grain()
 
@@ -97,6 +99,21 @@ class Aggregator():
 
             self.subject_df.rename(columns= rename_dict, inplace = True)
 
+    def clean_author_values(self):
+
+        if ("book_author" in self.book_column_list) and (self.clean_authors):
+
+            if self.print_updates:
+                print("Cleaning Author Data...")
+
+                cleaner = Author_Cleaner(self.book_file)
+                cleaner.train()
+
+                self.book_df["book_author"] = self.book_df["book_author"].apply(lambda author: cleaner.get_clean_name(author))
+
+            if self.print_updates:
+                print("Author Data Cleaned...")
+
     def clean_scraped_data(self):
 
         df_list = [self.review_df, self.book_df]
@@ -110,6 +127,7 @@ class Aggregator():
         self.drop_reviews_for_unknown_books()
         self.drop_unreviewed_books()
         self.drop_long_series_names()
+        self.clean_author_values()
 
         for df in df_list:
             df.reset_index(inplace = True, drop = True)
@@ -328,6 +346,7 @@ class Author_Cleaner():
         #acceptable_values = ["day", "week", "month", "quarter"]
     #subject_file = file name for the csv file containing the openlibrary subject data. Default = None
     #print_updates = Boolean for whether aggregator should print to terminal. Default = True
+    #clean_authors = boolean for whether author names should be cleaned. Default = False
 #After instantiating aggregator, use the .aggregate("by_book") or .aggregate("by_date") method to transform data into one of two forms.
 
 ##TESTING AGGREGATOR
@@ -339,15 +358,17 @@ data_file_name_book = "distributed_data_collection/databases/book_data_sample.cs
 #data_file_name_book = "distributed_data_collection/databases/book_data.csv"
 data_file_name_subject = "subject_matching/data/sub_feat_all.csv"
 
-book_column_list = ["num_reviews", "num_ratings", "avg_rating"]
+book_column_list = ["num_reviews", "num_ratings", "avg_rating", "book_author"]
 
 start_date = datetime.datetime(2018, 1, 1)
 end_date = datetime.datetime(2020, 2, 29)
 
 #test_aggregator = Aggregator(data_file_name_review, data_file_name_book, book_column_list, start_date, end_date, "month", subject_file = data_file_name_subject)
 #test_aggregator = Aggregator(data_file_name_review, data_file_name_book, book_column_list, start_date, end_date, "month")
+#test_aggregator = Aggregator(data_file_name_review, data_file_name_book, book_column_list, start_date, end_date, "month", clean_authors = True)
 
-#test_data = test_aggregator.aggregate("by_date")
+#test_data = test_aggregator.aggregate("by_book")
+#print(test_data)
 
 #dup_value = "J.R.R. Tolkien Christopher Tolkien (Editor) Alan  Lee (artist) (Illustrator)"
 #non_dup_value = "Leora Rosenberg"
