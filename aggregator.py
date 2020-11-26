@@ -4,12 +4,13 @@ import numpy as np
 
 class Aggregator():
 
-    def __init__(self, review_file, book_file, book_column_list, start_date, end_date, grain, print_updates = True):
+    def __init__(self, review_file, book_file, book_column_list, start_date, end_date, grain, print_updates = True, subject_file = None):
 
         self.start_date = start_date
         self.end_date = end_date
         self.grain = grain
         self.print_updates = print_updates
+        self.subject_file = subject_file
 
         self.check_grain()
 
@@ -25,6 +26,9 @@ class Aggregator():
 
         self.review_df = pd.read_csv(review_file, usecols = self.review_column_list, na_values= na_val_list, dtype = col_type_dict)
         self.book_df = pd.read_csv(book_file, usecols= self.book_column_list, na_values= na_val_list, dtype = col_type_dict)
+
+        if self.subject_file:
+            self.subject_df = pd.read_csv(subject_file, na_values= na_val_list, dtype = col_type_dict)
 
         if self.print_updates:
             print("Aggregator Initiated.")
@@ -76,7 +80,24 @@ class Aggregator():
             max_characters = 60
             self.book_df["series"] = self.book_df["series"].apply(lambda series: series if ( (len(str(series)) < max_characters) ) else np.nan).copy()
 
-    def clean_data(self):
+    def rename_subject_columns(self):
+
+        if self.subject_file:
+
+            rename_dict = {}
+
+            for col in self.subject_df.columns:
+
+                if col == "isbn13":
+                    pass
+
+                else:
+                    new_col_name = "subject_{}".format(col)
+                    rename_dict[col] = new_col_name
+
+            self.subject_df.rename(columns= rename_dict, inplace = True)
+
+    def clean_scraped_data(self):
 
         df_list = [self.review_df, self.book_df]
 
@@ -92,6 +113,23 @@ class Aggregator():
 
         for df in df_list:
             df.reset_index(inplace = True, drop = True)
+
+    def clean_subject_data(self):
+
+        if self.subject_file:
+
+            if self.print_updates:
+                    print("Cleaning Subject Data...")
+
+            self.subject_df.drop(columns = "clean_subjects", inplace = True)
+            self.drop_invalid_rows(self.subject_df)
+            self.rename_subject_columns()
+
+            self.subject_df.fillna(0, inplace = True)
+            self.subject_df.reset_index(inplace = True, drop = True)
+
+            if self.print_updates:
+                    print("Subject Data Cleaned")
 
     def resample_reviews(self):
 
@@ -141,7 +179,7 @@ class Aggregator():
         if self.print_updates:
             print("Processing Scraper Output...")
 
-        self.clean_data()
+        self.clean_scraped_data()
         self.resample_reviews()
         self.transform_given_text_columns()
 
@@ -189,10 +227,23 @@ class Aggregator():
 
         self.book_df["book_id"] = self.book_df["book_id"].apply(lambda id: int(id))
         self.aggregated_df["book_id"] = self.aggregated_df["book_id"].apply(lambda id: int(id))
-        self.aggregated_df = self.aggregated_df.merge(self.book_df, on = "book_id")
+        self.aggregated_df = self.aggregated_df.merge(self.book_df, on = "book_id") #SHOULD THIS REMAIN AN INNER MERGE?
 
         if self.print_updates:
             print("Book Data Merged.")
+
+    def merge_subject_data_to_aggregated(self):
+
+        if self.subject_file:
+
+            if self.print_updates:
+                print("Merging Subject Data...")
+
+            self.aggregated_df = self.aggregated_df.merge(self.subject_df, how = "left", on = "isbn13")
+            self.aggregated_df.fillna(0, inplace = True)
+
+            if self.print_updates:
+                print("Subject Data Merged.")
 
     def drop_non_features(self):
 
@@ -205,6 +256,7 @@ class Aggregator():
     def aggregate(self, aggregation_type):
 
         self.process_scraper_output()
+        self.clean_subject_data()
 
         if aggregation_type == "by_book":
             self.aggregate_data_by_book()
@@ -212,6 +264,7 @@ class Aggregator():
             self.aggregate_data_by_date()
 
         self.merge_book_data_to_aggregated()
+        self.merge_subject_data_to_aggregated()
         self.drop_non_features()
 
         return self.aggregated_df
@@ -227,6 +280,8 @@ class Aggregator():
     #end_date = all data from after this date will be removed (should be entered as a datetime)
     #grain = the level at which review dates should be aggregated. It will accept one of the following values:
         #acceptable_values = ["day", "week", "month", "quarter"]
+    #subject_file = file name for the csv file containing the openlibrary subject data. Default = None
+    #print_updates = Boolean for whether aggregator should print to terminal. Default = True
 #After instantiating aggregator, use the .aggregate("by_book") or .aggregate("by_date") method to transform data into one of two forms.
 
 ##TESTING AGGREGATOR
@@ -234,11 +289,16 @@ class Aggregator():
 data_file_name_review = "distributed_data_collection/databases/review_data_sample.csv"
 #data_file_name_review = "distributed_data_collection/databases/review_data.csv"
 data_file_name_book = "distributed_data_collection/databases/book_data_sample.csv"
+data_file_name_subject = "subject_matching/data/sub_feat_all.csv"
 
-book_column_list = ["book_language", "num_reviews", "num_ratings", "avg_rating", "series"]
+book_column_list = ["num_reviews", "num_ratings", "avg_rating"]
 
 start_date = datetime.datetime(2018, 1, 1)
 end_date = datetime.datetime(2020, 2, 29)
 
-#test_aggregator = Aggregator(data_file_name_review, data_file_name_book, book_column_list, start_date, end_date, "month")
-#test_data = test_aggregator.aggregate("by_date")
+#test_aggregator = Aggregator(data_file_name_review, data_file_name_book, book_column_list, start_date, end_date, "month", subject_file = data_file_name_subject)
+test_aggregator = Aggregator(data_file_name_review, data_file_name_book, book_column_list, start_date, end_date, "month")
+
+test_data = test_aggregator.aggregate("by_book")
+
+print(test_data.describe())
