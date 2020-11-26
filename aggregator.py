@@ -269,6 +269,52 @@ class Aggregator():
 
         return self.aggregated_df
 
+class Author_Cleaner():
+
+    def __init__(self, book_file):
+
+        na_val_list = ["None", " ", "", "Amazon", "amazon"]
+
+        self.book_df = pd.read_csv(book_file, usecols= ["book_author"], na_values= na_val_list)
+        self.book_df.dropna(inplace = True, how = "any")
+
+        self.book_df["book_author_length"] = self.book_df["book_author"].apply(lambda author: len(author))
+        self.book_df = self.book_df.sort_values(by = "book_author_length")
+
+        self.author_input_list = list(self.book_df.book_author.unique())
+
+        self.author_dict = {}
+
+    def train(self):
+
+        authors_to_check = [x for x in self.author_input_list]
+        single_name_authors = ["Aristophanes", "Aristotle", "Banksy", "Epictetus", "Homer"]
+
+        index = 0
+
+        while index < len(authors_to_check):
+            author_current = authors_to_check[index]
+
+            if (" " in author_current) or (author_current in single_name_authors):
+
+                author_duplicates = [author for author in authors_to_check if author_current in author]
+                author_duplicates = author_duplicates[1:]
+
+                if author_duplicates:
+                    for duplicate in author_duplicates:
+                        self.author_dict[duplicate] = author_current
+                        authors_to_check.remove(duplicate)
+            index +=1
+
+    def get_clean_name(self, input_name):
+
+        clean_name = self.author_dict.get(input_name)
+
+        if not clean_name:
+            clean_name = input_name
+
+        return clean_name
+
 ##HOW TO USE AGGREGATOR:
 
 #Aggregator takes the csv files containing scraped data and transforms them into a format which can be used for modeling. It takes the following arguments:
@@ -288,7 +334,9 @@ class Aggregator():
 
 data_file_name_review = "distributed_data_collection/databases/review_data_sample.csv"
 #data_file_name_review = "distributed_data_collection/databases/review_data.csv"
+
 data_file_name_book = "distributed_data_collection/databases/book_data_sample.csv"
+#data_file_name_book = "distributed_data_collection/databases/book_data.csv"
 data_file_name_subject = "subject_matching/data/sub_feat_all.csv"
 
 book_column_list = ["num_reviews", "num_ratings", "avg_rating"]
@@ -300,3 +348,11 @@ end_date = datetime.datetime(2020, 2, 29)
 #test_aggregator = Aggregator(data_file_name_review, data_file_name_book, book_column_list, start_date, end_date, "month")
 
 #test_data = test_aggregator.aggregate("by_date")
+
+#dup_value = "J.R.R. Tolkien Christopher Tolkien (Editor) Alan  Lee (artist) (Illustrator)"
+#non_dup_value = "Leora Rosenberg"
+
+#test_cleaner = Author_Cleaner(data_file_name_book)
+#test_cleaner.train()
+#test_cleaner.get_clean_name(dup_value)
+#test_cleaner.get_clean_name(non_dup_value)
