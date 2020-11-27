@@ -219,37 +219,3 @@ class Regression_Processor():
         plt.show()
 
         return pre_period_coefficient_df
-
-def sparsity_filter(input_df, k):
-
-    columns_dropped = []
-
-    ##FINDING SPARSE COLUMNS
-
-    for col in input_df.columns:
-
-        num_values = input_df[col].nunique()
-
-        if num_values == 1:
-            columns_dropped.append(col)
-
-        elif num_values == 2:
-            if input_df[col].sum() <=2:
-                columns_dropped.append(col)
-
-    #GENERATING OUTPUT
-
-    output_df = input_df.copy()
-
-    for col in columns_dropped:
-        output_df.drop(columns = col, inplace = True)
-
-    #PRINT STATEMENT
-
-    num_col_input = len(input_df.columns)
-    num_col_dropped = len(columns_dropped)
-    num_col_remaining = len(output_df.columns)
-
-    print("Dropped {:,}/{:,} columns. {:,} columns remaining.".format(num_col_dropped, num_col_input, num_col_remaining))
-
-    return output_df

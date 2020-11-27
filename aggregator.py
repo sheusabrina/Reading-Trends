@@ -287,6 +287,42 @@ class Aggregator():
 
         return self.aggregated_df
 
+    def sparsity_filter(self, k):
+
+        if self.print_updates:
+            print("Applying Sparsity Filter...")
+
+        cols_to_drop = []
+
+        ##FINDING SPARSE COLUMNS
+
+        for col in self.aggregated_df.columns:
+            num_values = self.aggregated_df[col].nunique()
+
+            if num_values == 1:
+                cols_to_drop.append(col)
+
+            elif num_values == 2:
+                if self.aggregated_df[col].sum() <=2:
+                    cols_to_drop.append(col)
+
+        #GENERATING OUTPUT
+
+        self.sparsity_filtered_df = self.aggregated_df.copy()
+
+        for col in cols_to_drop:
+            self.sparsity_filtered_df.drop(columns = col, inplace = True)
+
+        #PRINT STATEMENT
+
+        num_col_input = len(self.aggregated_df.columns)
+        num_col_dropped = len(cols_to_drop)
+        num_col_remaining = len(self.sparsity_filtered_df.columns)
+
+        print("Dropped {:,}/{:,} columns. {:,} columns remaining.".format(num_col_dropped, num_col_input, num_col_remaining))
+
+        return self.sparsity_filtered_df
+
 class Author_Cleaner():
 
     def __init__(self, book_file):
@@ -358,7 +394,7 @@ data_file_name_book = "distributed_data_collection/databases/book_data_sample.cs
 #data_file_name_book = "distributed_data_collection/databases/book_data.csv"
 data_file_name_subject = "subject_matching/data/sub_feat_all.csv"
 
-book_column_list = ["num_reviews", "num_ratings", "avg_rating", "book_author"]
+book_column_list = ["num_reviews", "num_ratings", "avg_rating", "series"]
 
 start_date = datetime.datetime(2018, 1, 1)
 end_date = datetime.datetime(2020, 2, 29)
@@ -369,6 +405,10 @@ end_date = datetime.datetime(2020, 2, 29)
 
 #test_data = test_aggregator.aggregate("by_book")
 #print(test_data)
+
+#sparsity_data = test_aggregator.sparsity_filter(2)
+
+#print(sparsity_data)
 
 #dup_value = "J.R.R. Tolkien Christopher Tolkien (Editor) Alan  Lee (artist) (Illustrator)"
 #non_dup_value = "Leora Rosenberg"
