@@ -13,6 +13,7 @@ class Aggregator():
         self.book_file = book_file
         self.subject_file = subject_file
         self.clean_authors = clean_authors
+        self.is_sparsity_filter = False
 
         self.check_grain()
 
@@ -321,7 +322,25 @@ class Aggregator():
 
         print("Dropped {:,}/{:,} columns. {:,} columns remaining.".format(num_col_dropped, num_col_input, num_col_remaining))
 
+        self.is_sparsity_filter = True
+
         return self.sparsity_filtered_df
+
+    def get_annual_time_periods(self, year):
+
+        if self.is_sparsity_filter:
+            col_list = self.sparsity_filtered_df.columns
+        else:
+            col_list = self.aggregated_df.columns
+
+        time_periods = []
+
+        for col in col_list:
+            if "review_count" in col:
+                if "2020" in col:
+                    time_periods.append(col)
+
+        return time_periods
 
 class Author_Cleaner():
 
