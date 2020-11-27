@@ -342,6 +342,22 @@ class Aggregator():
 
         return time_periods
 
+    def get_train_test_split(self, perc_train):
+
+        if self.is_sparsity_filter:
+            data = self.sparsity_filtered_df.copy()
+        else:
+            data = self.aggregated_df.copy()
+
+        num_observations_total = len(data)
+        num_observations_train = int(num_observations_total* perc_train)
+        num_observations_test = num_observations_total - num_observations_train
+
+        data_train = data.head(num_observations_train).reset_index(drop = True)
+        data_test = data.tail(num_observations_test).reset_index(drop = True)
+
+        return data_train, data_test
+
 class Author_Cleaner():
 
     def __init__(self, book_file):
