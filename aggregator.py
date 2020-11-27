@@ -349,6 +349,8 @@ class Aggregator():
         else:
             data = self.aggregated_df.copy()
 
+        data = data.iloc[np.random.permutation(data.index)].reset_index(drop=True)
+
         num_observations_total = len(data)
         num_observations_train = int(num_observations_total* perc_train)
         num_observations_test = num_observations_total - num_observations_train
