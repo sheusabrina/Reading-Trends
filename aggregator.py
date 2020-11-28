@@ -113,7 +113,7 @@ class Aggregator():
                 self.book_df["book_author"] = self.book_df["book_author"].apply(lambda author: cleaner.get_clean_name(author))
 
             if self.print_updates:
-                print("Author Data Cleaned...")
+                print("Author Data Cleaned.")
 
     def clean_scraped_data(self):
 
