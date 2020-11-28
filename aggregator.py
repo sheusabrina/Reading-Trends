@@ -408,7 +408,7 @@ class Author_Cleaner():
 
 ##HOW TO USE AGGREGATOR:
 
-#Aggregator takes the csv files containing scraped data and transforms them into a format which can be used for modeling. It takes the following arguments:
+#Initiation: Aggregator takes the csv files containing scraped data and transforms them into a format which can be used for modeling. It takes the following arguments:
     #review_file = file name for the csv file containing scraped review data
     #book_file = file name for the csv file containing scraped book data
     #book_column_list = a list of book data fields which should be included in the transformed data table. It can contain any of the following values:
@@ -420,7 +420,12 @@ class Author_Cleaner():
     #subject_file = file name for the csv file containing the openlibrary subject data. Default = None
     #print_updates = Boolean for whether aggregator should print to terminal. Default = True
     #clean_authors = boolean for whether author names should be cleaned. Default = False
-#After instantiating aggregator, use the .aggregate("by_book") or .aggregate("by_date") method to transform data into one of two forms.
+#Other Methods:
+    #use .aggregate("by_book") or .aggregate("by_date") method to transform data into one of two forms. This method will return an aggregated dataframe.
+    #use .sparsity_filter(k) to drop all binary columns which have k or fewer positive values. This method will return a dataframe.
+    #use .get_train_test_split(perc_train) to return split dataframes. If this method is called multiple times on the same aggregator object, it will return a different split each time.
+    #use .get_annual_time_periods(year) if you aggregated "by_book" and would like a list of all time periods in a given year.
+
 
 ##TESTING AGGREGATOR
 
