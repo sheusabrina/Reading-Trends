@@ -183,9 +183,7 @@ class Regression_Processor():
 
         return self.coefficient_df
 
-    def print_top_coefficients(self):
-
-        num_top = 10
+    def print_top_coefficients(self, k = 10):
 
         for label in self.coefficient_df.columns:
 
@@ -198,7 +196,7 @@ class Regression_Processor():
             selected_df.sort_values(by=abs_name, ascending=False, inplace = True)
 
             selected_df.drop(columns = abs_name, inplace = True)
-            selected_df = selected_df.head(num_top)
+            selected_df = selected_df.head(k)
 
             print(selected_df)
 
